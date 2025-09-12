@@ -3,18 +3,24 @@
 #ifndef LIB_CIRCLE_CIRCLE_H_
 #define LIB_CIRCLE_CIRCLE_H_
 
+#include "../lib_point/point.h"
+
 class Circle {
 	Point _cent;
 	float _rad;
 
 public:
-	Circle(Point point = Point(), float rad = 0);
+	Circle(float rad = 0, Point point = 0);
 	Circle(const Circle&);
 
-	Point get_cent();
-	float get_rad();
+	Point cent();
+	float rad();
 
-	friend int find_type_of_crossing(const Circle&, const Circle&);
+	const Point cent() const;
+	const float rad() const;
+
+	bool operator == (const Circle&) const;
+	bool operator != (const Circle&) const;
 };
 
 #endif  // LIB_CIRCLE_CIRCLE_H_
