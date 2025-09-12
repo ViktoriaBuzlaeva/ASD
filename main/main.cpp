@@ -40,12 +40,13 @@ int main() {
 #ifdef TYPE_OF_CROSSING
 
 #include <iostream>
-#include "../lib_point/point.h"
 #include "../lib_circle/circle.h"
+#include "../lib_sphere/sphere.h"
 
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
-TypeOfCrossing find_type_of_crossing(const Circle& first, const Circle& second) {
+template <class T>
+TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
     if (first == second) {
         return Coincide;
     }
@@ -57,6 +58,23 @@ TypeOfCrossing find_type_of_crossing(const Circle& first, const Circle& second) 
     }
     else {
         return Touch;
+    }
+}
+
+void print_result(TypeOfCrossing res) {
+    switch (res) {
+    case Intersect:
+        std::cout << "Intersect" << '\n';
+        break;
+    case NotIntersect:
+        std::cout << "Not Intersect" << '\n';
+        break;
+    case Touch:
+        std::cout << "Touch" << '\n';
+        break;
+    case Coincide:
+        std::cout << "Coincide" << '\n';
+        break;
     }
 }
 
@@ -73,22 +91,25 @@ int main() {
     std::cout << "(" << circle_2.cent().x() << ", " << circle_2.cent().y() <<
         "); r = " << circle_2.rad() << '\n';
 
-    TypeOfCrossing res = find_type_of_crossing(circle_1, circle_2);
+    TypeOfCrossing res_2d = find_type_of_crossing(circle_1, circle_2);
 
-    switch (res) {
-    case Intersect:
-        std::cout << "Intersect" << '\n';
-        break;
-    case NotIntersect:
-        std::cout << "Not Intersect" << '\n';
-        break;
-    case Touch:
-        std::cout << "Touch" << '\n';
-        break;
-    case Coincide:
-        std::cout << "Coincide" << '\n';
-        break;
-    }
+    print_result(res_2d);
+
+    Point3D point3d_1(3, 2, 0);
+    Point3D point3d_2(3, 4, 0);
+
+    Sphere sphere_1(5, point3d_1);
+    Sphere sphere_2(5, point3d_2);
+
+    std::cout << "(" << sphere_1.cent().x() << ", " << sphere_1.cent().y() <<
+        ", " << sphere_1.cent().z() << "); r = " << sphere_1.rad() << '\n';
+
+    std::cout << "(" << sphere_2.cent().x() << ", " << sphere_2.cent().y() <<
+        ", " << sphere_2.cent().z() << "); r = " << sphere_2.rad() << '\n';
+
+    TypeOfCrossing res_3d = find_type_of_crossing(sphere_1, sphere_2);
+
+    print_result(res_3d);
 
     return 0;
 }

@@ -4,6 +4,7 @@
 #define LIB_POINT_POINT_H_
 
 class Point {
+protected:
 	float _x;
 	float _y;
 

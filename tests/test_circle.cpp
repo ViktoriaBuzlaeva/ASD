@@ -58,8 +58,8 @@ TEST(TestCircleLib, can_comp_correctly_not_eq_circles) {
 
 TEST(TestCircleLib, can_comp_correctly_eq_circles_other) {
 	// Arrange
-	Circle circle_1(0, 3);
-	Circle circle_2(0, 3);
+	Circle circle_1(3);
+	Circle circle_2(3);
 
 	// Act & Assert
 	EXPECT_FALSE(circle_1 != circle_2);

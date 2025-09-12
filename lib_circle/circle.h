@@ -7,10 +7,12 @@
 
 class Circle {
 	Point _cent;
+
+protected:
 	float _rad;
 
 public:
-	Circle(float rad = 0, Point point = 0);
+	Circle(float rad = 0, Point cent = 0);
 	Circle(const Circle&);
 
 	Point cent();
