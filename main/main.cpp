@@ -87,12 +87,10 @@ int main() {
 
     std::cout << "(" << circle_1.cent().x() << ", " << circle_1.cent().y() <<
         "); r = " << circle_1.rad() << '\n';
-
     std::cout << "(" << circle_2.cent().x() << ", " << circle_2.cent().y() <<
         "); r = " << circle_2.rad() << '\n';
 
     TypeOfCrossing res_2d = find_type_of_crossing(circle_1, circle_2);
-
     print_result(res_2d);
 
     Point3D point3d_1(3, 2, 0);
@@ -103,12 +101,10 @@ int main() {
 
     std::cout << "(" << sphere_1.cent().x() << ", " << sphere_1.cent().y() <<
         ", " << sphere_1.cent().z() << "); r = " << sphere_1.rad() << '\n';
-
     std::cout << "(" << sphere_2.cent().x() << ", " << sphere_2.cent().y() <<
         ", " << sphere_2.cent().z() << "); r = " << sphere_2.rad() << '\n';
 
     TypeOfCrossing res_3d = find_type_of_crossing(sphere_1, sphere_2);
-
     print_result(res_3d);
 
     return 0;

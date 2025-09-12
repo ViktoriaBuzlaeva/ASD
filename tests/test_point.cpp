@@ -7,26 +7,45 @@
 
 TEST(TestPointLib, can_create) {
 	// Arrange
+	Point point;
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point point_1);
+	// Act
+	int x = 0;
+	int y = 0;
+	bool actual_result = (point.x() == x) && (point.y() == y);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_create_init) {
 	// Arrange
+	Point point(6, 2);
+
+	// Act
 	int x = 6;
 	int y = 2;
+	bool actual_result = (point.x() == x) && (point.y() == y);
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point point(x, y));
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_create_copy) {
 	// Arrange
 	Point point_1(2, 3);
+	Point point_2(point_1);
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point point_2(point_1));
+	// Act
+	int x = 2;
+	int y = 3;
+	bool actual_result = (point_2.x() == x) && (point_2.y() == y);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_comp_correctly_eq_points) {

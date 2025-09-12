@@ -12,7 +12,8 @@ protected:
 	float _rad;
 
 public:
-	Circle(float rad = 0, Point cent = 0);
+	Circle(float rad = 0, float x = 0, float y = 0);
+	Circle(float, Point);
 	Circle(const Circle&);
 
 	Point cent();

@@ -8,36 +8,68 @@
 
 TEST(TestPoint3DLib, can_create) {
 	// Arrange
+	Point3D point3d;
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point3D point3d_1);
+	// Act
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
+		(point3d.z() == z);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPoint3DLib, can_create_init) {
 	// Arrange
-	int x = 6;
-	int y = 2;
-	int z = 4;
+	Point3D point3d(3, 4, 2);
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point3D point3d(x, y, z));
+	// Act
+	int x = 3;
+	int y = 4;
+	int z = 2;
+	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
+		(point3d.z() == z);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPoint3DLib, can_create_init_with_point2d) {
 	// Arrange
 	Point point(6, 2);
-	int z = 4;
+	Point3D point3d(point, 4);
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point3D point3d(point, z));
+	// Act
+	int x = 6;
+	int y = 2;
+	int z = 4;
+	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
+		(point3d.z() == z);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPoint3DLib, can_create_copy) {
 	// Arrange
 	Point3D point3d_1(2, 3);
+	Point3D point3d_2(point3d_1);
 
-	// Act & Assert
-	ASSERT_NO_THROW(Point3D point3d_2(point3d_1));
+	// Act
+	int x = 2;
+	int y = 3;
+	int z = 0;
+	bool actual_result = (point3d_2.x() == x) && (point3d_2.y() == y) &&
+		(point3d_2.z() == z);
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPoint3DLib, can_comp_correctly_eq_points) {

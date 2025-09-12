@@ -10,7 +10,8 @@ class Sphere : public Circle {
 	Point3D _cent;
 
 public:
-	Sphere(float rad = 0, Point3D cent = 0);
+	Sphere(float rad = 0, float x = 0, float y = 0, float z = 0);
+	Sphere(float, Point3D);
 	Sphere(const Sphere&);
 
 	Point3D cent();

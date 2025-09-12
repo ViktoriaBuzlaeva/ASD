@@ -6,6 +6,13 @@
 #include <stdexcept>
 #include "../lib_sphere/sphere.h"
 
+Sphere::Sphere(float rad, float x, float y, float z) :
+	_cent(Point3D(x, y, z)) {
+	if (rad < 0)
+		throw std::invalid_argument("Input Error: radius can't be less than zero");
+	_rad = rad;
+}
+
 Sphere::Sphere(float rad, Point3D cent) : _cent(cent) {
 	if (rad < 0)
 		throw std::invalid_argument("Input Error: radius can't be less than zero");
