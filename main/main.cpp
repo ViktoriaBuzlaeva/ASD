@@ -1,6 +1,6 @@
-// Copyright 2024 Marina Usova
+// Copyright 2025 Viktoria Buzlaeva
 
-//#define EASY_EXAMPLE
+// #define EASY_EXAMPLE
 #ifdef EASY_EXAMPLE
 
 #include <iostream>
@@ -36,7 +36,7 @@ int main() {
 
 #endif  // EASY_EXAMPLE
 
-#define TYPE_OF_CROSSING
+// #define TYPE_OF_CROSSING
 #ifdef TYPE_OF_CROSSING
 
 #include <iostream>
@@ -111,3 +111,92 @@ int main() {
 }
 
 #endif  // TYPE_OF_CROSSING
+
+#define MATRIX_INTERFACE
+#ifdef MATRIX_INTERFACE
+
+#include <iostream>
+#include "../lib_matrix/matrix.h"
+
+#define START_MENU_OPTIONS 3
+
+void print_start_menu() {
+    std::cout << "Matrix calculator\n";
+    std::cout << "Choose operation (choose any key for exit):\n";
+    std::cout << "1) Addition\n";
+    std::cout << "2) Subtraction\n";
+    std::cout << "3) Multiplication\n";
+}
+
+int get_user_num(int options) {
+    int user_num = 0;
+    std::cout << "Your choice: ";
+    std::cin >> user_num;
+    return user_num;
+}
+
+void print_addition_menu() {
+    std::cout << "Matrix calculator\n";
+    std::cout << "Choose matrix's size\n";
+    std::cout << "For example, 2 3:\n";
+    std::cout << "1 2 3\n";
+    std::cout << "4 5 6\n";
+}
+
+int get_size() {
+    int size = 0;
+    std::cin >> size;
+    return size;
+}
+
+void start_addition_menu() {
+    print_addition_menu();
+
+    int M1 = get_size();
+    int N1 = get_size();
+    Matrix matrix1(M1, N1);
+
+    std::cout << "\n";
+
+    int M2 = get_size();
+    int N2 = get_size();
+    Matrix matrix2(M2, N2);
+
+
+}
+
+void start_subtraction_menu() {
+
+}
+    
+void start_multiplication_menu() {
+
+}
+
+void start_menu() {
+    print_start_menu();
+    
+    int user_num = get_user_num(START_MENU_OPTIONS);
+
+    system("cls");
+
+    switch (user_num) {
+    case 1:
+        start_addition_menu();
+    case 2:
+        start_subtraction_menu();
+    case 3:
+        start_multiplication_menu();
+    default:
+        return;
+    }
+
+
+}
+
+int main() {
+    start_menu();
+    return 0;
+}
+
+#endif  // MATRIX_INTERFACE

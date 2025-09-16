@@ -6,17 +6,13 @@
 #define EPSILON 0.000001
 
 TEST(TestCircleLib, can_create) {
-	// Arrange
+	// Arrange & Act
 	Circle circle;
 
-	// Act
-	Point cent(0, 0);
-	int rad = 0;
-	bool actual_result = (circle.cent() == cent) && (circle.rad() == rad);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(0, circle.cent().x());
+	EXPECT_EQ(0, circle.cent().y());
+	EXPECT_EQ(0, circle.rad());
 }
 
 TEST(TestCircleLib, can_create_init) {
