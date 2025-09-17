@@ -6,31 +6,25 @@
 #define EPSILON 0.000001
 
 TEST(TestSphereLib, can_create) {
-	// Arrange
+	// Arrange & Act
 	Sphere sphere;
 
-	// Act
-	Point3D cent(0, 0, 0);
-	int rad = 0;
-	bool actual_result = (sphere.cent() == cent) && (sphere.rad() == rad);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(0, sphere.cent().x());
+	EXPECT_EQ(0, sphere.cent().y());
+	EXPECT_EQ(0, sphere.cent().z());
+	EXPECT_EQ(0, sphere.rad());
 }
 
 TEST(TestSphereLib, can_create_init) {
-	// Arrange
+	// Arrange & Act
 	Sphere sphere(2, 1, 2, 3);
 
-	// Act
-	Point3D cent(1, 2, 3);
-	int rad = 2;
-	bool actual_result = (sphere.cent() == cent) && (sphere.rad() == rad);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(1, sphere.cent().x());
+	EXPECT_EQ(2, sphere.cent().y());
+	EXPECT_EQ(3, sphere.cent().z());
+	EXPECT_EQ(2, sphere.rad());
 }
 
 TEST(TestSphereLib, throw_when_create_init_with_incorrect_rad) {
@@ -45,21 +39,15 @@ TEST(TestSphereLib, throw_when_create_init_with_incorrect_rad) {
 }
 
 TEST(TestSphereLib, can_create_init_with_point3d) {
-	// Arrange
+	// Arrange & Act
 	Point3D point3d(6, 2, 1);
 	Sphere sphere(2, point3d);
 
-	// Act
-	int x = 6;
-	int y = 2;
-	int z = 1;
-	int rad = 2;
-	bool actual_result = (sphere.cent().x() == x) && (sphere.cent().y() == y)
-		&& (sphere.cent().z() == z) && (sphere.rad() == rad);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(6, sphere.cent().x());
+	EXPECT_EQ(2, sphere.cent().y());
+	EXPECT_EQ(1, sphere.cent().z());
+	EXPECT_EQ(2, sphere.rad());
 }
 
 TEST(TestSphereLib, throw_when_create_with_point3d_with_incorrect_rad) {
@@ -72,21 +60,15 @@ TEST(TestSphereLib, throw_when_create_with_point3d_with_incorrect_rad) {
 }
 
 TEST(TestSphereLib, can_create_copy) {
-	// Arrange
+	// Arrange & Act
 	Sphere sphere_1(3);
 	Sphere sphere_2(sphere_1);
 
-	// Act
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	int rad = 3;
-	bool actual_result = (sphere_2.cent().x() == x) && (sphere_2.cent().y() == y)
-		&& (sphere_2.cent().z() == z) && (sphere_2.rad() == rad);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(sphere_2.cent().x(), sphere_1.cent().x());
+	EXPECT_EQ(sphere_2.cent().y(), sphere_1.cent().y());
+	EXPECT_EQ(sphere_2.cent().z(), sphere_1.cent().z());
+	EXPECT_EQ(sphere_2.rad(), sphere_1.rad());
 }
 
 TEST(TestSphereLib, can_comp_correctly_eq_spheres) {

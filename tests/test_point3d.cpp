@@ -7,69 +7,45 @@
 #define EPSILON 0.000001
 
 TEST(TestPoint3DLib, can_create) {
-	// Arrange
+	// Arrange & Act
 	Point3D point3d;
 
-	// Act
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
-		(point3d.z() == z);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(0, point3d.x());
+	EXPECT_EQ(0, point3d.y());
+	EXPECT_EQ(0, point3d.z());
 }
 
 TEST(TestPoint3DLib, can_create_init) {
-	// Arrange
+	// Arrange & Act
 	Point3D point3d(3, 4, 2);
 
-	// Act
-	int x = 3;
-	int y = 4;
-	int z = 2;
-	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
-		(point3d.z() == z);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(3, point3d.x());
+	EXPECT_EQ(4, point3d.y());
+	EXPECT_EQ(2, point3d.z());
 }
 
 TEST(TestPoint3DLib, can_create_init_with_point2d) {
-	// Arrange
+	// Arrange & Act
 	Point point(6, 2);
 	Point3D point3d(point, 4);
 
-	// Act
-	int x = 6;
-	int y = 2;
-	int z = 4;
-	bool actual_result = (point3d.x() == x) && (point3d.y() == y) &&
-		(point3d.z() == z);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(6, point3d.x());
+	EXPECT_EQ(2, point3d.y());
+	EXPECT_EQ(4, point3d.z());
 }
 
 TEST(TestPoint3DLib, can_create_copy) {
-	// Arrange
+	// Arrange & Act
 	Point3D point3d_1(2, 3);
 	Point3D point3d_2(point3d_1);
 
-	// Act
-	int x = 2;
-	int y = 3;
-	int z = 0;
-	bool actual_result = (point3d_2.x() == x) && (point3d_2.y() == y) &&
-		(point3d_2.z() == z);
-
 	// Assert
-	bool expected_result = true;
-	EXPECT_EQ(expected_result, actual_result);
+	EXPECT_EQ(point3d_2.x(), point3d_1.x());
+	EXPECT_EQ(point3d_2.y(), point3d_1.y());
+	EXPECT_EQ(point3d_2.z(), point3d_1.z());
 }
 
 TEST(TestPoint3DLib, can_comp_correctly_eq_points) {
