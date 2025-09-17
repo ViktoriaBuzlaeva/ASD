@@ -42,24 +42,7 @@ int main() {
 #include <iostream>
 #include "../lib_circle/circle.h"
 #include "../lib_sphere/sphere.h"
-
-enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
-
-template <class T>
-TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
-    if (first == second) {
-        return Coincide;
-    }
-    else if (first.cent().find_distance(second.cent()) > (first.rad() + second.rad())) {
-        return NotIntersect;
-    }
-    else if (first.cent().find_distance(second.cent()) < (first.rad() + second.rad())) {
-        return Intersect;
-    }
-    else {
-        return Touch;
-    }
-}
+#include "../lib_algorithms/algorithms.h"
 
 void print_result(TypeOfCrossing res) {
     switch (res) {
