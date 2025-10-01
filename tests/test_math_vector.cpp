@@ -21,6 +21,31 @@ TEST(TestMathVectorLib, can_create_with_size) {
 	EXPECT_EQ(30, mvector.size());
 }
 
+TEST(TestMathVectorLib, can_create_copy) {
+	// Arrange
+	int mass[4] = { 1, 2, 3, 4 };
+	MathVector<int> mvector_1({ 1, 2, 3, 4 });
+	MathVector<int> mvector_2(mvector_1);
+
+	// Act
+	bool actual_result = true;
+	for (int i = 0; i < mvector_2.size(); i++) {
+		actual_result &= (*(mvector_2.data() + i) == mass[i]);
+	}
+
+	// Assert
+	bool expected_result = true;
+	EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST(TestMathVectorLib, throw_when_create_copy) {
+	// Arrange
+	MathVector<int>* mvector_1 = NULL;
+
+	// Act & Assert
+	ASSERT_ANY_THROW(MathVector<int> mvector_2(*mvector_1));
+}
+
 TEST(TestMathVectorLib, can_add_mvectors) {
 	// Arrange
 	MathVector<int> mvector_1({ 1, 2, 3 });

@@ -17,17 +17,20 @@ public:
 	MathVector(const MathVector<T>&);
 
 	inline const size_t size() const noexcept;
+	inline const T* data() const noexcept;
+
+	inline T* data() noexcept;
 
 	MathVector<T> operator + (const MathVector<T>&) const;
 	MathVector<T> operator - (const MathVector<T>&) const;
 	T operator * (const MathVector<T>&) const;
-	MathVector<T> operator * (const T&) const;
+	MathVector<T> operator * (const T) const;
+	template <class T>
+	friend MathVector<T> operator * (const T, const MathVector<T>&);
 
 	MathVector<T>& operator += (const MathVector<T>&);
 	MathVector<T>& operator -= (const MathVector<T>&);
-	MathVector<T>& operator *= (const T& scalar);
-	template <class T>
-	friend MathVector<T> operator * (const T&, const MathVector<T>&);
+	MathVector<T>& operator *= (const T scalar);
 
 	MathVector<T>& operator = (const MathVector<T>&) noexcept;
 
@@ -38,7 +41,7 @@ public:
 	T& operator [] (size_t) noexcept;
 
 	template <class T>
-	friend std::istream& operator >> (std::istream&, const MathVector<T>&);
+	friend std::istream& operator >> (std::istream&, MathVector<T>&);
 	template <class T>
 	friend std::ostream& operator << (std::ostream&, const MathVector<T>&);
 };
@@ -63,6 +66,16 @@ MathVector<T>::MathVector(const MathVector<T>& other) : TVector(other) {
 template <class T>
 inline const size_t MathVector<T>::size() const noexcept {
 	return TVector::size();
+}
+
+template <class T>
+inline const T* MathVector<T>::data() const noexcept {
+	return TVector::data();
+}
+
+template <class T>
+inline T* MathVector<T>::data() noexcept {
+	return TVector::data();
 }
 
 template <class T>
@@ -93,7 +106,7 @@ T MathVector<T>::operator * (const MathVector<T>& other) const {
 }
 
 template <class T>
-MathVector<T> MathVector<T>::operator * (const T& scalar) const {
+MathVector<T> MathVector<T>::operator * (const T scalar) const {
 	MathVector result(size());
 	for (size_t i = 0; i < size(); i++)
 		result[i] = (*this)[i] * scalar;
@@ -101,7 +114,7 @@ MathVector<T> MathVector<T>::operator * (const T& scalar) const {
 }
 
 template <class T>
-MathVector<T> operator * (const T& scalar, const MathVector<T>& vec) {
+MathVector<T> operator * (const T scalar, const MathVector<T>& vec) {
 	return vec * scalar;
 }
 
@@ -122,7 +135,7 @@ MathVector<T>& MathVector<T>::operator -= (const MathVector<T>& other) {
 }
 
 template <class T>
-MathVector<T>& MathVector<T>::operator *= (const T& scalar) {
+MathVector<T>& MathVector<T>::operator *= (const T scalar) {
 	for (size_t i = 0; i < size(); i++)
 		(*this)[i] *= scalar;
 	return *this;
@@ -158,7 +171,7 @@ T& MathVector<T>::operator[] (size_t pos) noexcept {
 }
 
 template <class T>
-std::istream& operator >> (std::istream& in, const MathVector<T>& vector) {
+std::istream& operator >> (std::istream& in, MathVector<T>& vector) {
 	for (size_t i = 0; i < vector.size(); i++) {
 		in >> vector[i];
 	}
