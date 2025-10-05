@@ -179,3 +179,13 @@ TEST(TestMathVectorLib, can_mult_scalar_with_assign) {
 	// Assert
 	EXPECT_EQ(result, mvector);
 }
+
+TEST(TestMathVectorLib, can_access_with_operator_brackets_with_start_index) {
+	// Arrange
+	MathVector<int> mvector({ 1, 2, 3 }, 1);
+	int zero_elem = mvector[0];
+
+	//  Act & Assert
+	EXPECT_EQ(0, zero_elem);
+	EXPECT_EQ(1, mvector[1]);
+}

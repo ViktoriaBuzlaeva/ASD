@@ -11,17 +11,16 @@ class Matrix : public MathVector<MathVector<T>> {
 	size_t _cols;
 
 public:
-	Matrix();
-	Matrix(int, int);
+	Matrix(size_t rows = 0, size_t cols = 0);
 	Matrix(const Matrix<T>&);
 	Matrix(const MathVector<MathVector<T>>&);
 	Matrix(std::initializer_list<std::initializer_list<T>>);
 
-	inline const size_t rows() const noexcept;
-	inline const size_t cols() const noexcept;
+	inline const size_t& rows() const noexcept;
+	inline const size_t& cols() const noexcept;
 
-	inline size_t rows() noexcept;
-	inline size_t cols() noexcept;
+	inline size_t& rows() noexcept;
+	inline size_t& cols() noexcept;
 
 	Matrix<T> transpose() const;
 
@@ -50,14 +49,7 @@ public:
 };
 
 template <class T>
-Matrix<T>::Matrix() : MathVector<MathVector<T>>(), _rows(0), _cols(0) {}
-
-template <class T>
-Matrix<T>::Matrix(int rows, int cols) {
-	if (rows < 0 || cols < 0) throw std::logic_error ("Error in init constructor: incorrect input!");
-	(*this) = MathVector<MathVector<T>>(rows);
-	_rows = rows;
-	_cols = cols;
+Matrix<T>::Matrix(size_t rows, size_t cols) : MathVector<MathVector<T>>(rows), _rows(rows), _cols(cols) {
 	for (size_t i = 0; i < _rows; i++) {
 		(*this)[i] = MathVector<T>(_cols);
 	}
@@ -95,22 +87,22 @@ Matrix<T>::Matrix(std::initializer_list<std::initializer_list<T>> data) : MathVe
 }
 
 template <class T>
-inline const size_t Matrix<T>::rows() const noexcept {
+inline const size_t& Matrix<T>::rows() const noexcept {
 	return _rows;
 }
 
 template <class T>
-inline const size_t Matrix<T>::cols() const noexcept {
+inline const size_t& Matrix<T>::cols() const noexcept {
 	return _cols;
 }
 
 template <class T>
-inline size_t Matrix<T>::rows() noexcept {
+inline size_t& Matrix<T>::rows() noexcept {
 	return _rows;
 }
 
 template <class T>
-inline size_t Matrix<T>::cols() noexcept {
+inline size_t& Matrix<T>::cols() noexcept {
 	return _cols;
 }
 

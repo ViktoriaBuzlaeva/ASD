@@ -44,6 +44,7 @@ public:
 	friend std::istream& operator >> (std::istream&, MathVector<T>&);
 	template <class T>
 	friend std::ostream& operator << (std::ostream&, const MathVector<T>&);
+
 };
 
 template <class T>
@@ -81,8 +82,8 @@ inline T* MathVector<T>::data() noexcept {
 template <class T>
 MathVector<T> MathVector<T>::operator + (const MathVector<T>& other) const {
 	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
-	MathVector result(size());
-	for (size_t i = 0; i < size(); i++)
+	MathVector result(size(), _start_index);
+	for (size_t i = 0; i < size() + _start_index; i++)
 		result[i] = (*this)[i] + other[i];
 	return result;
 }
@@ -90,8 +91,8 @@ MathVector<T> MathVector<T>::operator + (const MathVector<T>& other) const {
 template <class T>
 MathVector<T> MathVector<T>::operator - (const MathVector<T>& other) const {
 	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
-	MathVector result(size());
-	for (size_t i = 0; i < size(); i++)
+	MathVector result(size(), _start_index);
+	for (size_t i = 0; i < size() + _start_index; i++)
 		result[i] = (*this)[i] - other[i];
 	return result;
 }
@@ -100,15 +101,15 @@ template <class T>
 T MathVector<T>::operator * (const MathVector<T>& other) const {
 	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
 	T result = 0;
-	for (size_t i = 0; i < size(); i++)
+	for (size_t i = 0; i < size() + _start_index; i++)
 		result += (*this)[i] * other[i];
 	return result;
 }
 
 template <class T>
 MathVector<T> MathVector<T>::operator * (const T scalar) const {
-	MathVector result(size());
-	for (size_t i = 0; i < size(); i++)
+	MathVector result(size(), _start_index);
+	for (size_t i = 0; i < size() + _start_index; i++)
 		result[i] = (*this)[i] * scalar;
 	return result;
 }
@@ -121,7 +122,7 @@ MathVector<T> operator * (const T scalar, const MathVector<T>& vec) {
 template <class T>
 MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
-	for (size_t i = 0; i < size(); i++)
+	for (size_t i = 0; i < size() + _start_index; i++)
 		(*this)[i] += other[i];
 	return *this;
 }
@@ -129,14 +130,14 @@ MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 template <class T>
 MathVector<T>& MathVector<T>::operator -= (const MathVector<T>& other) {
 	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
-	for (size_t i = 0; i < size(); i++)
+	for (size_t i = 0; i < size() + _start_index; i++)
 		(*this)[i] -= other[i];
 	return *this;
 }
 
 template <class T>
 MathVector<T>& MathVector<T>::operator *= (const T scalar) {
-	for (size_t i = 0; i < size(); i++)
+	for (size_t i = 0; i < size() + _start_index; i++)
 		(*this)[i] *= scalar;
 	return *this;
 }
@@ -162,12 +163,20 @@ bool MathVector<T>::operator != (const MathVector<T>& other) const noexcept {
 
 template <class T>
 const T& MathVector<T>::operator[] (size_t pos) const noexcept {
-	return TVector::operator [] (pos);
+	if (pos < _start_index || pos >= _start_index + size()) {
+		T default = T();
+		return default;
+	}
+	return TVector::operator [] (pos - _start_index);
 }
 
 template <class T>
 T& MathVector<T>::operator[] (size_t pos) noexcept {
-	return TVector::operator [] (pos);
+	if (pos < _start_index || pos >= _start_index + size()) {
+		T default = T();
+		return default;
+	}
+	return TVector::operator [] (pos - _start_index);
 }
 
 template <class T>
@@ -180,7 +189,14 @@ std::istream& operator >> (std::istream& in, MathVector<T>& vector) {
 
 template <class T>
 std::ostream& operator << (std::ostream& out, const MathVector<T>& vector) {
-	out << static_cast<const TVector<T>&>(vector);
+	if (vector.data() == nullptr) {
+		return out;
+	}
+	out << "{ ";
+	for (size_t i = 0; i < vector.size() + vector._start_index - 1; i++) {
+		out << vector[i] << ", ";
+	}
+	out << vector[vector.size() + vector._start_index - 1] << " }";
 	return out;
 }
 

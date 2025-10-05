@@ -23,13 +23,6 @@ TEST(TestMatrixLib, can_create_with_rows_and_cols) {
 	EXPECT_EQ(3, matrix.cols());
 }
 
-TEST(TestMatrixLib, throw_when_try_create_with_incorrect_size) {
-	// Arrange
-
-	// Act & Assert
-	ASSERT_ANY_THROW(Matrix<int> matrix(-2, 3));
-}
-
 TEST(TestMatrixLib, can_create_with_copy) {
 	// Arrange & Act
 	Matrix<int> matrix_1(2, 3);
@@ -346,7 +339,6 @@ TEST(TestMatrixLib, can_mult_scalar_with_assign_correctly) {
 						{12, 15, 18} });
 
 	// Act
-	std::cout << matrix_1;
 	matrix_1 *= scalar;
 
 	// Assert
