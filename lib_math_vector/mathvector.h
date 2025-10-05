@@ -47,7 +47,6 @@ public:
 	friend std::istream& operator >> (std::istream&, MathVector<T>&);
 	template <class T>
 	friend std::ostream& operator << (std::ostream&, const MathVector<T>&);
-
 };
 
 template <class T>

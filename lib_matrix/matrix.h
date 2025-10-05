@@ -264,7 +264,12 @@ std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
 }
 
 template <class T>
-std::istream& operator >> (std::istream& in, const Matrix<T>& matrix) {
+std::istream& operator >> (std::istream& in, Matrix<T>& matrix) {
+	for (size_t i = 0; i < matrix._rows; i++) {
+		for (size_t j = 0; j < matrix._cols; j++) {
+			in >> matrix[i][j];
+		}
+	}
 	return in;
 }
 

@@ -34,7 +34,7 @@ public:
 	template <class T>
 	friend std::ostream& operator << (std::ostream&, const TriangleMatrix<T>&);
 	template <class T>
-	friend std::istream& operator >> (std::istream&, const TriangleMatrix<T>&);
+	friend std::istream& operator >> (std::istream&, TriangleMatrix<T>&);
 };
 
 template <class T>
@@ -179,7 +179,12 @@ std::ostream& operator << (std::ostream& out, const TriangleMatrix<T>& matrix) {
 }
 
 template <class T>
-std::istream& operator >> (std::istream& in, const TriangleMatrix<T>& matrix) {
+std::istream& operator >> (std::istream& in, TriangleMatrix<T>& matrix) {
+	for (size_t i = 0; i < matrix.size(); i++) {
+		for (size_t j = i; j < matrix.size(); j++) {
+			in >> matrix[i][j];
+		}
+	}
 	return in;
 }
 
