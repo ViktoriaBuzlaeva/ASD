@@ -22,6 +22,9 @@ public:
 	inline size_t& rows() noexcept;
 	inline size_t& cols() noexcept;
 
+	inline const T& at(size_t, size_t) const;
+	inline T& at(size_t, size_t);
+
 	Matrix<T> transpose() const;
 
 	Matrix<T> operator + (const Matrix<T>&) const;
@@ -104,6 +107,16 @@ inline size_t& Matrix<T>::rows() noexcept {
 template <class T>
 inline size_t& Matrix<T>::cols() noexcept {
 	return _cols;
+}
+
+template <class T>
+inline const T& Matrix<T>::at(size_t rows, size_t cols) const {
+	return this->MathVector<MathVector<T>>::at(rows).at(cols);
+}
+
+template <class T>
+inline T& Matrix<T>::at(size_t rows, size_t cols) {
+	return this->MathVector<MathVector<T>>::at(rows).at(cols);
 }
 
 template <class T>

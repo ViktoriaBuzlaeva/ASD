@@ -21,6 +21,9 @@ public:
 
 	inline T* data() noexcept;
 
+	inline const T& at(size_t) const;
+	inline T& at(size_t);
+
 	MathVector<T> operator + (const MathVector<T>&) const;
 	MathVector<T> operator - (const MathVector<T>&) const;
 	T operator * (const MathVector<T>&) const;
@@ -77,6 +80,26 @@ inline const T* MathVector<T>::data() const noexcept {
 template <class T>
 inline T* MathVector<T>::data() noexcept {
 	return TVector::data();
+}
+
+template <class T>
+inline const T& MathVector<T>::at(size_t pos) const {
+	if (pos >= _start_index + size()) throw std::logic_error ("Error in at method: position out of range!");
+	if (pos < _start_index) {
+		T default = T();
+		return default;
+	}
+	return TVector::operator [] (pos - _start_index);
+}
+
+template <class T>
+inline T& MathVector<T>::at(size_t pos) {
+	if (pos >= _start_index + size()) throw std::logic_error("Error in at method: position out of range!");
+	if (pos < _start_index) {
+		T default = T();
+		return default;
+	}
+	return TVector::operator [] (pos - _start_index);
 }
 
 template <class T>

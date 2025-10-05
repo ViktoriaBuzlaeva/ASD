@@ -344,3 +344,21 @@ TEST(TestMatrixLib, can_mult_scalar_with_assign_correctly) {
 	// Assert
 	EXPECT_EQ(matrix_2, matrix_1);
 }
+
+TEST(TestMatrixLib, can_access_with_method_at) {
+	// Arrange
+	Matrix<int> matrix_1({ {1, 2, 3},
+						{4, 5, 6} });
+
+	// Act & Assert
+	EXPECT_EQ(1, matrix_1.at(0, 0));
+}
+
+TEST(TestMatrixLib, throw_when_try_access_with_method_at_out_of_range) {
+	// Arrange
+	Matrix<int> matrix_1({ {1, 2, 3},
+						{4, 5, 6} });
+
+	// Act & Assert
+	ASSERT_ANY_THROW(matrix_1.at(3, 4));
+}

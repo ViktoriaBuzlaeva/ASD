@@ -257,3 +257,28 @@ TEST(TestTriangleMatrixLib, can_mult_scalar_with_assign_correctly) {
 	// Assert
 	EXPECT_EQ(matrix_2, matrix_1);
 }
+
+TEST(TestTriangleMatrixLib, can_access_with_method_at) {
+	// Arrange
+	TriangleMatrix<int> tmatrix({ {1, 2}, {4} });
+
+	//  Act & Assert
+	EXPECT_EQ(1, tmatrix.at(0, 0));
+}
+
+TEST(TestTriangleMatrixLib, can_access_with_method_at_zero_elem) {
+	// Arrange
+	TriangleMatrix<int> tmatrix({ {1, 2}, {4} });
+	int zero_elem = tmatrix.at(1, 0);
+
+	//  Act & Assert
+	EXPECT_EQ(0, zero_elem);
+}
+
+TEST(TestTriangleMatrixLib, throw_when_try_access_with_method_at_out_of_range) {
+	// Arrange
+	TriangleMatrix<int> tmatrix({ {1, 2}, {4} });
+
+	// Act & Assert
+	ASSERT_ANY_THROW(tmatrix.at(3, 3));
+}

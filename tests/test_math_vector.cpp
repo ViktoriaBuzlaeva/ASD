@@ -189,3 +189,19 @@ TEST(TestMathVectorLib, can_access_with_operator_brackets_with_start_index) {
 	EXPECT_EQ(0, zero_elem);
 	EXPECT_EQ(1, mvector[1]);
 }
+
+TEST(TestMathVectorLib, can_access_with_method_at) {
+	// Arrange
+	MathVector<int> mvector({ 1, 2, 3 });
+
+	//  Act & Assert
+	EXPECT_EQ(1, mvector.at(0));
+}
+
+TEST(TestMathVectorLib, throw_when_try_access_with_method_at_out_of_range) {
+	// Arrange
+	MathVector<int> mvector({ 1, 2, 3 });
+
+	// Act & Assert
+	ASSERT_ANY_THROW(mvector.at(3));
+}
