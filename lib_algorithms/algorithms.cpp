@@ -2,24 +2,44 @@
 
 #include "../lib_algorithms/algorithms.h"
 
-int find_local_min_matrix(Matrix<int> matrix) {
-	srand(time(0));
+int find_local_min_matrix(Matrix<int> matrix, unsigned int seed) {
+	srand(seed);
 	int size = matrix.rows();
 	int x = rand() % (size);
 	int y = rand() % (size);
 
-	int min_value = matrix[x][y];
+    while (true) {
+        int value = matrix[x][y];
+        int i = x, j = y;
+        int min_value = value;
 
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if ((i == x - 1 || i == x + 1) && j == y || (j == y - 1 || j == y + 1) && i == x) {
-				if (min_value > matrix[i][j]) {
-					min_value = matrix[i][j];
-					x = i;
-					y = j;
-				}
-			}
-		}
-	}
-	return min_value;
+        if (x + 1 < size && min_value > matrix[x + 1][y]) {
+            min_value = matrix[x + 1][y];
+            i = x + 1;
+            j = y;
+        }
+        if (x - 1 >= 0 && min_value > matrix[x - 1][y]) {
+            min_value = matrix[x - 1][y];
+            i = x - 1;
+            j = y;
+        }
+        if (y + 1 < size && min_value > matrix[x][y + 1]) {
+            min_value = matrix[x][y + 1];
+            i = x;
+            j = y + 1;
+        }
+        if (y - 1 >= 0 && min_value > matrix[x][y - 1]) {
+            min_value = matrix[x][y + 1];
+            i = x;
+            j = y + 1;
+        }
+
+        if (min_value >= value) {
+            return value;
+        }
+        else {
+            x = i;
+            y = j;
+        }
+    }
 }

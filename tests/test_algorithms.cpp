@@ -101,7 +101,20 @@ TEST(TestAlgorithmsLib, can_determine_touch_spheres) {
 	EXPECT_EQ(Touch, res);
 }
 
-TEST(TestAlgorithmsLib, can_find_local_min) {
+TEST(TestAlgorithmsLib, can_find_one_local_min) {
+	// Arrange
+	Matrix<int> matrix({ {1, 2, 3},
+		{ 4, 5, 6 },
+		{ 7, 8, 9 } });
+
+	// Act
+	int value = find_local_min_matrix(matrix);
+
+	// Assert
+	EXPECT_EQ(1, value);
+}
+
+TEST(TestAlgorithmsLib, can_find_any_local_min) {
 	// Arrange
 	Matrix<int> matrix({ {3, 1, 2},
 		{ 5, 8, 4 },
@@ -117,4 +130,3 @@ TEST(TestAlgorithmsLib, can_find_local_min) {
 	bool expected_result = true;
 	EXPECT_EQ(expected_result, actual_result);
 }
-

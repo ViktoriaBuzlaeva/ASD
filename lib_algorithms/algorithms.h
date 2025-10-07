@@ -23,6 +23,6 @@ TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
     }
 }
 
-int find_local_min_matrix(Matrix<int>);
+int find_local_min_matrix(Matrix<int>, unsigned int seed = time(0));
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_
