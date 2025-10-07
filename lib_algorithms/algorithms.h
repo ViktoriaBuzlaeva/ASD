@@ -3,6 +3,8 @@
 #ifndef LIB_ALGORITHMS_ALGORITHMS_H_
 #define LIB_ALGORITHMS_ALGORITHMS_H_
 
+#include "../lib_matrix/matrix.h"
+
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
 template <class T>
@@ -20,5 +22,7 @@ TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
         return Touch;
     }
 }
+
+int find_local_min_matrix(Matrix<int>);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_
