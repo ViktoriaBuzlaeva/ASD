@@ -29,9 +29,9 @@ int find_local_min_matrix(Matrix<int> matrix, unsigned int seed) {
             j = y + 1;
         }
         if (y - 1 >= 0 && min_value > matrix[x][y - 1]) {
-            min_value = matrix[x][y + 1];
+            min_value = matrix[x][y - 1];
             i = x;
-            j = y + 1;
+            j = y - 1;
         }
 
         if (min_value >= value) {

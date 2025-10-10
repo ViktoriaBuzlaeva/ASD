@@ -1,7 +1,7 @@
 // Copyright 2025 Viktoria Buzlaeva
 
-#ifndef GAMESTORE_TVECTOR_TVECTOR_H_
-#define GAMESTORE_TVECTOR_TVECTOR_H_
+#ifndef LIB_TVECTOR_TVECTOR_H_
+#define LIB_TVECTOR_TVECTOR_H_
 
 #include <iostream>
 #include <random>
@@ -898,4 +898,4 @@ inline void TVector<T>::swap_positions(size_t first, size_t second) noexcept {
     _data[second] = tmp;
 }
 
-#endif  // GAMESTORE_TVECTOR_TVECTOR_H_
+#endif  // LIB_TVECTOR_TVECTOR_H_

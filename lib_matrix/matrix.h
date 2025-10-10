@@ -133,20 +133,16 @@ Matrix<T> Matrix<T>::transpose() const {
 template <class T>
 Matrix<T> Matrix<T>::operator + (const Matrix<T>& other) const {
 	if (_rows != other._rows || _cols != other._cols) throw std::logic_error("Matrices must be the same size");
-	Matrix<T> result(_rows, _cols);
-	for (size_t i = 0; i < _rows; i++) {
-		result[i] = (*this)[i] + other[i];
-	}
+	Matrix<T> result(*this);
+	result += other;
 	return result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator - (const Matrix<T>& other) const {
 	if (_rows != other._rows || _cols != other._cols) throw std::logic_error("Matrices must be the same size");
-	Matrix<T> result(_rows, _cols);
-	for (size_t i = 0; i < _rows; i++) {
-		result[i] = (*this)[i] - other[i];
-	}
+	Matrix<T> result(*this);
+	result -= other;
 	return result;
 }
 
@@ -175,10 +171,8 @@ MathVector<T> Matrix<T>::operator * (const MathVector<T>& vector) const {
 
 template <class T>
 Matrix<T> Matrix<T>::operator * (const T scalar) const {
-	Matrix<T> result(_rows, _cols);
-	for (size_t i = 0; i < _rows; i++) {
-		result[i] = (*this)[i] * scalar;
-	}
+	Matrix<T> result(*this);
+	result *= scalar;
 	return result;
 }
 

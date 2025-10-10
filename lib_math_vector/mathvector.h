@@ -104,18 +104,16 @@ inline T& MathVector<T>::at(size_t pos) {
 template <class T>
 MathVector<T> MathVector<T>::operator + (const MathVector<T>& other) const {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
-	MathVector result(size(), _start_index);
-	for (size_t i = 0; i < size() + _start_index; i++)
-		result[i] = (*this)[i] + other[i];
+	MathVector result(*this);
+	result += other;
 	return result;
 }
 
 template <class T>
 MathVector<T> MathVector<T>::operator - (const MathVector<T>& other) const {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
-	MathVector result(size(), _start_index);
-	for (size_t i = 0; i < size() + _start_index; i++)
-		result[i] = (*this)[i] - other[i];
+	MathVector result(*this);
+	result -= other;
 	return result;
 }
 
@@ -123,16 +121,16 @@ template <class T>
 T MathVector<T>::operator * (const MathVector<T>& other) const {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	T result = 0;
-	for (size_t i = 0; i < size() + _start_index; i++)
+	size_t max_index = std::max(_start_index, other._start_index);
+	for (size_t i = max_index; i < size() + _start_index; i++)
 		result += (*this)[i] * other[i];
 	return result;
 }
 
 template <class T>
 MathVector<T> MathVector<T>::operator * (const T scalar) const {
-	MathVector result(size(), _start_index);
-	for (size_t i = 0; i < size() + _start_index; i++)
-		result[i] = (*this)[i] * scalar;
+	MathVector result(*this);
+	result *= scalar;
 	return result;
 }
 
@@ -144,7 +142,8 @@ MathVector<T> operator * (const T scalar, const MathVector<T>& vec) {
 template <class T>
 MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
-	for (size_t i = 0; i < size() + _start_index; i++)
+	size_t min_index = std::min(_start_index, other._start_index);
+	for (size_t i = min_index; i < size() + _start_index; i++)
 		(*this)[i] += other[i];
 	return *this;
 }
@@ -152,14 +151,15 @@ MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 template <class T>
 MathVector<T>& MathVector<T>::operator -= (const MathVector<T>& other) {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
-	for (size_t i = 0; i < size() + _start_index; i++)
+	size_t min_index = std::min(_start_index, other._start_index);
+	for (size_t i = min_index; i < size() + _start_index; i++)
 		(*this)[i] -= other[i];
 	return *this;
 }
 
 template <class T>
 MathVector<T>& MathVector<T>::operator *= (const T scalar) {
-	for (size_t i = 0; i < size() + _start_index; i++)
+	for (size_t i = _start_index; i < size() + _start_index; i++)
 		(*this)[i] *= scalar;
 	return *this;
 }
