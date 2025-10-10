@@ -103,7 +103,7 @@ inline T& MathVector<T>::at(size_t pos) {
 
 template <class T>
 MathVector<T> MathVector<T>::operator + (const MathVector<T>& other) const {
-	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
+	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	MathVector result(size(), _start_index);
 	for (size_t i = 0; i < size() + _start_index; i++)
 		result[i] = (*this)[i] + other[i];
@@ -112,7 +112,7 @@ MathVector<T> MathVector<T>::operator + (const MathVector<T>& other) const {
 
 template <class T>
 MathVector<T> MathVector<T>::operator - (const MathVector<T>& other) const {
-	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
+	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	MathVector result(size(), _start_index);
 	for (size_t i = 0; i < size() + _start_index; i++)
 		result[i] = (*this)[i] - other[i];
@@ -121,7 +121,7 @@ MathVector<T> MathVector<T>::operator - (const MathVector<T>& other) const {
 
 template <class T>
 T MathVector<T>::operator * (const MathVector<T>& other) const {
-	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
+	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	T result = 0;
 	for (size_t i = 0; i < size() + _start_index; i++)
 		result += (*this)[i] * other[i];
@@ -143,7 +143,7 @@ MathVector<T> operator * (const T scalar, const MathVector<T>& vec) {
 
 template <class T>
 MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
-	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
+	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	for (size_t i = 0; i < size() + _start_index; i++)
 		(*this)[i] += other[i];
 	return *this;
@@ -151,7 +151,7 @@ MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 
 template <class T>
 MathVector<T>& MathVector<T>::operator -= (const MathVector<T>& other) {
-	if (size() != other.size()) throw std::logic_error("Vectors must be the same size");
+	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	for (size_t i = 0; i < size() + _start_index; i++)
 		(*this)[i] -= other[i];
 	return *this;
