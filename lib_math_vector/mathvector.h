@@ -143,8 +143,12 @@ template <class T>
 MathVector<T>& MathVector<T>::operator += (const MathVector<T>& other) {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	size_t min_index = std::min(_start_index, other._start_index);
-	for (size_t i = min_index; i < size() + _start_index; i++)
-		(*this)[i] += other[i];
+	size_t max_size = std::max(size(), other.size());
+	MathVector<T> result(max_size, min_index);
+	for (size_t i = min_index; i < size() + _start_index; i++) {
+		result[i] = (*this)[i] + other[i];
+	}
+	*this = result;
 	return *this;
 }
 
@@ -152,8 +156,12 @@ template <class T>
 MathVector<T>& MathVector<T>::operator -= (const MathVector<T>& other) {
 	if (size() + _start_index != other.size() + other._start_index) throw std::logic_error("Vectors must be the same size");
 	size_t min_index = std::min(_start_index, other._start_index);
-	for (size_t i = min_index; i < size() + _start_index; i++)
-		(*this)[i] -= other[i];
+	size_t max_size = std::max(size(), other.size());
+	MathVector<T> result(max_size, min_index);
+	for (size_t i = min_index; i < size() + _start_index; i++) {
+		result[i] = (*this)[i] - other[i];
+	}
+	*this = result;
 	return *this;
 }
 
@@ -185,8 +193,8 @@ bool MathVector<T>::operator != (const MathVector<T>& other) const noexcept {
 
 template <class T>
 const T& MathVector<T>::operator[] (size_t pos) const noexcept {
+	T default = T();
 	if (pos < _start_index || pos >= _start_index + size()) {
-		T default = T();
 		return default;
 	}
 	return TVector::operator [] (pos - _start_index);
@@ -194,8 +202,8 @@ const T& MathVector<T>::operator[] (size_t pos) const noexcept {
 
 template <class T>
 T& MathVector<T>::operator[] (size_t pos) noexcept {
+	T default = T();
 	if (pos < _start_index || pos >= _start_index + size()) {
-		T default = T();
 		return default;
 	}
 	return TVector::operator [] (pos - _start_index);

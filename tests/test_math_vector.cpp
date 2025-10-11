@@ -136,6 +136,19 @@ TEST(TestMathVectorLib, can_add_mvectors_with_assign) {
 	EXPECT_EQ(result, mvector_1);
 }
 
+TEST(TestMathVectorLib, can_add_mvectors_with_assign_with_different_start_index) {
+	// Arrange
+	MathVector<int> mvector_1({ 4, 5 }, 2);
+	MathVector<int> mvector_2({ 1, 2, 3, 4 });
+	MathVector<int> result({ 1, 2, 7, 9 });
+
+	// Act
+	mvector_1 += mvector_2;
+
+	// Assert
+	EXPECT_EQ(result, mvector_1);
+}
+
 TEST(TestMathVectorLib, throw_when_try_add_mvectors_with_assign_with_different_size) {
 	// Arrange
 	MathVector<int> mvector_1({ 1, 2 });
@@ -157,6 +170,20 @@ TEST(TestMathVectorLib, can_sub_mvectors_with_assign) {
 	// Assert
 	EXPECT_EQ(result, mvector_1);
 }
+
+TEST(TestMathVectorLib, can_sub_mvectors_with_assign_with_different_start_index) {
+	// Arrange
+	MathVector<int> mvector_1({ 4, 5 }, 2);
+	MathVector<int> mvector_2({ 1, 2, 3, 4 });
+	MathVector<int> result({ -1, -2, 1, 1 });
+
+	// Act
+	mvector_1 -= mvector_2;
+
+	// Assert
+	EXPECT_EQ(result, mvector_1);
+}
+
 
 TEST(TestMathVectorLib, throw_when_try_sub_mvectors_with_assign_with_different_size) {
 	// Arrange
