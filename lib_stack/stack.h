@@ -93,9 +93,7 @@ inline bool Stack<T>::is_full() const noexcept {
 
 template<class T>
 void Stack<T>::clear() noexcept {
-	if (_top != -1) {
-		_top = -1;
-	}
+	_top = -1;
 }
 
 #endif  // LIB_STACK_STACK_H_
