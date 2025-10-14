@@ -177,8 +177,10 @@ TEST(TestQueueLib, can_clear_queue_correctly) {
 	queue.push(111);
 	queue.push(222);
 	queue.clear();
+	queue.push(333);
 
 	EXPECT_EQ(10, queue.get_size());
-	EXPECT_EQ(0, queue.get_count());
+	EXPECT_EQ(1, queue.get_count());
 	EXPECT_EQ(0, queue.get_head());
+	EXPECT_EQ(333, queue.head());
 }

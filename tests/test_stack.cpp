@@ -168,8 +168,10 @@ TEST(TestStackLib, can_clear_stack_correctly) {
 	stack.push(111);
 	stack.push(222);
 	stack.clear();
+	stack.push(333);
 
 	// Assert
 	EXPECT_EQ(10, stack.get_size());
-	EXPECT_EQ(-1, stack.get_top());
+	EXPECT_EQ(0, stack.get_top());
+	EXPECT_EQ(333, stack.top());
 }
