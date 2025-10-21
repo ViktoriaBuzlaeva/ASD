@@ -3,6 +3,8 @@
 #ifndef LIB_STACK_STACK_H_
 #define LIB_STACK_STACK_H_
 
+#include <stdexcept>
+
 template<class T>
 class Stack {
 	T* _data;
