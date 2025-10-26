@@ -114,7 +114,6 @@ void List<T>::insert(size_t pos, const T& value) {
 			curr = curr->next;
 		}
 		insert(curr, value);
-		_count++;
 	}
 }
 
@@ -126,6 +125,59 @@ void List<T>::insert(Node<T>* node, const T& value) {
 	node->next = new_node;
 	if (node == _tail) { _tail = new_node; }
 	_count++;
+}
+
+template <class T>
+void List<T>::pop_front() {
+	if (is_empty()) throw std::logic_error("List is empty");
+	if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; return; }
+	Node<T>* temp = _head;
+	_head = _head->next;
+	delete temp;
+	_count--;
+}
+
+template <class T>
+void List<T>::pop_back() {
+	if (is_empty()) throw std::logic_error("List is empty");
+	if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; return; }
+	Node<T>* curr = _head;
+	while (curr->next != _tail) {
+		curr = curr->next;
+	}
+	delete _tail;
+	_tail = curr;
+	curr->next = nullptr;
+	_count--;
+}
+
+template <class T>
+void List<T>::erase(size_t pos) {
+	if (is_empty()) throw std::logic_error("List is empty");
+	if (pos > _count - 1) throw std::logic_error("Position out of range");
+	if (pos == 0) { pop_front(); }
+	else if (pos == _count - 1) { pop_back(); }
+	else {
+		Node<T>* curr = _head;
+		size_t curr_pos = 0;
+		while (curr != nullptr) {
+			if (curr_pos == pos - 1) break;
+			curr_pos++;
+			curr = curr->next;
+		}
+		erase(curr);
+	}
+}
+
+template <class T>
+void List<T>::erase(Node<T>* node) {
+	if (is_empty()) throw std::logic_error("List is empty");
+	if (node == nullptr || node->next == nullptr) throw std::logic_error("Incorrect input");
+	Node<T>* temp = node->next;
+	node->next = temp->next;
+	if (temp == _tail) _tail = node;
+	delete temp;
+	_count--;
 }
 
 #endif  // LIB_LIST_LIST_H_
