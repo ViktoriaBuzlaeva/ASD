@@ -11,6 +11,21 @@ struct Node {
 	Node<T>* next;
 	
 	Node(const T& value_, Node<T>* next_ = nullptr) : value(value_), next(next_) {}
+
+	bool operator == (const Node<T>& other) {
+		return this->next == other.next;
+	}
+	bool operator != (const Node<T>& other) {
+		return !(*this == other);
+	}
+
+	Node<T>& operator = (const Node<T>& other) {
+		if (*this != other) {
+			this->value = other.value;
+			this->next = other.next;
+		}
+		return *this;
+	}
 };
 
 template <class T>
@@ -38,6 +53,55 @@ public:
 	void pop_back();
 	void erase(size_t);
 	void erase(Node<T>*);
+
+	class Iterator {
+		Node<T>* _current;
+	public:
+		Iterator() : _current(nullptr) {}
+		Iterator(Node<T>* node) { _current = node; }
+
+		Iterator& operator = (const Iterator& other) {
+			if (*this != other) {
+				this->_current = other._current;
+			}
+			return *this;
+		}
+		Iterator& operator += (int num) {
+			for (int i = 0; i < num; i++) {
+				_current = _current->next;
+			}
+			return *this;
+		}
+
+		Iterator& operator ++ () {
+			_current = _current->next;
+			return *this;
+		}
+		Iterator operator ++ (int) {
+			Iterator it = _current;
+			_current = _current->next;
+			return it;
+		}
+
+		T& operator * () {
+			return _current->value;
+		}
+
+		bool operator == (const Iterator& other) const {
+			return this->_current == other._current;
+		}
+
+		bool operator != (const Iterator& other) const {
+			return !(*this == other);
+		}
+	};
+
+	Iterator begin() {
+		return Iterator(_head);
+	}
+	Iterator end() {
+		return Iterator(nullptr);
+	}
 };
 
 template <class T>

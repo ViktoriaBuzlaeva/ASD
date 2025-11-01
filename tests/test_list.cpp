@@ -222,3 +222,44 @@ TEST(TestListLib, throw_when_try_erase_by_pos_out_of_range) {
 
 	ASSERT_ANY_THROW(list.erase(4));
 }
+
+TEST(TestListLib, check_iterator_empty_list) {
+	List<int> list;
+
+	EXPECT_EQ(list.begin(), list.end());
+}
+
+TEST(TestListLib, check_iterator_reading) {
+	List<int> list;
+
+	for (int i = 0; i < 3; i++) {
+		list.push_back(i * 3 + 1);
+	}
+
+	List<int>::Iterator it;
+	it = list.begin();
+
+	EXPECT_EQ(1, *it);
+	EXPECT_EQ(4, *(++it));
+	EXPECT_EQ(7, *(it+=1));
+}
+
+TEST(TestListLib, check_iterator_writing) {
+	List<int> list;
+
+	for (int i = 0; i < 3; i++) {
+		list.push_back(0);
+	}
+
+	int i = 1;
+	List<int>::Iterator it;
+	for (it = list.begin(); it != list.end(); it++) {
+		*it = i;
+		i *= 2;
+	}
+
+	it = list.begin();
+	EXPECT_EQ(1, *it);
+	EXPECT_EQ(2, *(++it));
+	EXPECT_EQ(4, *(++it));
+}
