@@ -6,6 +6,8 @@
 #include <string>
 #include "../lib_stack/stack.h"
 
-bool check_breckets(std::string str);
+bool check_brackets(std::string str);
+
+void read_expression(std::string expression);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_
