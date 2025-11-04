@@ -9,11 +9,12 @@ template <class T>
 struct Node {
 	T value;
 	Node<T>* next;
+	Node<T>* prev;
 	
-	Node(const T& value_, Node<T>* next_ = nullptr) : value(value_), next(next_) {}
+	Node(const T& value_, Node<T>* next_ = nullptr, Node<T>* prev_ = nullptr) : value(value_), next(next_), prev(prev_) {}
 
 	bool operator == (const Node<T>& other) {
-		return this->next == other.next;
+		return this->next == other.next && this->value == other.value;
 	}
 	bool operator != (const Node<T>& other) {
 		return !(*this == other);
@@ -23,6 +24,7 @@ struct Node {
 		if (*this != other) {
 			this->value = other.value;
 			this->next = other.next;
+			this->prev = other.prev;
 		}
 		return *this;
 	}
@@ -30,6 +32,7 @@ struct Node {
 
 template <class T>
 class List {
+protected:
 	Node<T>* _head, * _tail;
 	size_t _count;
 
@@ -44,18 +47,20 @@ public:
 	Node<T>* head() const;
 	Node<T>* tail() const;
 
-	void push_front(const T&) noexcept;
-	void push_back(const T&) noexcept;
-	void insert(size_t, const T&);
-	void insert(Node<T>*, const T&);
+	virtual void push_front(const T&) noexcept;
+	virtual void push_back(const T&) noexcept;
+	virtual void insert(size_t, const T&);
+	virtual void insert(Node<T>*, const T&);
 
-	void pop_front();
-	void pop_back();
-	void erase(size_t);
-	void erase(Node<T>*);
+	virtual void pop_front();
+	virtual void pop_back();
+	virtual void erase(size_t);
+	virtual void erase(Node<T>*);
 
 	class Iterator {
+	protected:
 		Node<T>* _current;
+
 	public:
 		Iterator() : _current(nullptr) {}
 		Iterator(Node<T>* node) { _current = node; }
@@ -126,7 +131,6 @@ List<T>::List(const List<T>& other) {
 	}
 
 	_tail = current_this;
-	_count = other._count;
 }
 
 template <class T>
