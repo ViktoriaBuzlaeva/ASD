@@ -981,3 +981,46 @@ TEST(TestTVectorLib, can_sort) {
 	EXPECT_EQ(v1.capacity(), v2.capacity());
 	EXPECT_EQ(v1, v2);
 }
+
+TEST(TestTVectorLib, check_iterator_empty_tvector) {
+	TVector<int> vec;
+
+	int i = 1;
+	TVector<int>::Iterator it;
+	for (it = vec.begin(); it != vec.end(); it++) {
+		*it = i;
+	}
+
+	EXPECT_EQ(vec.end(), vec.begin());
+	EXPECT_EQ(it, vec.begin());
+}
+
+TEST(TestTVectorLib, check_iterator_reading) {
+	TVector<int> vec({ 1, 2, 3 });
+
+	TVector<int>::Iterator it = vec.begin();
+	EXPECT_EQ(1, *it);
+	EXPECT_EQ(3, *(it+=2));
+	EXPECT_EQ(2, *(--it));
+	EXPECT_EQ(1, *(it-=1));
+}
+
+TEST(TestTVectorLib, check_iterator_writing) {
+	TVector<int> vec({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+		17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+		34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 });
+
+	vec.erase(2);
+	int i = 1;
+	TVector<int>::Iterator it;
+	for (it = vec.begin(); it != vec.end(); it++) {
+		i = *it;
+		i *= 2;
+		*it = i;
+	}
+
+	it = vec.begin();
+	EXPECT_EQ(2, *it);
+	EXPECT_EQ(4, *(++it));
+	EXPECT_EQ(8, *(++it));
+}

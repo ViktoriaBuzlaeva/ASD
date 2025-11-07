@@ -31,16 +31,12 @@ public:
     inline T* data() noexcept;  // setters
     inline T& front();
     inline T& back();
-    inline T* begin() noexcept;
-    inline T* end() noexcept;
 
     inline const T* data() const noexcept;  // getters
     inline const size_t size() const noexcept;
     inline const size_t capacity() const noexcept;
     inline const T& front() const;
     inline const T& back() const;
-    inline const T* begin() const noexcept;
-    inline const T* end() const noexcept;
 
     void push_front(const T&) noexcept;
     void push_back(const T&) noexcept;
@@ -98,6 +94,116 @@ public:
     void print() noexcept;
     template <class T>
     friend std::ostream& operator << (std::ostream&, const TVector<T>&);
+
+    class Iterator {
+    private:
+        T* _data;
+        State* _states;
+        size_t _index;
+        size_t _size;
+
+    public:
+        Iterator() : _data(nullptr), _states(nullptr), _index(0), _size(0) {}
+        Iterator(T* data, State* states, size_t index, size_t size) : _data(data), _states(states), _index(index), _size(size) {
+            while (_index < _size && _states[_index] != busy) {
+                ++_index;
+            }
+        }
+
+        Iterator& operator = (const Iterator& other) {
+            if (this != &other) {
+                _data = other._data;
+                _states = other._states;
+                _index = other._index;
+                _size = other._size;
+            }
+            return *this;
+        }
+
+        Iterator& operator ++ () {
+            if (_index >= _size) throw std::logic_error("Incrementing past end iterator");
+            ++_index;
+            while (_index < _size && _states[_index] != busy) {
+                ++_index;
+            }
+            return *this;
+        }
+
+        Iterator operator ++ (int) {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        Iterator& operator += (int num) {
+            if (num < 0) {
+                return *this -= (-num);
+            }
+            for (int i = 0; i < num; i++) {
+                if (_index >= _size) {
+                    throw std::logic_error("Advancing past end iterator");
+                }
+                ++(*this);
+            }
+            return *this;
+        }
+
+        Iterator& operator -- () {
+            if (_index == 0) throw std::logic_error("Decrementing before begin iterator");
+            --_index;
+            while (_states[_index] != busy) {
+                --_index;
+                if (_index < 0) throw std::logic_error("Invalid action");
+            }
+            return *this;
+        }
+
+        Iterator operator -- (int) {
+            Iterator tmp = *this;
+            --(*this);
+            return tmp;
+        }
+
+        Iterator& operator -= (int num) {
+            if (num < 0) {
+                return *this += (-num);
+            }
+            for (int i = 0; i < num; i++) {
+                if (_index == 0) throw std::logic_error("Reduction before begin iterator");
+                --(*this);
+            }
+            return *this;
+        }
+
+        T& operator * () {
+            if (_index >= _size || _states[_index] != busy) throw std::logic_error("Invalid iterator");
+            return _data[_index];
+        }
+
+        bool operator == (const Iterator& other) const {
+            return _data == other._data && _index == other._index;
+        }
+
+        bool operator != (const Iterator& other) const {
+            return !(*this == other);
+        }
+    };
+
+    const Iterator begin() const {
+        return Iterator(_data, _states, 0, _size + _deleted);
+    }
+
+    const Iterator end() const {
+        return Iterator(_data, _states, _size + _deleted, _size + _deleted);
+    }
+
+    Iterator begin() {
+        return Iterator(_data, _states, 0, _size + _deleted);
+    }
+
+    Iterator end() {
+        return Iterator(_data, _states, _size + _deleted, _size + _deleted);
+    }
 
 private:
     size_t _deleted;
@@ -248,16 +354,6 @@ inline T& TVector<T>::back() {
 }
 
 template <class T>
-inline T* TVector<T>::begin() noexcept {
-    return _data;
-}
-
-template <class T>
-inline T* TVector<T>::end() noexcept {
-    return _data + _size + _deleted;
-}
-
-template <class T>
 inline const T* TVector<T>::data() const noexcept {
     return _data;
 }
@@ -289,16 +385,6 @@ inline const T& TVector<T>::back() const {
     if (is_empty()) throw std::logic_error
     ("Error in back method: vector is empty!");
     return _data[_size + _deleted - 1];
-}
-
-template <class T>
-inline const T* TVector<T>::begin() const noexcept {
-    return _data;
-}
-
-template <class T>
-inline const T* TVector<T>::end() const noexcept {
-    return _data + _size + _deleted;
 }
 
 template <class T>
@@ -446,7 +532,7 @@ void TVector<T>::replace(size_t pos, const T& value) {
 
 template <class T>
 void TVector<T>::replace(T* pos, const T& value) {
-    if (pos < begin() || pos >= end()) throw std::logic_error
+    if (pos < _data || pos >= _data + _size + _deleted) throw std::logic_error
     ("Error in replace method: position out of range!");
     if (_states[pos - data()] == deleted) throw std::logic_error
     ("Error in replace method: element does not exist!");
