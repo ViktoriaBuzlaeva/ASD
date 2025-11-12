@@ -73,18 +73,19 @@ public:
 		}
 		Iterator& operator += (int num) {
 			for (int i = 0; i < num; i++) {
-				_current = _current->next;
+				++(*this);
 			}
 			return *this;
 		}
 
 		Iterator& operator ++ () {
+			if (_current == nullptr) throw std::logic_error("Incrementing past end iterator");
 			_current = _current->next;
 			return *this;
 		}
 		Iterator operator ++ (int) {
 			Iterator it = _current;
-			_current = _current->next;
+			++(*this);
 			return it;
 		}
 

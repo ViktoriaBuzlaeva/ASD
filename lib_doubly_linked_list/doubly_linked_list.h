@@ -30,19 +30,20 @@ public:
 
 		Iterator& operator -= (int num) {
 			for (int i = 0; i < num; i++) {
-				_current = _current->prev;
+				--(*this);
 			}
 			return *this;
 		}
 
 		Iterator& operator--() {
+			if (_current->prev == nullptr) throw std::logic_error("Decrementing before begin iterator");
 			_current = _current->prev;
 			return *this;
 		}
 
 		Iterator operator--(int) {
 			Iterator it = _current;
-			_current = _current->prev;
+			--(*this);
 			return it;
 		}
 	};
