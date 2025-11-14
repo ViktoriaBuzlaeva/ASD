@@ -130,3 +130,29 @@ TEST(TestAlgorithmsLib, can_find_any_local_min) {
 	bool expected_result = true;
 	EXPECT_EQ(expected_result, actual_result);
 }
+
+TEST(TestDSULib, can_count_islands) {
+	Matrix<int> matrix_1({ { 1, 0, 0, 0, 0, 1 },
+						{ 0, 0, 0, 0, 1, 1, },
+						{ 1, 1, 0, 0, 0, 1 },
+						{ 1, 0, 0, 0, 0, 1 },
+						{ 1, 0, 0, 1, 0, 1 },
+						{ 0, 0, 0, 1, 1, 1 } });
+
+	Matrix<int> matrix_2({ { 1, 0, 0, 0, 0, 1 },
+						{ 0, 0, 0, 0, 1, 1, },
+						{ 1, 1, 0, 0, 0, 1 },
+						{ 1, 0, 0, 0, 0, 1 },
+						{ 1, 0, 0, 1, 0, 1 } });
+
+	Matrix<int> matrix_3({ { 1, 0, 0, 0, 0, 1 },
+						{ 0, 0, 0, 0, 1, 1, },
+						{ 1, 1, 0, 0, 0, 1 },
+						{ 0, 0, 0, 0, 0, 1 },
+						{ 1, 1, 0, 1, 0, 1 },
+						{ 0, 1, 0, 1, 0, 1 } });
+
+	EXPECT_EQ(3, find_number_of_islands(matrix_1));
+	EXPECT_EQ(4, find_number_of_islands(matrix_2));
+	EXPECT_EQ(5, find_number_of_islands(matrix_3));
+}

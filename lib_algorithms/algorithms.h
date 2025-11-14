@@ -4,6 +4,7 @@
 #define LIB_ALGORITHMS_ALGORITHMS_H_
 
 #include "../lib_matrix/matrix.h"
+#include "../lib_dsu/dsu.h"
 
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
@@ -24,5 +25,7 @@ TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
 }
 
 int find_local_min_matrix(Matrix<int>, unsigned int seed = time(0));
+
+int find_number_of_islands(Matrix<int>);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_

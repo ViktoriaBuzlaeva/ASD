@@ -43,3 +43,39 @@ int find_local_min_matrix(Matrix<int> matrix, unsigned int seed) {
         }
     }
 }
+
+int find_number_of_islands(Matrix<int> matrix) {
+    DSU dsu(matrix.rows() * matrix.cols());
+
+    for (int i = 0; i < matrix.rows(); i++) {
+        for (int j = 0; j < matrix.cols(); j++) {
+            if (matrix[i][j] == 1) {
+                int current_index = i * matrix.cols() + j;
+
+                if (j > 0 && matrix[i][j - 1] == 1) {
+                    int left_index = i * matrix.cols() + (j - 1);
+                    dsu.unite(current_index, left_index);
+                }
+
+                if (i > 0 && matrix[i - 1][j] == 1) {
+                    int top_index = (i - 1) * matrix.cols() + j;
+                    dsu.unite(current_index, top_index);
+                }
+            }
+        }
+    }
+
+    int islands_count = 0;
+    for (int i = 0; i < matrix.rows(); i++) {
+        for (int j = 0; j < matrix.cols(); j++) {
+            if (matrix[i][j] == 1) {
+                int index = i * matrix.cols() + j;
+                if (dsu.find(index) == index) {
+                    islands_count++;
+                }
+            }
+        }
+    }
+
+    return islands_count;
+}
