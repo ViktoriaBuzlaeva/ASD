@@ -3,7 +3,13 @@
 #ifndef LIB_ALGORITHMS_ALGORITHMS_H_
 #define LIB_ALGORITHMS_ALGORITHMS_H_
 
+#include <string>
+#include "../lib_stack/stack.h"
 #include "../lib_list/list.h"
+
+bool check_brackets(std::string str);
+
+void read_expression(std::string expression);
 
 template <class T>
 bool is_looped_1(List<T>& list) {
