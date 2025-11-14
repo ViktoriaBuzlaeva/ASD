@@ -7,6 +7,24 @@
 #include "../lib_stack/stack.h"
 #include "../lib_list/list.h"
 
+enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
+
+template <class T>
+TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
+    if (first == second) {
+        return Coincide;
+    }
+    else if (first.cent().find_distance(second.cent()) > (first.rad() + second.rad())) {
+        return NotIntersect;
+    }
+    else if (first.cent().find_distance(second.cent()) < (first.rad() + second.rad())) {
+        return Intersect;
+    }
+    else {
+        return Touch;
+    }
+}
+
 bool check_brackets(std::string str);
 
 void read_expression(std::string expression);
