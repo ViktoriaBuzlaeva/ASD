@@ -20,6 +20,8 @@ add_subdirectory(lib_point3d)
 add_subdirectory(lib_sphere)
 add_subdirectory(lib_stack)
 add_subdirectory(lib_queue)
+add_subdirectory(lib_list)
+add_subdirectory(lib_doubly_linked_list)
 add_subdirectory(lib_algorithms)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 

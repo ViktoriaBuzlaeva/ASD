@@ -45,7 +45,7 @@ void read_expression(std::string expression) {
 
         if (std::isspace(c)) { continue; }
 
-        if (expect_operand) { // Ожидаем открывающую скобку, унарный минус, число или переменную
+        if (expect_operand) { // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (c == '(') {
                 brackets.push(c);
 
@@ -82,7 +82,7 @@ void read_expression(std::string expression) {
                 }
             }
         }
-        else { // Ожидаем закрывающую скобку или операцию
+        else { // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if (c == ')') {
                 if (brackets.is_empty()) {
                     throw std::logic_error("Extra closing bracket");
@@ -93,7 +93,7 @@ void read_expression(std::string expression) {
                 prev_is_operation = false;
             }
             else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
-                if (i == expression.length() - 1) {  // Проверяем, что оператор не в конце
+                if (i == expression.length() - 1) {  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
                     throw std::logic_error("Missing second operand in operation " + std::string(1, c));
                 }
 

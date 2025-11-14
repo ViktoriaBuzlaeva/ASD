@@ -1,0 +1,2 @@
+create_project_lib(DoublyLinkedList)
+add_depend(DoublyLinkedList List lib_list)
