@@ -45,7 +45,7 @@ void read_expression(std::string expression) {
 
         if (std::isspace(c)) { continue; }
 
-        if (expect_operand) { // ������� ����������� ������, ������� �����, ����� ��� ����������
+        if (expect_operand) {
             if (c == '(') {
                 brackets.push(c);
 
@@ -82,7 +82,7 @@ void read_expression(std::string expression) {
                 }
             }
         }
-        else { // ������� ����������� ������ ��� ��������
+        else {
             if (c == ')') {
                 if (brackets.is_empty()) {
                     throw std::logic_error("Extra closing bracket");
@@ -93,7 +93,7 @@ void read_expression(std::string expression) {
                 prev_is_operation = false;
             }
             else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
-                if (i == expression.length() - 1) {  // ���������, ��� �������� �� � �����
+                if (i == expression.length() - 1) {
                     throw std::logic_error("Missing second operand in operation " + std::string(1, c));
                 }
 

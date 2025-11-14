@@ -57,6 +57,26 @@ TEST(TestAlgorithmsLib, can_check_uncorrect_expression_3) {
 	std::string expr = "((x + y) * (x - y)";
 
 	ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_4) {
+	std::string expr = "3 * (15 + (x + y) *";
+
+	ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_5) {
+	std::string expr = "* (15 + (x + y) * (2 * x - 7 * y^2))";
+
+	ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_6) {
+	std::string expr = "(x + y) * (x - y))";
+
+	ASSERT_ANY_THROW(read_expression(expr));
+}
+
 TEST(TestAlgoritmsLib, can_check_empty_list_1_alg) {
 	List<int> list;
 
