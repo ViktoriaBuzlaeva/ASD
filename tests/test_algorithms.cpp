@@ -133,27 +133,27 @@ TEST(TestAlgorithmsLib, can_find_any_local_min) {
 
 TEST(TestDSULib, can_count_islands) {
 	Matrix<int> matrix_1({ { 0, 0, 0, 0, 0, 0 },
-						{ 0, 0, 0, 0, 0, 0, },
+						{ 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0 },
 						{ 0, 0, 0, 0, 0, 0 } });
 
 	Matrix<int> matrix_2({ { 1, 0, 0, 0, 0, 1 },
-						{ 0, 0, 0, 0, 1, 1, },
+						{ 0, 0, 0, 0, 1, 1 },
 						{ 1, 1, 0, 0, 0, 1 },
 						{ 1, 0, 0, 0, 0, 1 },
 						{ 1, 0, 0, 1, 0, 1 } });
 
 	Matrix<int> matrix_3({ { 1, 0, 0, 0, 0, 1 },
-						{ 0, 0, 0, 0, 1, 1, },
+						{ 0, 0, 0, 0, 1, 1 },
 						{ 1, 1, 0, 0, 0, 1 },
 						{ 0, 0, 0, 0, 0, 1 },
 						{ 1, 1, 0, 1, 0, 1 },
 						{ 0, 1, 0, 1, 0, 1 } });
 
 	Matrix<int> matrix_4({ { 1, 1, 1, 1, 1, 1 },
-						{ 1, 1, 1, 1, 1, 1, },
+						{ 1, 1, 1, 1, 1, 1 },
 						{ 1, 1, 1, 1, 1, 1 },
 						{ 1, 1, 1, 1, 1, 1 },
 						{ 1, 1, 1, 1, 1, 1 },
@@ -163,10 +163,19 @@ TEST(TestDSULib, can_count_islands) {
 
 	Matrix<int> matrix_6({ { 0 } });
 
+	Matrix<int> matrix_7({
+						{ 0, 0, 0, 0, 0, 1 },
+						{ 0, 0, 0, 1, 1, 1 },
+						{ 1, 1, 1, 1, 0, 1 },
+						{ 0, 1, 0, 1, 0, 1 },
+						{ 1, 1, 0, 1, 0, 1 },
+						{ 0, 1, 0, 1, 0, 1 } });
+
 	EXPECT_EQ(0, find_number_of_islands(matrix_1));
 	EXPECT_EQ(4, find_number_of_islands(matrix_2));
 	EXPECT_EQ(5, find_number_of_islands(matrix_3));
 	EXPECT_EQ(1, find_number_of_islands(matrix_4));
 	EXPECT_EQ(1, find_number_of_islands(matrix_5));
 	EXPECT_EQ(0, find_number_of_islands(matrix_6));
+	EXPECT_EQ(1, find_number_of_islands(matrix_7));
 }
