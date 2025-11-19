@@ -85,11 +85,15 @@ DoublyLinkedList<T>::DoublyLinkedList(const DoublyLinkedList<T>& other) {
 
 template <class T>
 void DoublyLinkedList<T>::push_front(const T& value) noexcept {
-	Node<T>* node = new Node<T>(value, _head);
+	this->List<T>::push_front(value);
+	if (_count != 1) {
+		_head->next->prev = _head;
+	}
+	/*Node<T>* node = new Node<T>(value, _head);
 	if (is_empty()) { _tail = node; }
 	else { _head->prev = node; }
 	_head = node;
-	_count++;
+	_count++;*/
 }
 
 template <class T>

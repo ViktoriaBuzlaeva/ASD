@@ -30,7 +30,7 @@ bool check_brackets(std::string str);
 void read_expression(std::string expression);
 
 template <class T>
-bool is_looped_1(List<T>& list) {
+bool is_looped_1(List<T>& list) {  // O(n)
 	if (list.is_empty() || list.begin() == list.end()) return false;
 
 	List<T>::Iterator it_1 = list.begin();

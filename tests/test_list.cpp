@@ -167,8 +167,8 @@ TEST(TestListLib, can_erase_by_pointer_correctly) {
 	list.push_back(2);
 	list.push_back(3);
 
+	list.erase(list.head()->next->next);
 	list.erase(list.head()->next);
-	list.erase(list.head());
 	EXPECT_EQ(1, list.tail()->value);
 	EXPECT_EQ(1, list.head()->value);
 }
@@ -179,7 +179,7 @@ TEST(TestListLib, throw_when_try_erase_empty_or_incorrect_pos) {
 
 	list.push_back(1);
 	list.push_back(2);
-	ASSERT_ANY_THROW(list.erase(list.tail()));
+	ASSERT_ANY_THROW(list.erase(list.tail()->next));
 }
 
 TEST(TestListLib, throw_when_try_erase_nullptr) {
@@ -232,13 +232,14 @@ TEST(TestListLib, check_iterator_empty_list) {
 		*it = i;
 	}
 
-	EXPECT_EQ(it, list.begin());
+	EXPECT_EQ(list.end(), list.begin());
+	EXPECT_TRUE(list.is_empty());
 }
 
 TEST(TestListLib, check_iterator_reading) {
 	List<int> list;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 5; i++) {
 		list.push_back(i * 3 + 1);
 	}
 
@@ -247,7 +248,7 @@ TEST(TestListLib, check_iterator_reading) {
 
 	EXPECT_EQ(1, *it);
 	EXPECT_EQ(4, *(++it));
-	EXPECT_EQ(7, *(it+=1));
+	EXPECT_EQ(10, *(it+=2));
 }
 
 TEST(TestListLib, check_iterator_writing) {

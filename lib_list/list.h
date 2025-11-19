@@ -12,22 +12,6 @@ struct Node {
 	Node<T>* prev;
 	
 	Node(const T& value_, Node<T>* next_ = nullptr, Node<T>* prev_ = nullptr) : value(value_), next(next_), prev(prev_) {}
-
-	bool operator == (const Node<T>& other) {
-		return this->next == other.next && this->value == other.value;
-	}
-	bool operator != (const Node<T>& other) {
-		return !(*this == other);
-	}
-
-	Node<T>& operator = (const Node<T>& other) {
-		if (*this != other) {
-			this->value = other.value;
-			this->next = other.next;
-			this->prev = other.prev;
-		}
-		return *this;
-	}
 };
 
 template <class T>
@@ -71,6 +55,7 @@ public:
 			}
 			return *this;
 		}
+
 		Iterator& operator += (int num) {
 			for (int i = 0; i < num; i++) {
 				++(*this);
@@ -83,6 +68,7 @@ public:
 			_current = _current->next;
 			return *this;
 		}
+
 		Iterator operator ++ (int) {
 			Iterator it = _current;
 			++(*this);
@@ -225,12 +211,11 @@ void List<T>::erase(size_t pos) {
 	if (is_empty()) throw std::logic_error("List is empty");
 	if (pos > _count - 1) throw std::logic_error("Position out of range");
 	if (pos == 0) { pop_front(); }
-	else if (pos == _count - 1) { pop_back(); }
 	else {
 		Node<T>* curr = _head;
 		size_t curr_pos = 0;
 		while (curr != nullptr) {
-			if (curr_pos == pos - 1) break;
+			if (curr_pos == pos) break;
 			curr_pos++;
 			curr = curr->next;
 		}
@@ -241,11 +226,14 @@ void List<T>::erase(size_t pos) {
 template <class T>
 void List<T>::erase(Node<T>* node) {
 	if (is_empty()) throw std::logic_error("List is empty");
-	if (node == nullptr || node->next == nullptr) throw std::logic_error("Incorrect input");
-	Node<T>* temp = node->next;
-	node->next = temp->next;
-	if (temp == _tail) _tail = node;
-	delete temp;
+	if (node == nullptr) throw std::logic_error("Incorrect input");
+	Node<T>* curr = _head;
+	while (curr->next != node) {
+		curr = curr->next;
+	}
+	curr->next = node->next;
+	if (node == _tail) _tail = curr;
+	delete node;
 	_count--;
 }
 

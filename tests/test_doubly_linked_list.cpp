@@ -260,14 +260,14 @@ TEST(TestDoublyLinkedListLib, check_iterator_writing) {
 	}
 
 	int i = 1;
-	DoublyLinkedList<int>::Iterator it;
-	for (it = list.begin(); it != list.end(); it++) {
+	DoublyLinkedList<int>::Iterator it(list.tail());
+	for (; it != list.begin(); it--) {
 		*it = i;
 		i *= 2;
 	}
 
 	it = list.begin();
-	EXPECT_EQ(1, *it);
+	EXPECT_EQ(0, *it);
 	EXPECT_EQ(2, *(++it));
-	EXPECT_EQ(4, *(++it));
+	EXPECT_EQ(1, *(++it));
 }

@@ -52,7 +52,7 @@ void read_expression(std::string expression) {
                 prev_is_operand = false;
                 prev_is_operation = false;
             }
-            else if (c == '-' && (i == 0 || expression[i - 1] == '(' || prev_is_operation)) {
+            else if (c == '-' && (i == 0 || expression[i - 1] == '(')) {
                 prev_is_operand = false;
                 prev_is_operation = false;
             }
