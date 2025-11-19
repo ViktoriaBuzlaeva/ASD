@@ -24,6 +24,18 @@ TEST(TestDSULib, throw_when_try_find_with_invalid_input) {
     EXPECT_ANY_THROW(dsu.find(5));
 }
 
+TEST(TestDSULib, can_unite_elems_correctly) {
+    DSU dsu(10);
+    dsu.unite(0, 1);
+    dsu.unite(1, 2);
+    dsu.unite(3, 4);
+    dsu.unite(5, 4);
+    EXPECT_EQ(dsu.find(0), dsu.find(1));
+    EXPECT_EQ(dsu.find(0), dsu.find(2));
+    EXPECT_EQ(dsu.find(3), dsu.find(4));
+    EXPECT_EQ(dsu.find(3), dsu.find(5));
+}
+
 TEST(TestDSULib, can_unite_dif_elems_correctly) {
     DSU dsu(3);
     dsu.unite(0, 1);
@@ -66,16 +78,4 @@ TEST(TestDSULib, can_compress_path_correctly) {
     dsu.unite(3, 1);
     EXPECT_EQ(dsu.find(2), dsu.find(1));
     EXPECT_EQ(dsu.find(4), dsu.find(1));
-}
-
-TEST(TestDSULib, can_unite_elems_correctly_1) {
-    DSU dsu(10);
-    dsu.unite(0, 1);
-    dsu.unite(1, 2);
-    dsu.unite(3, 4);
-    dsu.unite(5, 4);
-    EXPECT_EQ(dsu.find(0), dsu.find(1));
-    EXPECT_EQ(dsu.find(0), dsu.find(2));
-    EXPECT_EQ(dsu.find(3), dsu.find(4));
-    EXPECT_EQ(dsu.find(3), dsu.find(5));
 }

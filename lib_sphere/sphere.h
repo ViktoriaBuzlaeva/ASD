@@ -7,19 +7,19 @@
 #include "../lib_circle/circle.h"
 
 class Sphere : public Circle {
-	Point3D _cent;
+    Point3D _cent;
 
 public:
-	Sphere(float rad = 0, float x = 0, float y = 0, float z = 0);
-	Sphere(float, Point3D);
-	Sphere(const Sphere&);
+    Sphere(float rad = 0, float x = 0, float y = 0, float z = 0);
+    Sphere(float, Point3D);
+    Sphere(const Sphere&);
 
-	Point3D cent();
+    Point3D cent();
 
-	const Point3D cent() const;
+    const Point3D cent() const;
 
-	bool operator == (const Sphere&) const;
-	bool operator != (const Sphere&) const;
+    bool operator == (const Sphere&) const;
+    bool operator != (const Sphere&) const;
 };
 
 #endif  // LIB_SPHERE_SPHERE_H_
