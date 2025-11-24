@@ -90,7 +90,7 @@ TEST(TestDoublyLinkedListLib, throw_when_try_insert_by_pointer_nullptr) {
 	list.push_back(1);
 	list.push_back(2);
 	list.push_back(3);
-	Node<int>* ptr = nullptr;
+	DoublyNode<int>* ptr = nullptr;
 
 	ASSERT_ANY_THROW(list.insert(ptr, 555));
 }
@@ -169,8 +169,8 @@ TEST(TestDoublyLinkedListLib, can_erase_by_pointer_correctly) {
 
 	list.erase(list.head()->next);
 	list.erase(list.head());
-	EXPECT_EQ(1, list.tail()->value);
-	EXPECT_EQ(1, list.head()->value);
+	EXPECT_EQ(3, list.tail()->value);
+	EXPECT_EQ(3, list.head()->value);
 }
 
 TEST(TestDoublyLinkedListLib, throw_when_try_erase_empty_or_incorrect_pos) {
@@ -187,7 +187,7 @@ TEST(TestDoublyLinkedListLib, throw_when_try_erase_nullptr) {
 	list.push_back(1);
 	list.push_back(2);
 	list.push_back(3);
-	Node<int>* ptr = nullptr;
+	DoublyNode<int>* ptr = nullptr;
 
 	ASSERT_ANY_THROW(list.erase(ptr));
 }
@@ -220,7 +220,7 @@ TEST(TestDoublyLinkedListLib, throw_when_try_erase_by_pos_out_of_range) {
 	list.push_back(2);
 	list.push_back(3);
 
-	ASSERT_ANY_THROW(list.erase(4));
+	ASSERT_ANY_THROW(list.erase(3));
 }
 
 TEST(TestDoublyLinkedListLib, check_iterator_empty_list) {
@@ -260,14 +260,14 @@ TEST(TestDoublyLinkedListLib, check_iterator_writing) {
 	}
 
 	int i = 1;
-	DoublyLinkedList<int>::Iterator it(list.tail());
-	for (; it != list.begin(); it--) {
+	DoublyLinkedList<int>::Iterator it;
+	for (it = list.rbegin(); it != list.rend(); it--) {
 		*it = i;
 		i *= 2;
 	}
 
 	it = list.begin();
-	EXPECT_EQ(0, *it);
+	EXPECT_EQ(4, *it);
 	EXPECT_EQ(2, *(++it));
 	EXPECT_EQ(1, *(++it));
 }

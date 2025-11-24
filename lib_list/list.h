@@ -9,14 +9,12 @@ template <class T>
 struct Node {
 	T value;
 	Node<T>* next;
-	Node<T>* prev;
 	
-	Node(const T& value_, Node<T>* next_ = nullptr, Node<T>* prev_ = nullptr) : value(value_), next(next_), prev(prev_) {}
+	Node(const T& value_, Node<T>* next_ = nullptr, Node<T>* prev_ = nullptr) : value(value_), next(next_) {}
 };
 
 template <class T>
 class List {
-protected:
 	Node<T>* _head, * _tail;
 	size_t _count;
 
@@ -31,18 +29,17 @@ public:
 	Node<T>* head() const;
 	Node<T>* tail() const;
 
-	virtual void push_front(const T&) noexcept;
-	virtual void push_back(const T&) noexcept;
-	virtual void insert(size_t, const T&);
-	virtual void insert(Node<T>*, const T&);
+	void push_front(const T&) noexcept;
+	void push_back(const T&) noexcept;
+	void insert(size_t, const T&);
+	void insert(Node<T>*, const T&);
 
-	virtual void pop_front();
-	virtual void pop_back();
-	virtual void erase(size_t);
-	virtual void erase(Node<T>*);
+	void pop_front();
+	void pop_back();
+	void erase(size_t);
+	void erase(Node<T>*);
 
 	class Iterator {
-	protected:
 		Node<T>* _current;
 
 	public:
