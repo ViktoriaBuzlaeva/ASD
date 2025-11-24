@@ -31,34 +31,34 @@ void read_expression(std::string expression);
 
 template <class T>
 bool is_looped_1(List<T>& list) {  // O(n)
-	if (list.is_empty() || list.begin() == list.end()) return false;
+    if (list.is_empty() || list.begin() == list.end()) return false;
 
-	List<T>::Iterator it_1 = list.begin();
-	List<T>::Iterator it_2 = list.begin();
+    List<T>::Iterator it_1 = list.begin();
+    List<T>::Iterator it_2 = list.begin();
 
-	do {
-		it_1++;
-		it_2++;
-		if (it_2 == nullptr) return false;
-		it_2++;
-		if (it_2 == nullptr) return false;
-	} while (it_1 != it_2);
+    do {
+        it_1++;
+        it_2++;
+        if (it_2 == nullptr) return false;
+        it_2++;
+        if (it_2 == nullptr) return false;
+    } while (it_1 != it_2);
 
-	return true;
+    return true;
 }
 
 template <class T>
 bool is_looped_2(List<T>& list) {
     if (list.is_empty() || list.head() == list.tail()) return false;
 
-	bool loop_found = false;
+    bool loop_found = false;
 
     Node<T>* curr = list.head();
     Node<T>* prev = nullptr;
 
     while (curr != nullptr) {
         if (curr->next == list.head()) {
-			loop_found = true;
+            loop_found = true;
         }
 
         Node<T>* tmp = curr->next;
