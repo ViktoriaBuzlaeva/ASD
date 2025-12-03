@@ -1,0 +1,5 @@
+create_project_lib(Parser)
+add_depend(Parser Lexem lib_lexem)
+add_depend(Parser Functions lib_functions)
+add_depend(Parser List lib_list)
+add_depend(Parser Stack lib_stack)

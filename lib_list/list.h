@@ -39,6 +39,8 @@ public:
     void erase(size_t);
     void erase(Node<T>*);
 
+    List<T>& operator=(const List<T>& other);
+
     class Iterator {
         Node<T>* _current;
 
@@ -232,6 +234,32 @@ void List<T>::erase(Node<T>* node) {
     if (node == _tail) _tail = curr;
     delete node;
     _count--;
+}
+
+template <class T>
+List<T>& List<T>::operator=(const List<T>& other) {
+    if (this != &other) {
+        _count = other._count;
+
+        if (_count == 0) {
+            _head = nullptr;
+            _tail = nullptr;
+            return *this;
+        }
+
+        _head = new Node<T>(other._head->value);
+        Node<T>* current_this = _head;
+        Node<T>* current_other = other._head->next;
+
+        while (current_other != nullptr) {
+            current_this->next = new Node<T>(current_other->value);
+            current_this = current_this->next;
+            current_other = current_other->next;
+        }
+
+        _tail = current_this;
+    }
+    return *this;
 }
 
 #endif  // LIB_LIST_LIST_H_

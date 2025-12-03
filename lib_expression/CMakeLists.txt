@@ -1,0 +1,2 @@
+create_project_lib(Expression)
+add_depend(Expression Parser lib_parser)
