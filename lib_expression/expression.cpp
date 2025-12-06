@@ -58,37 +58,38 @@ double Expression::calculate() {
     Stack<double> stack;
 
     for (auto it = _polish_record.begin(); it != _polish_record.end(); it++) {
-        Lexem lexem = *it;
-
-        switch (lexem.type) {
+        switch ((*it).type) {
         case Constant:
-            stack.push(lexem.value);
+            stack.push((*it).value);
             break;
         case Variable:
-            if (lexem.value == DBL_MAX) {
-                throw std::logic_error("Переменная '" + lexem.name + "' не определена");
+            if ((*it).value == DBL_MAX) {
+                throw std::logic_error("Переменная '" + (*it).name + "' не определена");
             }
-            stack.push(lexem.value);
+            stack.push((*it).value);
             break;
         case Function: {
+            if (stack.is_empty()) throw std::logic_error("Отсутствует аргумент");
             double val = stack.top();
             stack.pop();
-            stack.push(lexem.function(val));
+            stack.push((*it).function(val));
             break;
         }
         case Operator: {
+            if (stack.is_empty()) throw std::logic_error("Отсутствует операнд");
             double b = stack.top();
             stack.pop();
+            if (stack.is_empty()) throw std::logic_error("Отсутствует операнд");
             double a = stack.top();
             stack.pop();
-            if (lexem.name == "+") stack.push(a + b);
-            else if (lexem.name == "-") stack.push(a - b);
-            else if (lexem.name == "*") stack.push(a * b);
-            else if (lexem.name == "/") {
+            if ((*it).name == "+") stack.push(a + b);
+            else if ((*it).name == "-") stack.push(a - b);
+            else if ((*it).name == "*") stack.push(a * b);
+            else if ((*it).name == "/") {
                 if (b == 0) throw std::logic_error("Некорректное деление на ноль");
                 stack.push(a / b);
             }
-            else if (lexem.name == "^") stack.push(pow(a, b));
+            else if ((*it).name == "^") stack.push(pow(a, b));
             break;
         }
         }
@@ -155,13 +156,18 @@ List<Lexem> Expression::to_polish_record() {
 std::string Expression::to_string() {
     std::string res;
     bool is_abs = false;
+    Stack<std::string> brackets;
     
     for (auto it = _lexems.begin(); it != _lexems.end(); it++) {
         if ((*it).name == "abs") {
             res += "|";
             it++;
-            is_abs = true;
+            brackets.push("|");
             continue;
+        }
+
+        if ((*it).type == OpenBracket) {
+            brackets.push((*it).name);
         }
 
         bool need_space = true;
@@ -180,9 +186,10 @@ std::string Expression::to_string() {
             }
         }
 
-        if ((*it).type == ClosedBracket && is_abs) {
-            is_abs = false;
-            res += "|";
+        if ((*it).type == ClosedBracket) {
+            if (brackets.top() == "|") res += brackets.top();
+            else res += (*it).name;
+            brackets.pop();
             if (need_space) res += " ";
             continue;
         }
@@ -203,6 +210,7 @@ std::istream& operator >> (std::istream& in, Expression& expr) {
     std::string line;
     std::getline(in, line);
     expr._lexems = Parser::parse(line);
+    if (expr._lexems.is_empty()) throw std::logic_error("Incorrect input");
     expr._polish_record = expr.to_polish_record();
     return in;
 }

@@ -28,7 +28,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 prev_is_operand = false;
                 prev_is_operation = false;
             }
-            else if (c == '-' && (i == 0 || expression[i - 1] == '(')) {
+            else if (c == '-' && (i == 0 || lexems.tail()->value.type == OpenBracket)) {
                 lexems.push_back(Lexem("0", Constant, 0));
                 lexems.push_back(Lexem("-", Operator, DBL_MAX, 1));
 
@@ -40,16 +40,13 @@ List<Lexem> Parser::parse(const std::string& expression) {
                     std::string name = read_name(expression, i);
 
                     if (name == "sin") {
-                        Lexem lex("sin", Function, DBL_MAX, -1, Functions::sin);
-                        lexems.push_back(lex);
+                        lexems.push_back(Lexem("sin", Function, DBL_MAX, -1, Functions::sin));
                     }
                     else if (name == "cos") {
-                        Lexem lex("cos", Function, DBL_MAX, -1, Functions::cos);
-                        lexems.push_back(lex);
+                        lexems.push_back(Lexem("cos", Function, DBL_MAX, -1, Functions::cos));
                     }
                     else if (name == "tg") {
-                        Lexem lex("tg", Function, DBL_MAX, -1, Functions::tg);
-                        lexems.push_back(lex);
+                        lexems.push_back(Lexem("tg", Function, DBL_MAX, -1, Functions::tg));
                     }
                     else {
                         lexems.push_back(Lexem(name, Variable));
@@ -59,10 +56,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 else {
                     std::string number = read_num(expression, i);
                     double value = std::stod(number);
-                    std::string str = std::to_string(value);
-                    str.erase(str.find_last_not_of('0') + 1, std::string::npos);
-                    if (str[str.length() - 1] == '.') str.erase(str.length() - 1);
-                    lexems.push_back(Lexem(str, Constant, value));
+                    lexems.push_back(Lexem(number, Constant, value));
                     expect_operand = false;
                 }
 
@@ -71,7 +65,8 @@ List<Lexem> Parser::parse(const std::string& expression) {
             }
             else {
                 if (prev_is_operation) {
-                    throw std::logic_error(error_message(i, "missing second operand in operation '" + std::string(1, expression[i - 1]) + "'"));
+                    do i--; while (expression[i] == ' ');
+                    throw std::logic_error(error_message(i, "missing second operand in operation '" + std::string(1, expression[i]) + "'"));
                 }
                 else {
                     throw std::logic_error(error_message(i, "missing operand"));
@@ -101,7 +96,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 prev_is_operation = false;
             }
             else if (c == '|') {
-                if (brackets.top() == '|') {
+                if (!brackets.is_empty() && brackets.top() == '|') {
                     brackets.pop();
                     lexems.push_back(Lexem(")", ClosedBracket));
 

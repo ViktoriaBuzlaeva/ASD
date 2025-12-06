@@ -151,6 +151,7 @@ void print_tab(TVector<Expression>& exprs) {
         print_expr(i + 1, exprs[i].get_expression(), exprs[i].get_variables());
     }
     print_line();
+    std::cout << std::endl;
 }
 
 void print_main_menu(TVector<Expression>& exprs) {
@@ -181,19 +182,16 @@ int get_user_num() {
 }
 
 void print_creating_exprs_menu() {
+    system("cls");
     std::cout << "============= ÑÎÇÄÀÍÈÅ ÍÎÂÎÃÎ ÂÛÐÀÆÅÍÈß =============" << std::endl;
 }
 
 void start_creating_exprs_menu(TVector<Expression>& exprs) {
-    system("cls");
     print_creating_exprs_menu();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     while (1) {
         std::cout << "Ââåäèòå âûðàæåíèå: ";
-        // std::string expr_str;
-        // std::getline(std::cin, expr_str);
         try {
-            //Expression expr(expr_str);
             Expression expr;
             std::cin >> expr;
             exprs.push_back(expr);
@@ -206,12 +204,14 @@ void start_creating_exprs_menu(TVector<Expression>& exprs) {
 }
 
 void print_no_exprs() {
+    system("cls");
     std::cout << "Íåò âûðàæåíèé!";
     getchar();
     getchar();
 }
 
 void print_deleting_exprs_menu(TVector<Expression>& exprs) {
+    system("cls");
     print_tab(exprs);
     std::cout << "============= ÓÄÀËÅÍÈÅ ÂÛÐÀÆÅÍÈß =============" << std::endl;
 }
@@ -234,7 +234,6 @@ int get_expr_num(const TVector<Expression>& exprs) {
 }
 
 void start_deleting_exprs_menu(TVector<Expression>& exprs) {
-    system("cls");
     if (exprs.is_empty()) {
         print_no_exprs();
         return;
@@ -246,27 +245,41 @@ void start_deleting_exprs_menu(TVector<Expression>& exprs) {
 }
 
 void print_setting_vars_menu(TVector<Expression>& exprs) {
+    system("cls");
     print_tab(exprs);
     std::cout << "============= ÇÀÄÀÍÈÅ ÏÅÐÅÌÅÍÍÛÕ =============" << std::endl;
 }
 
 double get_user_input(const std::string& name) {
     while (1) {
-        std::cout << "Ââåäèòå çíà÷åíèå äëÿ ïåðåìåííîé " + name + " : ";
-        double user_input = 0;
-        if (std::cin >> user_input) {
-            return user_input;
+        std::cout << "Ââåäèòå çíà÷åíèå äëÿ ïåðåìåííîé '" + name + "' : ";
+        std::string user_input = "";
+        bool has_dot = false;
+        bool is_correct = true;
+
+        std::cin >> user_input;
+        int pos = 0;
+        if (std::isdigit(user_input[pos]) || user_input[pos] == '-') {
+            pos++;
+            while (pos < user_input.length() && (std::isdigit(user_input[pos]) || user_input[pos] == '.')) {
+                if (!std::isdigit(user_input[pos])) {
+                    if (has_dot || user_input[pos] != '.') is_correct = false;
+                    has_dot = true;
+                }
+                pos++;
+            }
+            if (is_correct) {
+                double number = std::stod(user_input);
+                return number;
+            }
         }
-        else {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Íåêîððåêòíûé ââîä!" << std::endl;
     }
 }
 
 void start_setting_vars_menu(TVector<Expression>& exprs) {
-    system("cls");
     if (exprs.is_empty()) {
         print_no_exprs();
         return;
@@ -275,7 +288,7 @@ void start_setting_vars_menu(TVector<Expression>& exprs) {
     int expr_num = get_expr_num(exprs);
     if (expr_num == 0) return;
     List<Lexem> variables = exprs[expr_num - 1].get_list_vars();
-    int user_input;
+    double user_input;
 
     for (auto it = variables.begin(); it != variables.end(); it++) {
         user_input = get_user_input((*it).name);
@@ -284,12 +297,12 @@ void start_setting_vars_menu(TVector<Expression>& exprs) {
 }
 
 void print_calculation_menu(TVector<Expression>& exprs) {
+    system("cls");
     print_tab(exprs);
     std::cout << "============= ÂÛ×ÈÑËÅÍÈÅ ÇÍÀ×ÅÍÈß ÂÛÐÀÆÅÍÈß =============" << std::endl;
 }
 
 void start_calculation_menu(TVector<Expression>& exprs) {
-    system("cls");
     if (exprs.is_empty()) {
         print_no_exprs();
         return;

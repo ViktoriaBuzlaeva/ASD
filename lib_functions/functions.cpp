@@ -2,13 +2,23 @@
 
 #include "../lib_functions/functions.h"
 
-#define EPSILON 0.000001
+#define EPSILON 0.001
+#define PI 3.14
 
 double Functions::my_abs(double x) {
     return x < 0 ? -x : x;
 }
 
 double Functions::sin(double x) {
+    x = fmod(x, 2 * PI);
+    
+    if (x > PI) {
+        x -= PI;
+    }
+    else if (x < -PI) {
+        x += 2 * PI;
+    }
+
     double  res = x;
     double term = x;
     int n = 0;
@@ -23,17 +33,7 @@ double Functions::sin(double x) {
 }
 
 double Functions::cos(double x) {
-    double  res = 1.0;
-    double term = 1.0;
-    int n = 0;
-
-    while (my_abs(term) > EPSILON) {
-        n++;
-        term = -term * x * x / ((2 * n) * (2 * n - 1));
-        res += term;
-    }
-
-    return res;
+    return sin(PI / 2 - x);
 }
 
 double Functions::tg(double x) {
