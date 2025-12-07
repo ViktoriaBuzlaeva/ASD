@@ -10,7 +10,8 @@ class Expression {
     List<Lexem> _polish_record;
 
 public:
-    Expression(const std::string& expr = " ");
+    Expression();
+    Expression(const std::string&);
     Expression(const List<Lexem>&);
 
     List<Lexem> get_list_vars();

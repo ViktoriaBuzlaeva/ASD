@@ -2,6 +2,8 @@
 
 #include "../lib_expression/expression.h"
 
+Expression::Expression() : _lexems(List<Lexem>()), _polish_record(List<Lexem>()) {}
+
 Expression::Expression(const std::string& expr) {
     _lexems = Parser::parse(expr);
     _polish_record = to_polish_record();
@@ -210,7 +212,6 @@ std::istream& operator >> (std::istream& in, Expression& expr) {
     std::string line;
     std::getline(in, line);
     expr._lexems = Parser::parse(line);
-    if (expr._lexems.is_empty()) throw std::logic_error("Incorrect input");
     expr._polish_record = expr.to_polish_record();
     return in;
 }

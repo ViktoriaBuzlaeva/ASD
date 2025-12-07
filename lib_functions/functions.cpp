@@ -9,7 +9,7 @@ double Functions::my_abs(double x) {
     return x < 0 ? -x : x;
 }
 
-double Functions::sin(double x) {
+double Functions::my_sin(double x) {
     x = fmod(x, 2 * PI);
     
     if (x > PI) {
@@ -32,11 +32,11 @@ double Functions::sin(double x) {
     return res;
 }
 
-double Functions::cos(double x) {
+double Functions::my_cos(double x) {
     return sin(PI / 2 - x);
 }
 
-double Functions::tg(double x) {
+double Functions::my_tg(double x) {
     double cos_val = cos(x);
 
     if (std::abs(cos_val) < EPSILON) {

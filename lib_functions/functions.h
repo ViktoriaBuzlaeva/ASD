@@ -7,9 +7,9 @@
 
 namespace Functions {
     double my_abs(double);
-    double sin(double);
-    double cos(double);
-    double tg(double);
+    double my_sin(double);
+    double my_cos(double);
+    double my_tg(double);
 }
 
 #endif  // LIB_FUNCTIONS_FUNCTIONS_H_

@@ -124,7 +124,7 @@ int main() {
 #define MAIN_OPTIONS 4
 #define ID_COLUMN_WIDTH 4
 #define EXPRESSION_COLUMN_WIDTH 45
-#define VARIABLES_COLUMN_WIDTH 30
+#define VARIABLES_COLUMN_WIDTH 35
 
 void print_line() {
     std::cout << "+";

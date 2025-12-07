@@ -39,14 +39,9 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 if (std::isalpha(c)) {
                     std::string name = read_name(expression, i);
 
-                    if (name == "sin") {
-                        lexems.push_back(Lexem("sin", Function, DBL_MAX, -1, Functions::sin));
-                    }
-                    else if (name == "cos") {
-                        lexems.push_back(Lexem("cos", Function, DBL_MAX, -1, Functions::cos));
-                    }
-                    else if (name == "tg") {
-                        lexems.push_back(Lexem("tg", Function, DBL_MAX, -1, Functions::tg));
+                    if (name == "sin" || name == "cos" || name == "tg") {
+                        if (!is_correct_function(expression, i + 1)) throw std::logic_error(error_message(i, "missing argument in function '" + name + "'"));
+                        lexems.push_back(Lexem(name, Function, DBL_MAX, -1, get_function(name)));
                     }
                     else {
                         lexems.push_back(Lexem(name, Variable));
@@ -78,18 +73,10 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 if (brackets.is_empty()) {
                     throw std::logic_error(error_message(i, "extra closing bracket"));
                 }
-                if (c == '}' && brackets.top() == '{') {
-                    brackets.pop();
-                }
-                else if (c == ']' && brackets.top() == '[') {
-                    brackets.pop();
-                }
-                else if (c == ')' && brackets.top() == '(') {
-                    brackets.pop();
-                }
-                else {
+                if (!is_matching_brackets(c, brackets.top())) {
                     throw std::logic_error(error_message(i, "wrong closing bracket"));
                 }
+                brackets.pop();
                 lexems.push_back(Lexem(std::string(1, c), ClosedBracket));
 
                 prev_is_operand = true;
@@ -109,23 +96,7 @@ List<Lexem> Parser::parse(const std::string& expression) {
                 if (i == expression.length() - 1) {
                     throw std::logic_error(error_message(i, "missing second operand in operation '" + std::string(1, c) + "'"));
                 }
-                switch (c) {
-                case '+':
-                    lexems.push_back(Lexem("+", Operator, DBL_MAX, 1));
-                    break;
-                case '-':
-                    lexems.push_back(Lexem("-", Operator, DBL_MAX, 1));
-                    break;
-                case '*':
-                    lexems.push_back(Lexem("*", Operator, DBL_MAX, 2));
-                    break;
-                case '/':
-                    lexems.push_back(Lexem("/", Operator, DBL_MAX, 2));
-                    break;
-                case '^':
-                    lexems.push_back(Lexem("^", Operator, DBL_MAX, 3));
-                    break;
-                }
+                lexems.push_back(Lexem(std::string(1, c), Operator, DBL_MAX, get_priority(std::string(1, c))));
 
                 prev_is_operand = false;
                 prev_is_operation = true;
@@ -145,7 +116,21 @@ List<Lexem> Parser::parse(const std::string& expression) {
         throw std::logic_error(error_message(expression.length() - 1, "missing operand"));
     }
 
+    if (lexems.is_empty()) throw std::logic_error(error_message(expression.length() - 1, "empty input"));
+
     return lexems;
+}
+
+double(*Parser::get_function(const std::string& name))(double) {
+    if (name == "sin") return Functions::my_sin;
+    else if (name == "cos") return Functions::my_cos;
+    else if (name == "tg") return Functions::my_tg;
+    return nullptr;
+}
+
+bool Parser::is_correct_function(const std::string& expr, int pos) {
+    while (expr[pos] == ' ') pos++;
+    if (expr[pos] != '(' && expr[pos] != '{' && expr[pos] != '[') return false;
 }
 
 std::string Parser::read_num(const std::string& expr, int& pos) {
@@ -175,6 +160,26 @@ std::string Parser::read_name(const std::string& expr, int& pos) {
     pos--;
 
     return name;
+}
+
+bool Parser::is_matching_brackets(const char& opened, const char& closed) {
+    if (opened == '}' && closed == '{') {
+        return true;
+    }
+    else if (opened == ']' && closed == '[') {
+        return true;
+    }
+    else if (opened == ')' && closed == '(') {
+        return true;
+    }
+    return false;
+}
+
+int Parser::get_priority(const std::string& name) {
+    if (name == "+" || name == "-") return 1;
+    else if (name == "*" || name == "/") return 2;
+    else if (name == "^") return 3;
+    return -1;
 }
 
 std::string Parser::error_message(int pos, const std::string& msg) {

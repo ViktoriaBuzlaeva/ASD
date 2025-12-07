@@ -11,8 +11,14 @@
 namespace Parser {
     List<Lexem> parse(const std::string&);
 
+    bool is_correct_function(const std::string&, int);
+    bool is_matching_brackets(const char&, const char&);
+
     std::string read_num(const std::string&, int&);
     std::string read_name(const std::string&, int&);
+
+    double(*get_function(const std::string&))(double);
+    int get_priority(const std::string&);
 
     std::string error_message(int, const std::string&);
 }
