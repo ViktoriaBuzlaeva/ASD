@@ -104,13 +104,66 @@ int main() {
 
 #define START_MENU_OPTIONS 2
 #define MATRIX_MENU_OPTIONS 7
-#define TRIANGLE_MATRIX_MENU_OPTIONS 5
+#define TRIANGLE_MATRIX_MENU_OPTIONS 7
 
 void show_start_menu() {
     std::cout << "Matrix calculator\n";
-    std::cout << "Choose option (input any key to exit):\n";
+    std::cout << "Choose option:\n";
     std::cout << "1) Matrix;\n";
     std::cout << "2) Triangle matrix.\n";
+    std::cout << "0) Exit.\n";
+}
+
+int get_user_num(int options) {
+    while (1) {
+        int user_num = 0;
+        if (std::cin >> user_num) {
+            if (user_num >= 0 && user_num <= options) {
+                return user_num;
+            }
+        }
+        else {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+        std::cout << "Incorrect input! Try again" << std::endl;
+    }
+}
+
+void show_matrix_input_menu() {
+    std::cout << "Matrix calculator\n";
+    std::cout << "Choose matrix's size\n";
+}
+
+size_t get_user_input(std::string name) {
+    while (1) {
+        std::cout << name;
+        int user_input = 0;
+        if (std::cin >> user_input) {
+            if (user_input >= 0) {
+                return user_input;
+            }
+        }
+        else {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+        std::cout << "Incorrect input! Try again" << std::endl;
+    }
+}
+
+Matrix<double> input_matrix(std::string name) {
+    std::cout << "Matrix " << name << "\n";
+    
+    size_t rows = get_user_input("Rows: ");
+    size_t cols = get_user_input("Columns: ");
+
+    Matrix<double> matrix(rows, cols);
+
+    std::cout << "Input elements separated by a space:\n";
+    std::cin >> matrix;
+
+    return matrix;
 }
 
 void show_matrix_menu(Matrix<double>& A, Matrix<double>& B, Matrix<double>& C) {
@@ -123,41 +176,15 @@ void show_matrix_menu(Matrix<double>& A, Matrix<double>& B, Matrix<double>& C) {
         std::cout << "C = ";
         std::cout << C << std::endl;
     }
-    std::cout << "Choose option (input any key to return start menu):\n";
+    std::cout << "Choose option:\n";
     std::cout << "1) Input matrices (A, B);\n";
     std::cout << "2) Addition;\n";
     std::cout << "3) Subtraction;\n";
     std::cout << "4) Multiplication (matrices);\n";
     std::cout << "5) Multiplication (matrix and vector);\n";
     std::cout << "6) Multiplication (matrix and scalar);\n";
-    std::cout << "7) Exit.\n";
-}
-
-void show_triangle_matrix_menu(Matrix<double>& A, Matrix<double>& B, Matrix<double>& C) {
-    std::cout << "Matrix calculator\n";
-    std::cout << "A = ";
-    std::cout << A << std::endl;
-    std::cout << "B = ";
-    std::cout << B << std::endl;
-    if (C != NULL) {
-        std::cout << "C = ";
-        std::cout << C << std::endl;
-    }
-    std::cout << "Choose option (input any key to return start menu):\n";
-    std::cout << "1) Input matrices (A, B);\n";
-    std::cout << "2) Addition;\n";
-    std::cout << "3) Subtraction;\n";
-    std::cout << "4) Multiplication (matrices);\n";
-    std::cout << "5) Multiplication (matrix and vector);\n";
-    std::cout << "6) Multiplication (matrix and scalar);\n";
-    std::cout << "7) Exit.\n";
-}
-
-char get_user_num(int options) {
-    char user_num = '0';
-    std::cout << "Your choice: ";
-    std::cin >> user_num;
-    return user_num;
+    std::cout << "7) Back.\n";
+    std::cout << "0) Exit.\n";
 }
 
 template <class T>
@@ -180,50 +207,21 @@ T choose_matrix(T A, T B, T C) {
     }
 }
 
-void show_matrix_input_menu() {
-    std::cout << "Matrix calculator\n";
-    std::cout << "Choose matrix's size\n";
-}
-
-Matrix<double> input_matrix(std::string name) {
-    std::cout << "Matrix " << name << "\n";
-    int rows, cols;
-
-    std::cout << "Rows: ";
-    std::cin >> rows;
-
-    std::cout << "Columns: ";
-    std::cin >> cols;
-
-    Matrix<double> matrix(rows, cols);
-
-    std::cout << "Input elements separated by a space:\n";
-    std::cin >> matrix;
-
-    return matrix;
-}
-
-TriangleMatrix<double> input_triangle_matrix(std::string name) {
-    std::cout << "Matrix " << name << "\n";
-    int size;
-
-    std::cout << "Size: ";
-    std::cin >> size;
-
-    TriangleMatrix<double> matrix(size);
-
-    std::cout << "Input non-zero elements separated by a space:\n";
-    std::cin >> matrix;
-
-    return matrix;
-}
-
 Matrix<double> start_addition_menu(Matrix<double>& A, Matrix<double>& B, Matrix<double>& C) {
     Matrix<double> fmatrix = choose_matrix(A, B, C);
     Matrix<double> smatrix = choose_matrix(A, B, C);
 
     Matrix<double> result;
-    result = fmatrix + smatrix;
+
+    try {
+        result = fmatrix + smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+    
     return result;
 }
 
@@ -232,7 +230,16 @@ Matrix<double> start_subtraction_menu(Matrix<double>& A, Matrix<double>& B, Matr
     Matrix<double> smatrix = choose_matrix(A, B, C);
 
     Matrix<double> result;
-    result = fmatrix - smatrix;
+
+    try {
+        result = fmatrix - smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+    
     return result;
 }
 
@@ -241,7 +248,16 @@ Matrix<double> start_multiplication_menu(Matrix<double>& A, Matrix<double>& B, M
     Matrix<double> smatrix = choose_matrix(A, B, C);
 
     Matrix<double> result;
-    result = fmatrix * smatrix;
+
+    try {
+        result = fmatrix * smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+
     return result;
 }
 
@@ -251,11 +267,21 @@ Matrix<double> start_multiplication_vector_menu(Matrix<double>& A, Matrix<double
     std::cout << "Input vector elements separated by a space (size " << vector.size() << "):\n";
     std::cin >> vector;
 
-    MathVector<double> vec_res = matrix * vector;
-    MathVector<MathVector<double>> res(1);
-    res[0] = vec_res;
+    Matrix<double> result;
 
-    Matrix<double> result(res);
+    try {
+        MathVector<double> vec_res = matrix * vector;
+        MathVector<MathVector<double>> res(1);
+        res[0] = vec_res;
+        Matrix<double> r(res);
+        result = r;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+
     return result;
 }
 
@@ -279,36 +305,36 @@ bool start_matrix_menu() {
     while (1) {
         system("cls");
         show_matrix_menu(A, B, C);
-        char user_num = get_user_num(MATRIX_MENU_OPTIONS);
+        int user_num = get_user_num(MATRIX_MENU_OPTIONS);
         bool isBack = false;
 
         system("cls");
         switch (user_num) {
-        case '1':
+        case 1:
             show_matrix_input_menu();
             A = input_matrix("A");
             B = input_matrix("B");
             break;
-        case '2':
+        case 2:
             C = start_addition_menu(A, B, C);
             break;
-        case '3':
+        case 3:
             C = start_subtraction_menu(A, B, C);
             break;
-        case '4':
+        case 4:
             C = start_multiplication_menu(A, B, C);
             break;
-        case '5':
+        case 5:
             C = start_multiplication_vector_menu(A, B, C);
             break;
-        case '6':
+        case 6:
             C = start_multiplication_scalar_menu(A, B, C);
             break;
-        case '7':
-            return true;
-        default:
+        case 7:
             isBack = true;
             break;
+        default:
+            return true;
         }
 
         if (isBack) break;
@@ -317,12 +343,55 @@ bool start_matrix_menu() {
     return false;
 }
 
+TriangleMatrix<double> input_triangle_matrix(std::string name) {
+    std::cout << "Matrix " << name << "\n";
+
+    size_t size = get_user_input("Size: ");
+
+    TriangleMatrix<double> matrix(size);
+
+    std::cout << "Input non-zero elements separated by a space:\n";
+    std::cin >> matrix;
+
+    return matrix;
+}
+
+void show_triangle_matrix_menu(Matrix<double>& A, Matrix<double>& B, Matrix<double>& C) {
+    std::cout << "Matrix calculator\n";
+    std::cout << "A = ";
+    std::cout << A << std::endl;
+    std::cout << "B = ";
+    std::cout << B << std::endl;
+    if (C != NULL) {
+        std::cout << "C = ";
+        std::cout << C << std::endl;
+    }
+    std::cout << "Choose option:\n";
+    std::cout << "1) Input matrices (A, B);\n";
+    std::cout << "2) Addition;\n";
+    std::cout << "3) Subtraction;\n";
+    std::cout << "4) Multiplication (matrices);\n";
+    std::cout << "5) Multiplication (matrix and vector);\n";
+    std::cout << "6) Multiplication (matrix and scalar);\n";
+    std::cout << "7) Back.\n";
+    std::cout << "0) Exit.\n";
+}
+
 TriangleMatrix<double> start_addition_menu(TriangleMatrix<double>& A, TriangleMatrix<double>& B, TriangleMatrix<double>& C) {
     TriangleMatrix<double> fmatrix = choose_matrix(A, B, C);
     TriangleMatrix<double> smatrix = choose_matrix(A, B, C);
 
     TriangleMatrix<double> result;
-    result = fmatrix + smatrix;
+
+    try {
+        result = fmatrix + smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+
     return result;
 }
 
@@ -331,7 +400,16 @@ TriangleMatrix<double> start_subtraction_menu(TriangleMatrix<double>& A, Triangl
     TriangleMatrix<double> smatrix = choose_matrix(A, B, C);
 
     TriangleMatrix<double> result;
-    result = fmatrix - smatrix;
+
+    try {
+        result = fmatrix - smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+
     return result;
 }
 
@@ -340,19 +418,37 @@ TriangleMatrix<double> start_multiplication_menu(TriangleMatrix<double>& A, Tria
     TriangleMatrix<double> smatrix = choose_matrix(A, B, C);
 
     TriangleMatrix<double> result;
-    result = fmatrix * smatrix;
+
+    try {
+        result = fmatrix * smatrix;
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
+
     return result;
 }
 
-MathVector<double> start_multiplication_vector_menu(TriangleMatrix<double>& A, TriangleMatrix<double>& B, TriangleMatrix<double>& C) {
+void start_multiplication_vector_menu(TriangleMatrix<double>& A, TriangleMatrix<double>& B, TriangleMatrix<double>& C) {
     TriangleMatrix<double> matrix = choose_matrix(A, B, C);
     MathVector<double> vector(matrix.cols());
     std::cout << "Input vector elements separated by a space (size " << vector.size() << "):\n";
     std::cin >> vector;
 
-    MathVector<double> result = matrix * vector;
-
-    return result;
+    try {
+        MathVector<double> result = matrix * vector;
+        std::cout << "Result: " << result << std::endl;
+        std::cout << "Press any key to continue";
+        std::getchar();
+        std::getchar();
+    }
+    catch (std::logic_error e) {
+        std::cerr << e.what() << std::endl;
+        getchar();
+        getchar();
+    }
 }
 
 TriangleMatrix<double> start_multiplication_scalar_menu(TriangleMatrix<double>& A, TriangleMatrix<double>& B, TriangleMatrix<double>& C) {
@@ -376,40 +472,36 @@ bool start_triangle_matrix_menu() {
     while (1) {
         system("cls");
         show_triangle_matrix_menu(A, B, C);
-        char user_num = get_user_num(TRIANGLE_MATRIX_MENU_OPTIONS);
+        int user_num = get_user_num(TRIANGLE_MATRIX_MENU_OPTIONS);
         bool isBack = false;
 
         system("cls");
         switch (user_num) {
-        case '1':
+        case 1:
             show_matrix_input_menu();
             A = input_triangle_matrix("A");
             B = input_triangle_matrix("B");
             break;
-        case '2':
+        case 2:
             C = start_addition_menu(A, B, C);
             break;
-        case '3':
+        case 3:
             C = start_subtraction_menu(A, B, C);
             break;
-        case '4':
+        case 4:
             C = start_multiplication_menu(A, B, C);
             break;
-        case '5':
-            res = start_multiplication_vector_menu(A, B, C);
-            std::cout << "Result: " << res << std::endl;
-            std::cout << "Press any key to continue";
-            std::getchar();
-            std::getchar();
+        case 5:
+            start_multiplication_vector_menu(A, B, C);
             break;
-        case '6':
+        case 6:
             C = start_multiplication_scalar_menu(A, B, C);
             break;
-        case '7':
-            return true;
-        default:
+        case 7:
             isBack = true;
             break;
+        default:
+            return true;
         }
 
         if (isBack) break;
@@ -422,17 +514,17 @@ int main() {
     bool isExit = false;
     while (1) {
         show_start_menu();
-        char user_num = get_user_num(START_MENU_OPTIONS);
+        int user_num = get_user_num(START_MENU_OPTIONS);
 
         system("cls");
         switch (user_num) {
-        case '1':
+        case 1:
             isExit = start_matrix_menu();
             break;
-        case '2':
+        case 2:
             isExit = start_triangle_matrix_menu();
             break;
-        default:
+        case 0:
             isExit = true;
         }
         if (isExit) break;
