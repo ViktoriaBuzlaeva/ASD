@@ -108,16 +108,16 @@ void Expression::set_variable(const std::string& name, double value) {
 }
 
 List<Lexem> Expression::to_polish_record() {
-    List<Lexem> record;
+    List<Lexem> polish_record;
     Stack<Lexem> stack;
 
     for (auto it = _lexems.begin(); it != _lexems.end(); ++it) {
         switch ((*it).type) {
         case Constant:
-            record.push_back(*it);
+            polish_record.push_back(*it);
             break;
         case Variable:
-            record.push_back(*it);
+            polish_record.push_back(*it);
             break;
         case Function:
             stack.push(*it);
@@ -125,7 +125,7 @@ List<Lexem> Expression::to_polish_record() {
         case Operator:
             while (!stack.is_empty() && (stack.top().type == Function ||
                 (stack.top().type == Operator && stack.top().priority >= (*it).priority))) {
-                record.push_back(stack.top());
+                polish_record.push_back(stack.top());
                 stack.pop();
             }
             stack.push(*it);
@@ -135,12 +135,12 @@ List<Lexem> Expression::to_polish_record() {
             break;
         case ClosedBracket:
             while (stack.top().type != OpenBracket) {
-                record.push_back(stack.top());
+                polish_record.push_back(stack.top());
                 stack.pop();
             }
             stack.pop();
             if (!stack.is_empty() && stack.top().type == Function) {
-                record.push_back(stack.top());
+                polish_record.push_back(stack.top());
                 stack.pop();
             }
             break;
@@ -148,11 +148,11 @@ List<Lexem> Expression::to_polish_record() {
     }
 
     while (!stack.is_empty()) {
-        record.push_back(stack.top());
+        polish_record.push_back(stack.top());
         stack.pop();
     }
 
-    return record;
+    return polish_record;
 }
 
 std::string Expression::to_string() {
