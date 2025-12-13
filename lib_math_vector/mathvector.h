@@ -211,7 +211,7 @@ T& MathVector<T>::operator[] (size_t pos) noexcept {
 
 template <class T>
 std::istream& operator >> (std::istream& in, MathVector<T>& vector) {
-    for (size_t i = 0; i < vector.size(); i++) {
+    for (size_t i =vector._start_index; i < vector.size(); i++) {
         in >> vector[i];
     }
     return in;

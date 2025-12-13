@@ -184,18 +184,14 @@ Matrix<T> operator * (const T scalar, const Matrix<T>& matr) {
 template <class T>
 Matrix<T>& Matrix<T>::operator += (const Matrix<T>& other) {
     if (_rows != other._rows || _cols != other._cols) throw std::logic_error("Matrices must be the same size");
-    for (size_t i = 0; i < _rows; i++) {
-        (*this)[i] += other[i];
-    }
+    (*this).MathVector<MathVector<T>>::operator+=(other);
     return *this;
 }
 
 template <class T>
 Matrix<T>& Matrix<T>::operator -= (const Matrix<T>& other) {
     if (_rows != other._rows || _cols != other._cols) throw std::logic_error("Matrices must be the same size");
-    for (size_t i = 0; i < _rows; i++) {
-        (*this)[i] -= other[i];
-    }
+    (*this).MathVector<MathVector<T>>::operator-=(other);
     return *this;
 }
 
@@ -226,7 +222,7 @@ Matrix<T>& Matrix<T>::operator = (const Matrix<T>& other) {
     if (this != &other) {
         _rows = other._rows;
         _cols = other._cols;
-        MathVector<MathVector<T>>::operator = (other);
+        (*this).MathVector<MathVector<T>>::operator = (other);
     }
     return *this;
 }
@@ -234,10 +230,7 @@ Matrix<T>& Matrix<T>::operator = (const Matrix<T>& other) {
 template <class T>
 bool Matrix<T>::operator == (const Matrix<T>& other) const {
     if (_rows != other._rows || _cols != other._cols) return false;
-    for (size_t i = 0; i < _rows; i++) {
-        if ((*this)[i] != other[i]) return false;
-    }
-    return true;
+    (*this).MathVector<MathVector<T>>::operator==(other);
 }
 
 template <class T>
@@ -247,23 +240,20 @@ bool Matrix<T>::operator != (const Matrix<T>& other) const {
 
 template <class T>
 std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
-    out << "[";
+    /*out << "[";
     for (size_t i = 0; i < matrix._rows; i++) {
         out << " " << matrix[i];
         if (i < matrix._rows - 1) out << ", \n";
         out << " ";
     }
-    out << "]";
+    out << "]";*/
+    out << static_cast<const MathVector<MathVector<T>>&>(matrix);
     return out;
 }
 
 template <class T>
 std::istream& operator >> (std::istream& in, Matrix<T>& matrix) {
-    for (size_t i = 0; i < matrix._rows; i++) {
-        for (size_t j = 0; j < matrix._cols; j++) {
-            in >> matrix[i][j];
-        }
-    }
+    in >> static_cast<MathVector<MathVector<T>>&>(matrix);
     return in;
 }
 

@@ -61,20 +61,16 @@ TriangleMatrix<T>::TriangleMatrix(std::initializer_list<std::initializer_list<T>
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator + (const TriangleMatrix<T>& other) const {
     if (size() != other.size()) throw std::logic_error("Matrices must be the same size");
-    TriangleMatrix<T> result(size());
-    for (size_t i = 0; i < size(); i++) {
-        result[i] = (*this)[i] + other[i];
-    }
+    TriangleMatrix<T> result(*this);
+    result += other;
     return result;
 }
 
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator - (const TriangleMatrix<T>& other) const {
     if (size() != other.size()) throw std::logic_error("Matrices must be the same size");
-    TriangleMatrix<T> result(size());
-    for (size_t i = 0; i < size(); i++) {
-        result[i] = (*this)[i] - other[i];
-    }
+    TriangleMatrix<T> result(*this);
+    result -= other;
     return result;
 }
 
@@ -125,18 +121,14 @@ TriangleMatrix<T> operator * (const T scalar, const TriangleMatrix<T>& matr) {
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator += (const TriangleMatrix<T>& other) {
     if (size() != other.size()) throw std::logic_error("Matrices must be the same size");
-    for (size_t i = 0; i < size(); i++) {
-        (*this)[i] += other[i];
-    }
+    (*this).Matrix<T>::operator+=(other);
     return *this;
 }
 
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator -= (const TriangleMatrix<T>& other) {
     if (size() != other.size()) throw std::logic_error("Matrices must be the same size");
-    for (size_t i = 0; i < size(); i++) {
-        (*this)[i] -= other[i];
-    }
+    (*this).Matrix<T>::operator-=(other);
     return *this;
 }
 
@@ -148,23 +140,21 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator *= (const TriangleMatrix<T>& othe
 
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator *= (const T scalar) {
-    for (size_t i = 0; i < size(); i++) {
-        (*this)[i] *= scalar;
-    }
+    (*this).Matrix<T>::operator*=(scalar);
     return *this;
 }
 
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator = (const TriangleMatrix<T>& other) {
     if (this != &other) {
-        Matrix<T>::operator = (other);
+        (*this).Matrix<T>::operator = (other);
     }
     return *this;
 }
 
 template <class T>
 bool TriangleMatrix<T>::operator == (const TriangleMatrix<T>& other) const {
-    return Matrix<T>::operator == (other);
+    return (*this).Matrix<T>::operator == (other);
 }
 
 template <class T>
@@ -180,11 +170,7 @@ std::ostream& operator << (std::ostream& out, const TriangleMatrix<T>& matrix) {
 
 template <class T>
 std::istream& operator >> (std::istream& in, TriangleMatrix<T>& matrix) {
-    for (size_t i = 0; i < matrix.size(); i++) {
-        for (size_t j = i; j < matrix.size(); j++) {
-            in >> matrix[i][j];
-        }
-    }
+    in >> static_cast< Matrix<T>&>(matrix);
     return in;
 }
 
