@@ -40,7 +40,7 @@ double Functions::my_tg(double x) {
     double cos_val = cos(x);
 
     if (std::abs(cos_val) < EPSILON) {
-        throw std::logic_error("Тангенс не определен");
+        throw std::logic_error("Tangent isn't defined");
     }
 
     return sin(x) / cos_val;

@@ -66,29 +66,29 @@ double Expression::calculate() {
             break;
         case Variable:
             if ((*it).value == DBL_MAX) {
-                throw std::logic_error("Переменная '" + (*it).name + "' не определена");
+                throw std::logic_error("Variable '" + (*it).name + "' isn't defined");
             }
             stack.push((*it).value);
             break;
         case Function: {
-            if (stack.is_empty()) throw std::logic_error("Отсутствует аргумент");
+            if (stack.is_empty()) throw std::logic_error("Missing argument");
             double val = stack.top();
             stack.pop();
             stack.push((*it).function(val));
             break;
         }
         case Operator: {
-            if (stack.is_empty()) throw std::logic_error("Отсутствует операнд");
+            if (stack.is_empty()) throw std::logic_error("Missing operand");
             double b = stack.top();
             stack.pop();
-            if (stack.is_empty()) throw std::logic_error("Отсутствует операнд");
+            if (stack.is_empty()) throw std::logic_error("Missing operand");
             double a = stack.top();
             stack.pop();
             if ((*it).name == "+") stack.push(a + b);
             else if ((*it).name == "-") stack.push(a - b);
             else if ((*it).name == "*") stack.push(a * b);
             else if ((*it).name == "/") {
-                if (b == 0) throw std::logic_error("Некорректное деление на ноль");
+                if (b == 0) throw std::logic_error("Incorrect division by zero");
                 stack.push(a / b);
             }
             else if ((*it).name == "^") stack.push(pow(a, b));
