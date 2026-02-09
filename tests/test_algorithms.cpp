@@ -131,7 +131,7 @@ TEST(TestAlgorithmsLib, can_find_any_local_min) {
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST(TestDSULib, can_count_islands) {
+TEST(TestAlgorithmsLib, can_count_islands) {
     Matrix<int> matrix_1({
                         { 0, 0, 0, 0, 0, 0 },
                         { 0, 0, 0, 0, 0, 0 },

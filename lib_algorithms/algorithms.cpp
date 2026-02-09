@@ -79,3 +79,32 @@ int find_number_of_islands(Matrix<int> matrix) {
 
     return islands_count;
 }
+
+Matrix<bool> generate_labyrinth(int X, int Y, int N, int M) {
+    int size = N * M;
+    if (X < 0 || X > size || Y < 0 || Y > size) throw std::logic_error("Invalid input");
+    Matrix<bool> walls(N + 1, M + 1);
+    DSU labyrinth(size);
+    srand(0);
+
+    for (int j = 1; j <= M; j++) {
+        for (int i = 0; i < j * N; i++) {
+            int random;
+            if (i == X || i == Y) {
+                random = rand() % 76;
+            }
+            else {
+                random = rand() % 51;
+            }
+            if (i + 1 < size && random <= 25) {
+                labyrinth.unite(i, i + 1);
+
+            }
+            if (i + N < size && random > 25 && random <= 50) {
+                labyrinth.unite(i, i + N);
+            }
+        }
+    }
+
+    return walls;
+}

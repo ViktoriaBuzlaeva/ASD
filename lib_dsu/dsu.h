@@ -9,6 +9,7 @@ class DSU {
 
 public:
     DSU(size_t);
+    DSU(const DSU&);
     ~DSU();
 
     void unite(int, int);

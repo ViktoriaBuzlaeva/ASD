@@ -28,4 +28,6 @@ int find_local_min_matrix(Matrix<int>, unsigned int seed = time(0));
 
 int find_number_of_islands(Matrix<int>);
 
+Matrix<bool> generate_labyrinth(int, int, int, int);
+
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_

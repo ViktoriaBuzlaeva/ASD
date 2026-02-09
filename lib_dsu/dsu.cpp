@@ -12,6 +12,15 @@ DSU::DSU(size_t size) : _size(size) {
     }
 }
 
+DSU::DSU(const DSU& other) : _size(other._size) {
+    _parent = new int[_size];
+    _rank = new int[_size];
+    for (size_t i = 0; i < _size; i++) {
+        _parent[i] = other._parent[i];
+        _rank[i] = other._rank[i];
+    }
+}
+
 DSU::~DSU() {
     delete[] _parent;
     delete[] _rank;
