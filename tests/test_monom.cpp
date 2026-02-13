@@ -12,11 +12,14 @@ TEST(TestMonomLib, can_create_with_coeff) {
 }
 
 TEST(TestMonomLib, can_create_with_powers) {
-    int powers[3] = { 1, 2, 3 };
-    ASSERT_NO_THROW(Monom monom_1(-2, powers));
+    int powers_1[] = { 1, 2, 3 };
+    ASSERT_NO_THROW(Monom monom_1(-2, powers_1));
+    int powers_2[] = { 1, -2, 3 };
+    ASSERT_ANY_THROW(Monom monom_2(-2, powers_2));
 
-    ASSERT_NO_THROW(Monom monom_2(5.67, {0, 0, 3}));
-    ASSERT_ANY_THROW(Monom monom_3(-5.67, {2, 4, 5, 6}));
+    ASSERT_NO_THROW(Monom monom_3(5.67, {0, 0, 3}));
+    ASSERT_ANY_THROW(Monom monom_4(-5.67, {2, 4, 5, 6}));
+    ASSERT_ANY_THROW(Monom monom_4(-5.67, { 2, 4, -5}));
 }
 
 TEST(TestMonomLib, can_create_copy) {
@@ -137,11 +140,43 @@ TEST(TestMonomLib, can_div_with_assign_correctly) {
     EXPECT_TRUE(monom_1 == monom_3);
 }
 
+TEST(TestMonomLib, throw_when_try_div_with_greater_powers) {
+    Monom monom_1(5, { 1, 2, 3 });
+    Monom monom_2(4, { 2, 0, 3 });
+
+    ASSERT_ANY_THROW(monom_1 /= monom_2);
+}
+
 TEST(TestMonomLib, throw_when_try_div_with_assign_by_zero) {
     Monom monom_1(5, { 1, 2, 3 });
     Monom monom_2(0, { 0, 0, 3 });
 
     ASSERT_ANY_THROW(monom_1 /= monom_2);
+}
+
+TEST(TestMonomLib, can_mult_num_with_assign_correctly) {
+    Monom monom_1(5, { 1, 2, 3 });
+    double num = 4.2;
+    Monom monom_2(21, { 1, 2, 3 });
+
+    monom_1 *= num;
+    EXPECT_TRUE(monom_1 == monom_2);
+}
+
+TEST(TestMonomLib, can_div_num_with_assign_correctly) {
+    Monom monom_1(5, { 1, 2, 3 });
+    double num = 4.2;
+    Monom monom_2(21, { 1, 2, 3 });
+
+    monom_2 /= num;
+    EXPECT_TRUE(monom_1 == monom_2);
+}
+
+TEST(TestMonomLib, throw_when_try_div_num_with_assign_by_zero) {
+    Monom monom_1(5, { 1, 2, 3 });
+    double num = 0;
+
+    ASSERT_ANY_THROW(monom_1 /= num);
 }
 
 TEST(TestMonomLib, can_add_correctly) {
@@ -186,9 +221,9 @@ TEST(TestMonomLib, can_mult_correctly) {
 }
 
 TEST(TestMonomLib, can_div_correctly) {
-    Monom monom_1(5, { -1, 0, 3 });
+    Monom monom_1(5, { 0, 0, 3 });
     Monom monom_2(4, { 2, 2, 3 });
-    Monom monom_3(20, { 1, 2, 6 });
+    Monom monom_3(20, { 2, 2, 6 });
 
     Monom monom_4 = monom_3 / monom_2;
     EXPECT_TRUE(monom_1 == monom_4);
@@ -199,4 +234,48 @@ TEST(TestMonomLib, throw_when_try_div_by_zero) {
     Monom monom_2(0, { 0, 0, 3 });
 
     ASSERT_ANY_THROW(monom_1 / monom_2);
+}
+
+TEST(TestMonomLib, can_mult_num_correctly) {
+    Monom monom_1(5, { 1, 2, 3 });
+    double num = 4.2;
+    Monom monom_2(21, { 1, 2, 3 });
+
+    Monom monom_3 = monom_1 * num;
+    EXPECT_TRUE(monom_2 == monom_3);
+}
+
+TEST(TestMonomLib, can_div_num_correctly) {
+    Monom monom_1(5, { 1, 0, 3 });
+    double num = 4.2;
+    Monom monom_2(21, { 1, 0, 3 });
+
+    Monom monom_3 = monom_2 / num;
+    EXPECT_TRUE(monom_1 == monom_3);
+}
+
+TEST(TestMonomLib, throw_when_try_div_num_by_zero) {
+    Monom monom_1(5, { 1, 2, 3 });
+    double num = 0;
+
+    ASSERT_ANY_THROW(monom_1 / num);
+}
+
+TEST(TestMonomLib, check_operator_unar_minus) {
+    Monom monom_1(5, { 1, 0, 3 });
+    Monom monom_2(0, { 1, 0, 3 });
+    Monom monom_3(-5, { 1, 0, 3 });
+
+    Monom monom_4 = -monom_1;
+    Monom monom_5 = -monom_2;
+    EXPECT_TRUE(monom_3 == monom_4);
+    EXPECT_TRUE(monom_2 == monom_5);
+}
+
+TEST(TestMonomLib, can_calculate_value_in_point_correctly) {
+    Monom monom(5, { 1, 2, 3 });
+
+    EXPECT_TRUE(0 == monom.calculate_point(2, 2, 0));
+    EXPECT_TRUE(40 == monom.calculate_point(2, 2, 1));
+    EXPECT_TRUE(70 == monom.calculate_point(3.5, 2, 1));
 }

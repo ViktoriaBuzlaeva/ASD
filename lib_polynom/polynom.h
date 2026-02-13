@@ -44,7 +44,7 @@ public:
 	friend Polynom operator / (const Monom&, const Polynom&) noexcept;
 
 	friend std::ostream& operator << (std::ostream&, const Polynom&);
-	friend std::istream& operator >> (std::istream&, const Polynom&);
+	friend std::istream& operator >> (std::istream&, Polynom&);
 };
 
 #endif  // LIB_POLYNOM_POLYNOM_H_
