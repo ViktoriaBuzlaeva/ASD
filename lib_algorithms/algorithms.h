@@ -5,6 +5,7 @@
 
 #include "../lib_matrix/matrix.h"
 #include "../lib_dsu/dsu.h"
+#include <iomanip>
 
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
@@ -29,5 +30,9 @@ int find_local_min_matrix(Matrix<int>, unsigned int seed = time(0));
 int find_number_of_islands(Matrix<int>);
 
 Matrix<bool> generate_labyrinth(int, int, int, int);
+
+Matrix<bool> create_wall_matrix(int, int, int, int);
+
+void print_lab(Matrix<bool> labyrinth, int N, int M);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_

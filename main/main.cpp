@@ -1,6 +1,10 @@
 // Copyright 2025 Viktoria Buzlaeva
 
 // #define EASY_EXAMPLE
+// #define TYPE_OF_CROSSING
+// #define MATRIX_INTERFACE
+#define LABYRINTH_GENERATION
+
 #ifdef EASY_EXAMPLE
 
 #include <iostream>
@@ -36,7 +40,6 @@ int main() {
 
 #endif  // EASY_EXAMPLE
 
-// #define TYPE_OF_CROSSING
 #ifdef TYPE_OF_CROSSING
 
 #include <iostream>
@@ -95,7 +98,6 @@ int main() {
 
 #endif  // TYPE_OF_CROSSING
 
-#define MATRIX_INTERFACE
 #ifdef MATRIX_INTERFACE
 
 #include <iostream>
@@ -533,3 +535,37 @@ int main() {
 }
 
 #endif  // MATRIX_INTERFACE
+
+#ifdef LABYRINTH_GENERATION
+
+#include <iomanip>
+#include <locale>
+#include "../lib_algorithms/algorithms.h"
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    while (1) {
+        int S, F, N, M;
+        std::cout << "¬ведите вход, выход и размеры лабиринта (через пробел): ";
+        std::cin >> S;
+        std::cin >> F;
+        std::cin >> N;
+        std::cin >> M;
+        Matrix<bool> labyrinth;
+        try {
+            labyrinth = generate_labyrinth(S, F, N, M);
+            print_lab(labyrinth, N, M);
+            std::getchar();
+            std::getchar();
+        }
+        catch (std::logic_error e) {
+            std::cerr << e.what() << std::endl;
+            getchar();
+            getchar();
+        }
+        system("cls");
+    }
+    return 0;
+}
+
+#endif  // LABYRINTH_GENERATION

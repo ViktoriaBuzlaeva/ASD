@@ -183,3 +183,12 @@ TEST(TestAlgorithmsLib, can_count_islands) {
     EXPECT_EQ(0, find_number_of_islands(matrix_6));
     EXPECT_EQ(1, find_number_of_islands(matrix_7));
 }
+
+TEST(TestAlgorithmsLib, can_generate_labyrinth) {
+    ASSERT_ANY_THROW(generate_labyrinth(1, 16, 4, 4));
+    ASSERT_ANY_THROW(generate_labyrinth(1, 26, 5, 5));
+    ASSERT_ANY_THROW(generate_labyrinth(1, 16, 5, 5));
+    Matrix<bool> n;
+    ASSERT_NO_THROW(n = generate_labyrinth(1, 25, 5, 5));
+    std::cout << n;
+}

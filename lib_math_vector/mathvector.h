@@ -226,7 +226,7 @@ std::ostream& operator << (std::ostream& out, const MathVector<T>& vector) {
     for (size_t i = 0; i < vector.size() - 1; i++) {
         out << vector[i] << ", ";
     }
-    out << vector[vector.size() - 1] << " }";
+    out << vector[vector.size() - 1] << " }" << std::endl;
     return out;
 }
 
