@@ -98,9 +98,9 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < M; j++) {
             int cell = i * M + j;
-            int random = rand() % 61;
+            int random = rand() % 65;
 
-            if (j + 1 < M && random <= 25) {
+            if (j + 1 < M && random < 25) {
                 int rcell = i * M + (j + 1); // ѕрава€ €чейка (вертикальна€ стена)
                 if (labyrinth.find(cell) != labyrinth.find(rcell)) {
                     labyrinth.unite(cell, rcell);
@@ -108,7 +108,7 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
                 }
             }
 
-            if (i + 1 < N && random > 25 && random <= 50) {
+            if (i + 1 < N && random >= 25 && random < 50) {
                 int dcell = (i + 1) * M + j; // Ќижн€€ €чейка (горизонтальна€ стена)
                 if (labyrinth.find(cell) != labyrinth.find(dcell)) {
                     labyrinth.unite(cell, dcell);
@@ -118,39 +118,40 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
         }
     }
 
-    while (labyrinth.find(S) != labyrinth.find(F)) {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
+    int rootS = labyrinth.find(S);
+    int rootF = labyrinth.find(F);
+
+    while (rootS != rootF) {
+        for (int i = 0; i < N && rootS != rootF; i++) {
+            for (int j = 0; j < M && rootS != rootF; j++) {
                 int cell = i * M + j;
-                int random = rand() % 101;
+                bool cell_in_S = (labyrinth.find(cell) == rootS);
+                bool cell_in_F = (labyrinth.find(cell) == rootF);
                 int rcell = -1, dcell = -1;
 
                 if (j + 1 < M) {
                     rcell = i * M + (j + 1);
+                    bool rcell_in_S = (labyrinth.find(rcell) == rootS);
+                    bool rcell_in_F = (labyrinth.find(rcell) == rootF);
                     if (labyrinth.find(cell) == labyrinth.find(rcell) ||
-                        labyrinth.find(cell) != labyrinth.find(S) &&
-                        labyrinth.find(rcell) != labyrinth.find(S)) {
+                        !cell_in_S && !cell_in_F && !rcell_in_S && !rcell_in_F) {
                         rcell = -1;
-                    }
-                    else if (labyrinth.find(F) == labyrinth.find(rcell)) {
-                        random = rand() % 51;
                     }
                 }
 
                 if (i + 1 < N) {
                     dcell = (i + 1) * M + j;
+                    bool dcell_in_S = (labyrinth.find(dcell) == rootS);
+                    bool dcell_in_F = (labyrinth.find(dcell) == rootF);
                     if (labyrinth.find(cell) == labyrinth.find(dcell) ||
-                        labyrinth.find(cell) != labyrinth.find(S) &&
-                        labyrinth.find(dcell) != labyrinth.find(S)) {
+                        !cell_in_S && !cell_in_F && !dcell_in_S && !dcell_in_F) {
                         dcell = -1;
-                    }
-                    else if (labyrinth.find(F) == labyrinth.find(dcell)) {
-                        random = 51 + rand() % 51;
                     }
                 }
 
                 if (rcell != -1 || dcell != -1) {
-                    if (random <= 50 && rcell != -1 || dcell == -1) {
+                    int random = rand() % 100;
+                    if (random < 50 && rcell != -1 || dcell == -1) {
                         labyrinth.unite(cell, rcell);
                         walls[2 * i + 1][j + 1] = false;
                     }
@@ -160,6 +161,8 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
                     }
                 }
 
+                rootS = labyrinth.find(S);
+                rootF = labyrinth.find(F);
             }
         }
     }
@@ -190,17 +193,17 @@ Matrix<bool> create_wall_matrix(int S, int F, int N, int M) {
         }
     }
 
-    if (rowS == 0) walls[0][colS] = false;
-    else if (rowS == N - 1) walls[2 * N][colS] = false;
-    else if (colS == 0) walls[2 * rowS + 1][0] = false;
-    else if (colS == M - 1) walls[2 * rowS + 1][M] = false;
-
-    if (rowF == 0) walls[0][colF] = false;
-    else if (rowF == N - 1) walls[2 * N][colF] = false;
-    else if (colF == 0) walls[2 * rowF + 1][0] = false;
-    else if (colF == M - 1) walls[2 * rowF + 1][M] = false;
+    create_passage(walls, rowS, colS, N, M);
+    create_passage(walls, rowF, colF, N, M);
 
     return walls;
+}
+
+void create_passage(Matrix<bool>& walls, int row, int col, int N, int M) {
+    if (row == 0) walls[0][col] = false;
+    else if (row == N - 1) walls[2 * N][col] = false;
+    else if (col == 0) walls[2 * row + 1][0] = false;
+    else if (col == M - 1) walls[2 * row + 1][M] = false;
 }
 
 void print_lab(Matrix<bool> labyrinth, int N, int M) {

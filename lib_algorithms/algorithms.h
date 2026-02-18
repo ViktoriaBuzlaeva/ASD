@@ -33,6 +33,8 @@ Matrix<bool> generate_labyrinth(int, int, int, int);
 
 Matrix<bool> create_wall_matrix(int, int, int, int);
 
+void create_passage(Matrix<bool>&, int, int, int, int);
+
 void print_lab(Matrix<bool> labyrinth, int N, int M);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_
