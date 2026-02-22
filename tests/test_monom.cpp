@@ -53,8 +53,8 @@ TEST(TestMonomLib, can_comp_correctly_with_greater_operator) {
     Monom monom_y(1, { 0, 1, 0 });
     Monom monom_z(1, { 0, 0, 1 });
 
-    Monom monom_1(5, { 0, 2, 1 });
-    Monom monom_2(5, { 0, 2, 2 });
+    Monom monom_1(5, { 0, 2, 2 });
+    Monom monom_2(5, { 0, 2, 1 });
 
     EXPECT_TRUE(monom_y > monom_x);
     EXPECT_TRUE(monom_z > monom_y);
@@ -72,8 +72,8 @@ TEST(TestMonomLib, can_comp_correctly_with_less_operator) {
     Monom monom_y(1, { 0, 1, 0 });
     Monom monom_z(1, { 0, 0, 1 });
 
-    Monom monom_1(5, { 0, 2, 1 });
-    Monom monom_2(5, { 0, 2, 2 });
+    Monom monom_1(5, { 0, 2, 2 });
+    Monom monom_2(5, { 0, 2, 1 });
 
     EXPECT_TRUE(monom_x < monom_1);
     EXPECT_TRUE(monom_1 < monom_2);
@@ -242,7 +242,9 @@ TEST(TestMonomLib, can_mult_num_correctly) {
     Monom monom_2(21, { 1, 2, 3 });
 
     Monom monom_3 = monom_1 * num;
+    Monom monom_4 = num * monom_1;
     EXPECT_TRUE(monom_2 == monom_3);
+    EXPECT_TRUE(monom_2 == monom_4);
 }
 
 TEST(TestMonomLib, can_div_num_correctly) {
@@ -275,7 +277,7 @@ TEST(TestMonomLib, check_operator_unar_minus) {
 TEST(TestMonomLib, can_calculate_value_in_point_correctly) {
     Monom monom(5, { 1, 2, 3 });
 
-    EXPECT_TRUE(0 == monom.calculate_point(2, 2, 0));
+    EXPECT_TRUE(0 == monom.calculate_point(2, 2));
     EXPECT_TRUE(40 == monom.calculate_point(2, 2, 1));
     EXPECT_TRUE(70 == monom.calculate_point(3.5, 2, 1));
 }

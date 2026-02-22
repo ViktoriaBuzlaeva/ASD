@@ -39,6 +39,8 @@ public:
     void erase(size_t);
     void erase(Node<T>*);
 
+    List<T>& operator = (const List<T>&);
+
     class Iterator {
         Node<T>* _current;
 
@@ -84,6 +86,13 @@ public:
             return !(*this == other);
         }
     };
+
+    Iterator begin() const {
+        return Iterator(_head);
+    }
+    Iterator end() const {
+        return Iterator(nullptr);
+    }
 
     Iterator begin() {
         return Iterator(_head);
@@ -182,7 +191,7 @@ void List<T>::insert(Node<T>* node, const T& value) {
 template <class T>
 void List<T>::pop_front() {
     if (is_empty()) throw std::logic_error("List is empty");
-    if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; return; }
+    if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; _count = 0; return; }
     Node<T>* temp = _head;
     _head = _head->next;
     delete temp;
@@ -192,7 +201,7 @@ void List<T>::pop_front() {
 template <class T>
 void List<T>::pop_back() {
     if (is_empty()) throw std::logic_error("List is empty");
-    if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; return; }
+    if (_head == _tail) { delete _head; _head = nullptr; _tail = nullptr; _count = 0; return; }
     Node<T>* curr = _head;
     while (curr->next != _tail) {
         curr = curr->next;
@@ -232,6 +241,38 @@ void List<T>::erase(Node<T>* node) {
     if (node == _tail) _tail = curr;
     delete node;
     _count--;
+}
+
+template<class T>
+List<T>& List<T>::operator = (const List<T>& other) {
+    if (this != &other) {
+        while (_head) {
+            Node<T>* tmp = _head;
+            _head = _head->next;
+            delete tmp;
+        }
+        _tail = nullptr;
+        _count = other._count;
+
+        if (_count == 0) {
+            _head = nullptr;
+            _tail = nullptr;
+            return *this;
+        }
+
+        _head = new Node<T>(other._head->value);
+        Node<T>* current_this = _head;
+        Node<T>* current_other = other._head->next;
+
+        while (current_other != nullptr) {
+            current_this->next = new Node<T>(current_other->value);
+            current_this = current_this->next;
+            current_other = current_other->next;
+        }
+
+        _tail = current_this;
+    }
+    return *this;
 }
 
 #endif  // LIB_LIST_LIST_H_

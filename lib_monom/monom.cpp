@@ -50,17 +50,17 @@ bool Monom::operator != (const Monom& other) const noexcept {
 }
 
 bool Monom::operator > (const Monom & other) const noexcept {
-    for (int i = 0; i < VARSCOUNT - 1; i++) {
-        if (_powers[i] < other._powers[i]) return true;
-        if (_powers[i] > other._powers[i]) return false;
+    for (int i = 0; i < VARSCOUNT; i++) {
+        if (_powers[i] != other._powers[i]) {
+            return _powers[i] < other._powers[i];
+        }
     }
-    if (_powers[VARSCOUNT - 1] >= other._powers[VARSCOUNT - 1]) return true;
     return false;
 }
 
 bool Monom::operator < (const Monom& other) const noexcept {
     if (*this == other) return false;
-    return !(*this > other);
+    return other > *this;
 }
 
 Monom& Monom::operator = (const Monom& other) noexcept {
@@ -142,15 +142,21 @@ Monom Monom::operator / (const Monom& other) const {
     return res;
 }
 
-Monom Monom::operator *= (const double num) const noexcept {
+Monom Monom::operator * (const double num) const noexcept {
     Monom res(*this);
     res *= num;
     return res;
 }
 
-Monom Monom::operator /= (const double num) const {
+Monom Monom::operator / (const double num) const {
     Monom res(*this);
     res /= num;
+    return res;
+}
+
+Monom operator * (const double num, const Monom& monom) noexcept {
+    Monom res(monom);
+    res *= num;
     return res;
 }
 
@@ -160,88 +166,106 @@ Monom Monom::operator - () const noexcept {
     return res;
 }
 
-double Monom::calculate_point(double x, double y, double z) {
+double Monom::calculate_point(double x, double y, double z) const {
     return _coeff * pow(x, _powers[0])
         * pow(y, _powers[1]) * pow(z, _powers[2]);
 }
 
-std::ostream& operator << (std::ostream& out, const Monom& monom) {
-    if (monom._coeff == 0) {
-        out << "0";
-        return out;
-    }
-
-    out << monom._coeff;
-
-    char vars[] = { 'x', 'y', 'z' };
-
-    for (int i = 0; i < VARSCOUNT; ++i) {
-        if (monom._powers[i] != 0) {
-            out << vars[i];
-            if (monom._powers[i] != 1) {
-                out << "^" << monom._powers[i];
-            }
-        }
-    }
-
-    return out;
-}
-
-std::istream& operator >> (std::istream& in, Monom& monom) {
-    std::string m;
-    in >> m;
+Monom Monom::parse(const std::string& str) {
+    if (str.empty()) throw std::logic_error("Empty monom");
 
     double coeff = 1.0;
     int powers[] = { 0, 0, 0 };
+    bool found[] = { false, false, false };
     int sign = 1;
+    int pos = 0;
 
-    int i = 0;
-    if (m[i] == '-') {
+    if (str[pos] == '-') {
         sign = -1;
-        i++;
+        pos++;
     }
 
-    if (i < m.size() && std::isdigit(m[i])) {
-        coeff = std::stod(read_num(m, i));
+    if (pos < str.size() && std::isdigit(str[pos])) {
+        coeff = std::stod(read_num(str, pos));
         coeff *= sign;
     }
     else {
         coeff = sign;
     }
 
-    while (i < m.size()) {
+    while (pos < str.size()) {
         int var;
-        char c = m[i];
-        switch (c) {
-        case 'x':
-            var = 0;
-            break;
-        case 'y':
-            var = 1;
-            break;
-        case 'z':
-            var = 2;
-            break;
-        default:
-            throw std::logic_error("invalid variable");
+        switch (str[pos]) {
+        case 'x': var = 0; break;
+        case 'y': var = 1; break;
+        case 'z': var = 2; break;
+        default: throw std::logic_error("Invalid character");
         }
-        i++;
+        if (found[var]) throw std::logic_error
+            ("Variable has been already met");
+        found[var] = true;
+        
+        pos++;
 
         int power = 1;
-        if (i < m.size() && m[i] == '^') {
-            i++;
-            power = std::stoi(read_num(m, i));
+        if (pos < str.size() && str[pos] == '^') {
+            pos++;
+            if (str[pos] == '-')
+                throw std::logic_error("Power can't be negative");
+            std::string num_str = read_num(str, pos);
+            if (num_str == "")
+                throw std::logic_error("Invalid number input");
+            if (num_str.find('.') != std::string::npos) 
+                throw std::logic_error("Power must be integer");
+            power = std::stoi(num_str);
         }
         powers[var] += power;
     }
 
-    try {
-        monom = Monom(coeff, powers);
+    return Monom(coeff, powers);
+}
+
+std::string Monom::to_string() const {
+    if (_coeff == 0) return "0";
+    if (_coeff == 1 && is_const()) return "1";
+    if (_coeff == -1 && is_const()) return "-1";
+
+    std::string res = "";
+
+    if (_coeff == -1) {
+        res += "-";
     }
-    catch (std::logic_error e) {
-        std::cerr << e.what() << std::endl;
+    else if (_coeff != 1) {
+        std::string str_coeff = std::to_string(_coeff);
+        str_coeff.erase(str_coeff.find_last_not_of('0') + 1, std::string::npos);
+        if (str_coeff[str_coeff.length() - 1] == '.')
+            str_coeff.erase(str_coeff.length() - 1);
+        res += str_coeff;
     }
 
+    char vars[] = { 'x', 'y', 'z' };
+
+    for (int i = 0; i < VARSCOUNT; ++i) {
+        if (_powers[i] != 0) {
+            res += vars[i];
+            if (_powers[i] != 1) {
+                res += "^" + std::to_string(_powers[i]);
+            }
+        }
+    }
+
+    return res;
+}
+
+std::ostream& operator << (std::ostream& out, const Monom& monom) {
+    out << monom.to_string();
+    return out;
+}
+
+std::istream& operator >> (std::istream& in, Monom& monom) {
+    std::string m;
+    in >> m;
+    monom = Monom::parse(m);
     return in;
 }
 
@@ -259,4 +283,11 @@ std::string read_num(const std::string& str, int& pos) {
     }
 
     return number;
+}
+
+bool Monom::is_const() const {
+    for (int i = 0; i < VARSCOUNT; i++) {
+        if (_powers[i] != 0) return false;
+    }
+    return true;
 }
