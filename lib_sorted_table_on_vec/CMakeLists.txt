@@ -1,0 +1,2 @@
+create_project_lib(SortedTableOnVec)
+add_depend(SortedTableOnVec Table lib_table)

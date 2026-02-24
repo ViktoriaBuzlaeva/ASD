@@ -37,6 +37,7 @@ add_subdirectory(lib_pair)
 add_subdirectory(lib_itable)
 add_subdirectory(lib_table)
 add_subdirectory(lib_unsorted_table_on_vec)
+add_subdirectory(lib_sorted_table_on_vec)
 add_subdirectory(lib_skip_list)
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
