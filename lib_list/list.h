@@ -93,10 +93,10 @@ public:
         }
     };
 
-    Iterator begin() const {
+    const Iterator begin() const {
         return Iterator(_head);
     }
-    Iterator end() const {
+    const Iterator end() const {
         return Iterator(nullptr);
     }
 

@@ -79,9 +79,9 @@ public:
     friend void sort_rec(TVector<T>&, size_t, size_t) noexcept;
 
     template <class T>
-    friend size_t find_first(const TVector<T>&, T);
+    friend int find_first(const TVector<T>&, T);
     template <class T>
-    friend size_t find_last(const TVector<T>&, T);
+    friend int find_last(const TVector<T>&, T);
     template <class T>
     friend TVector<T> find_all(const TVector<T>&, T);
     template <class T>
@@ -800,7 +800,7 @@ void sort_rec(TVector<T>& vec, size_t left, size_t right) noexcept {
 }
 
 template <class T>
-size_t find_first(const TVector<T>& vec, T value) {
+int find_first(const TVector<T>& vec, T value) {
     if (vec._size != 0) {
         for (size_t i = 0; i < vec._size + vec._deleted; i++) {
             if (vec._data[i] == value && vec._states[i] == busy) {
@@ -809,11 +809,11 @@ size_t find_first(const TVector<T>& vec, T value) {
             }
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return -1;
 }
 
 template <class T>
-size_t find_last(const TVector<T>& vec, T value) {
+int find_last(const TVector<T>& vec, T value) {
     if (vec._size != 0) {
         for (size_t i = vec._size + vec._deleted - 1; i > 0; i--) {
             if (vec._data[i] == value && vec._states[i] == busy) {
@@ -822,28 +822,28 @@ size_t find_last(const TVector<T>& vec, T value) {
             }
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return -1;
 }
 
 template <class T>
 TVector<T> find_all(const TVector<T>& vec, T value) {
+    TVector<T> result;
     if (vec._size != 0) {
         size_t size = 0;
         for (size_t i = 0; i < vec._size + vec._deleted; i++) {
             if (vec._data[i] == value && vec._states[i] == busy) size++;
         }
         if (size != 0) {
-            TVector<T> result(size);
+            result.resize(size);
             for (size_t i = 0, j = 0; j < size; i++) {
                 if (vec._data[i] == value && vec._states[i] == busy) {
                     result[j] = vec.get_right_position(i);
                     j++;
                 }
             }
-            return result;
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return result;
 }
 
 template <class T>
@@ -855,7 +855,7 @@ T* find_first_pointer(const TVector<T>& vec, T value) {
             }
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return nullptr;
 }
 
 template <class T>
@@ -867,28 +867,28 @@ T* find_last_pointer(const TVector<T>& vec, T value) {
             }
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return nullptr;
 }
 
 template <class T>
 TVector<T*> find_all_pointers(const TVector<T>& vec, T value) {
+    TVector<T*> result;
     if (vec._size != 0) {
         size_t size = 0;
         for (size_t i = 0; i < vec._size + vec._deleted; i++) {
             if (vec._data[i] == value && vec._states[i] == busy) size++;
         }
         if (size != 0) {
-            TVector<T*> result(size);
+            result.resize(size);
             for (size_t i = 0, j = 0; j < size; i++) {
                 if (vec._data[i] == value && vec._states[i] == busy) {
                     result[j] = vec._data + i;
                     j++;
                 }
             }
-            return result;
         }
     }
-    throw std::logic_error("Error in find method: elem was not found!");
+    return result;
 }
 
 template <class T>

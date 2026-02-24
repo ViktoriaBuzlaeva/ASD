@@ -4,15 +4,16 @@
 #define LIB_ITABLE_ITABLE_H_
 
 #include <iostream>
+#include "../lib_pair/pair.h"
 
 template <class TKey, class TValue>
 class ITable {
 public:
-	virtual void insert(const TKey&, const TValue&);
-	virtual void erase(const TKey&);
-	virtual TValue& found(const TKey&) const noexcept;
-	virtual bool is_empty() const noexcept;
-	// virtual friend std::ostream& operator << (std::ostream& out, const ITable&);
+	virtual void insert(const TKey&, const TValue&) = 0;
+	virtual void erase(const TKey&) = 0;
+	virtual TValue& found(const TKey&) = 0;
+	virtual bool is_empty() const noexcept = 0;
+	virtual ~ITable() {}
 };
 
 #endif  // LIB_ITABLE_ITABLE_H_
