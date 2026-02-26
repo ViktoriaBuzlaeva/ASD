@@ -19,6 +19,7 @@ TEST(TestSortedTableOnVecLib, can_insert) {
     table.insert(6, "six");
     table.insert(3, "three");
     EXPECT_FALSE(table.is_empty());
+    table.print();
 }
 
 TEST(TestSortedTableOnVecLib, throw_when_try_insert_same_key) {
