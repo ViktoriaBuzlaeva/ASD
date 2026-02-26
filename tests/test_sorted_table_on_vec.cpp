@@ -13,13 +13,23 @@ TEST(TestSortedTableOnVecLib, can_create) {
 TEST(TestSortedTableOnVecLib, can_insert) {
     SortedTableOnVec<int, std::string> table;
     table.insert(1, "one");
+    table.insert(2, "two");
+    table.insert(5, "five");
+    table.insert(4, "four");
+    table.insert(6, "six");
+    table.insert(3, "three");
     EXPECT_FALSE(table.is_empty());
+    table.print();
 }
 
 TEST(TestSortedTableOnVecLib, throw_when_try_insert_same_key) {
     SortedTableOnVec<int, std::string> table;
     table.insert(1, "one");
     table.insert(2, "two");
+    table.insert(5, "five");
+    table.insert(4, "four");
+    table.insert(6, "six");
+    table.insert(3, "three");
     ASSERT_ANY_THROW(table.insert(1, ""));
 }
 
