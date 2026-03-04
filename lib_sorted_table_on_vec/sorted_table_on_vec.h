@@ -14,6 +14,8 @@ class SortedTableOnVec : public Table<TKey, TValue> {
 public:
     SortedTableOnVec() = default;
 
+    const TVector<TPair<TKey, TValue>>& rows() const noexcept { return _rows; }
+
     void insert(const TKey&, const TValue&) override;
     void erase(const TKey&) override;
     TValue& found(const TKey&) override;
