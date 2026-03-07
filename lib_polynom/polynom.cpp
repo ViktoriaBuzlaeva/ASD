@@ -47,40 +47,12 @@ Polynom& Polynom::operator = (const Polynom& other) noexcept {
 }
 
 Polynom& Polynom::operator += (const Polynom& other) noexcept {
-    List<Monom> res;
-
-    auto it_1 = _polynom.begin();
-    auto it_2 = other._polynom.begin();
-    while (it_1 != _polynom.end() && it_2 != other._polynom.end()) {
-        if (*it_1 == *it_2) {
-            Monom sum = *it_1 + *it_2;
-            if (sum.coeff() != 0) res.push_back(sum);
-            it_1++;
-            it_2++;
-        }
-        else if (*it_1 < *it_2) {
-            res.push_back(*it_1);
-            it_1++;
-        }
-        else {
-            res.push_back(*it_2);
-            it_2++;
-        }
+    auto it = other._polynom.begin();
+    while (it != other._polynom.end()) {
+        insert_monom(*it);
+        it++;
     }
-
-    for (; it_1 != _polynom.end(); it_1++) {
-        if ((*it_1).coeff() != 0) res.push_back(*it_1);
-    }
-    for (; it_2 != other._polynom.end(); it_2++) {
-        if ((*it_2).coeff() != 0) res.push_back(*it_2);
-    }
-
-    if (res.is_empty()) {
-        Monom zero;
-        _polynom.push_back(zero);
-    }
-
-    _polynom = res;
+    remove_zero_monoms();
     return *this;
 }
 
