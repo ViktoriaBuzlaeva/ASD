@@ -163,6 +163,8 @@ List<SNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key)
         if (curr != nullptr && curr->data.key == key) {
             throw std::logic_error("Key already exists");
         }
+
+        nodes.push_front(nearest);
     }
 
     return nodes;
