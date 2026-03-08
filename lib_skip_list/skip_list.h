@@ -17,17 +17,11 @@ struct SNode {
     SNode<TKey, TValue>** next;
     size_t level;
 
-    SNode(size_t level_) : data(), level(level_) {
-        next = new SNode<TKey, TValue>*[level];
-        for (size_t i = 0; i < level; i++)
-            next[i] = nullptr;
-    }
-
     SNode(const TPair<TKey, TValue>& data_, size_t level_)
         : data(data_), level(level_) {
         next = new SNode<TKey, TValue>*[level];
         for (int i = 0; i < level; i++) {
-            next[i] = new SNode<TKey, TValue>(level);
+            next[i] = nullptr;
         }
     }
 
@@ -44,13 +38,14 @@ class SkipList {
 
 public:
     SkipList(size_t MAX_LVL = SIZE_MAX);
+    ~SkipList();
 
     void insert(const TKey&, const TValue&);
     void print() const noexcept;
 
 protected:
     size_t flip_coin() const noexcept;
-    List<SNode<TKey, TValue>*> find_nearest(const TKey&) const noexcept;
+    List<SNode<TKey, TValue>*> find_nearest(const TKey&) const;
 };
 
 template<class TKey, class TValue>
@@ -58,6 +53,18 @@ SkipList<TKey, TValue>::SkipList(size_t MAX_LVL) : _MAX_LVL(MAX_LVL), _heads() {
     _heads.push_back(nullptr);
     _LVL = 1;
     srand(time(0));
+}
+
+template<class TKey, class TValue>
+SkipList<TKey, TValue>::~SkipList() {
+    if (!_heads.is_empty()) {
+        SNode<TKey, TValue>* current = _heads.head()->value;
+        while (current != nullptr) {
+            SNode<TKey, TValue>* next = current->next[0];
+            delete current;
+            current = next;
+        }
+    }
 }
 
 template<class TKey, class TValue>
@@ -70,24 +77,7 @@ void SkipList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
         _LVL = new_level;
     }
 
-    List<SNode<TKey, TValue>*> prev_nodes = find_nearest(key);
-
-    SNode<TKey, TValue>* prev_key = nullptr;
-    if (!prev_nodes.is_empty()) {
-        prev_key = prev_nodes.head()->value;
-    }
-
-    SNode<TKey, TValue>* next_key;
-    if (prev_key == nullptr) {
-        next_key = _heads.head()->value;
-    }
-    else {
-        next_key = prev_key->next[0];
-    }
-
-    if (next_key != nullptr && next_key->data.key == key) {
-        throw std::logic_error("Key already exists");
-    }
+    List<SNode<TKey, TValue>*> prev_nodes = find_nearest(key); // Список ближайших узлов c 0 до LVL-1
 
     TPair<TKey, TValue> new_pair(key, value);
     SNode<TKey, TValue>* new_node = new SNode<TKey, TValue>(new_pair, new_level);
@@ -97,7 +87,7 @@ void SkipList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
 
     for (size_t i = 0; i < new_level; i++, it++, head_it++) {
         SNode<TKey, TValue>* prev = *it;
-        if (prev == nullptr) {
+        if (prev == nullptr) { // Предыдущего узла нет
             new_node->next[i] = *head_it;
             *head_it = new_node;
         }
@@ -110,16 +100,32 @@ void SkipList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
 
 template<class TKey, class TValue>
 void SkipList<TKey, TValue>::print() const noexcept {
+    SNode<TKey, TValue>* zero_level = _heads.head()->value;
+
     for (size_t level = _LVL; level-- > 0; ) {
-        std::cout << level + 1 << ": ";
-        auto it = _heads.begin();
-        for (size_t i = 0; i < level; i++) it++;
-        SNode<TKey, TValue>* curr = *it;
-        while (curr != nullptr) {
-            std::cout << "[" << curr->data.key << ":" << curr->data.value << "]";
-            if (curr->next[level] != nullptr) std::cout << "->";
-            curr = curr->next[level];
+        std::cout << level << ": ";
+
+        auto head_it = _heads.begin();
+        for (size_t i = 0; i < level; i++) head_it++;
+        SNode<TKey, TValue>* curr_level_node = *head_it;
+
+        SNode<TKey, TValue>* zero_node = zero_level;
+        while (zero_node != nullptr) {
+            std::ostringstream out;
+            out << "[" << zero_node->data.key << ":" << zero_node->data.value << "]";
+            std::string node_str = out.str();
+
+            if (curr_level_node != nullptr && curr_level_node->data.key == zero_node->data.key) {
+                std::cout << "->" << node_str;
+                curr_level_node = curr_level_node->next[level];
+            }
+            else {
+                std::cout << std::string(node_str.size() + 2, '-');
+            }
+
+            zero_node = zero_node->next[0];
         }
+
         std::cout << "->NULL" << std::endl;
     }
 }
@@ -134,7 +140,7 @@ size_t SkipList<TKey, TValue>::flip_coin() const noexcept {
 }
 
 template<class TKey, class TValue>
-List<SNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key) const noexcept {
+List<SNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key) const {
     List<SNode<TKey, TValue>*> nodes;
     SNode<TKey, TValue>* nearest = nullptr;
 
@@ -152,6 +158,10 @@ List<SNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key)
         while (curr != nullptr && curr->data.key < key) {
             nearest = curr;
             curr = curr->next[l];
+        }
+
+        if (curr != nullptr && curr->data.key == key) {
+            throw std::logic_error("Key already exists");
         }
 
         nodes.push_front(nearest);
