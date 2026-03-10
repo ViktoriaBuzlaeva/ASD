@@ -19,17 +19,17 @@ public:
     TValue& found(const TKey&) override;
     bool is_empty() const noexcept override;
     void print() const noexcept override;
+
+    Node<TPair<TKey, TValue>>* find(const TKey& key);
 };
 
 template <class TKey, class TValue>
 void UnsortedTableOnList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
-    Node<TPair<TKey, TValue>>* curr = _rows.head();
-    while (curr != nullptr) {
-        if (curr->value.key == key) {
-            throw std::logic_error("Key already exists");
-        }
-        curr = curr->next;
+    Node<TPair<TKey, TValue>>* curr = find(key);
+    if (curr != nullptr) {
+        throw std::logic_error("Key already exists");
     }
+
     TPair<TKey, TValue> new_pair(key, value);
     _rows.push_back(new_pair);
 }
@@ -37,30 +37,27 @@ void UnsortedTableOnList<TKey, TValue>::insert(const TKey& key, const TValue& va
 template <class TKey, class TValue>
 void UnsortedTableOnList<TKey, TValue>::erase(const TKey& key) {
     if (is_empty()) throw std::logic_error("Table is empty");
-    Node<TPair<TKey, TValue>>* curr = _rows.head();
-    while (curr != nullptr) {
-        if (curr->value.key == key) {
-            if (curr == _rows.head()) {
-                _rows.pop_front();
-            } else {
-                _rows.erase(curr);
-            }
-            return;
+    Node<TPair<TKey, TValue>>* curr = find(key);
+    if (curr != nullptr) {
+        if (curr == _rows.head()) {
+            _rows.pop_front();
         }
-        curr = curr->next;
+        else {
+            _rows.erase(curr);
+        }
+        return;
     }
+
     throw std::out_of_range("Key doesn't exist");
 }
 
 template <class TKey, class TValue>
 TValue& UnsortedTableOnList<TKey, TValue>::found(const TKey& key) {
     if (is_empty()) throw std::logic_error("Table is empty");
-    Node<TPair<TKey, TValue>>* curr = _rows.head();
-    while (curr != nullptr) {
-        if (curr->value.key == key) {
-            return curr->value.value;
-        }
-        curr = curr->next;
+    Node<TPair<TKey, TValue>>* curr = find(key);
+    if (curr != nullptr) {
+        return curr->value.value;
+
     }
     throw std::out_of_range("Key doesn't exist");
 }
@@ -96,6 +93,18 @@ void UnsortedTableOnList<TKey, TValue>::print() const noexcept {
 
     std::cout << "+-" << std::string(key_length, '-') << "+-"
         << std::string(value_length, '-') << "+" << std::endl;
+}
+
+template <class TKey, class TValue>
+Node<TPair<TKey, TValue>>* UnsortedTableOnList<TKey, TValue>::find(const TKey& key) {
+    Node<TPair<TKey, TValue>>* curr = _rows.head();
+    while (curr != nullptr) {
+        if (curr->value.key == key) {
+            return curr;
+        }
+        curr = curr->next;
+    }
+    return nullptr;
 }
 
 #endif  // LIB_UNSORTED_TABLE_ON_LIST_UNSORTED_TABLE_ON_LIST_H_
