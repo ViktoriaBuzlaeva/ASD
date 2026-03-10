@@ -33,8 +33,8 @@ void UnsortedTableOnVec<TKey, TValue>::insert(const TKey& key, const TValue& val
 template <class TKey, class TValue>
 void UnsortedTableOnVec<TKey, TValue>::erase(const TKey& key) {
     if (is_empty()) throw std::logic_error("Table is empty");
-    TPair<TKey, TValue> new_pair(key, TValue());
-    int found = find_first(_rows, new_pair);
+    TPair<TKey, TValue> pair(key, TValue());
+    int found = find_first(_rows, pair);
     if (found == -1) {
         throw std::logic_error("Key doesn't exist");
     }
@@ -44,8 +44,8 @@ void UnsortedTableOnVec<TKey, TValue>::erase(const TKey& key) {
 template <class TKey, class TValue>
 TValue& UnsortedTableOnVec<TKey, TValue>::found(const TKey& key) {
     if (is_empty()) throw std::logic_error("Table is empty");
-    TPair<TKey, TValue> new_pair(key, TValue());
-    int found = find_first(_rows, new_pair);
+    TPair<TKey, TValue> pair(key, TValue());
+    int found = find_first(_rows, pair);
     if (found == -1) {
         throw std::logic_error("Key doesn't exist");
     }
