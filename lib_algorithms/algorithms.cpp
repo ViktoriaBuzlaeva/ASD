@@ -207,7 +207,6 @@ void create_passage(Matrix<bool>& walls, int row, int col, int N, int M) {
 }
 
 void print_lab(Matrix<bool> labyrinth, int N, int M) {
-    int num = 1;
     for (int i = 0; i < N * 2 + 1; i++) {
         if (i % 2 == 0) {
             for (int j = 0; j < M; j++) {
@@ -229,8 +228,7 @@ void print_lab(Matrix<bool> labyrinth, int N, int M) {
                 else {
                     std::cout << " ";
                 }
-                std::cout << std::setw(3) << num;
-                num++;
+                std::cout << std::setw(3) << "";
             }
             if (labyrinth[i][M]) {
                 std::cout << "|";
