@@ -132,11 +132,11 @@ Polynom Polynom::operator * (const Polynom& other) const noexcept {
     Polynom res;
     res._polynom.pop_front();
 
-    for (auto it_1 = _polynom.begin(); it_1 != _polynom.end(); it_1++) {
-        for (auto it_2 = other._polynom.begin(); it_2 != other._polynom.end(); it_2++) {
-            res.insert_monom((*it_1) * (*it_2));
-        }
+    for (auto it_2 = other._polynom.begin(); it_2 != other._polynom.end(); it_2++) {
+        res += *this * (*it_2);
+        // res.insert_monom((*it_1) * (*it_2));
     }
+
     if (res._polynom.is_empty()) {
         Monom zero;
         res._polynom.push_back(zero);
