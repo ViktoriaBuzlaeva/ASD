@@ -29,6 +29,7 @@ void UnsortedTableOnList<TKey, TValue>::insert(const TKey& key, const TValue& va
     if (curr != nullptr) {
         throw std::logic_error("Key already exists");
     }
+
     TPair<TKey, TValue> new_pair(key, value);
     _rows.push_back(new_pair);
 }
@@ -46,6 +47,7 @@ void UnsortedTableOnList<TKey, TValue>::erase(const TKey& key) {
         }
         return;
     }
+
     throw std::out_of_range("Key doesn't exist");
 }
 
