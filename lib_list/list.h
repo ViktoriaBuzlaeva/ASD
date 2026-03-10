@@ -78,6 +78,10 @@ public:
             return _current->value;
         }
 
+        Node<T>* get_node() { 
+            return _current;
+        }
+
         bool operator == (const Iterator& other) const {
             return this->_current == other._current;
         }

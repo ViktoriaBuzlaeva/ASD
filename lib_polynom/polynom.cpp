@@ -134,7 +134,6 @@ Polynom Polynom::operator * (const Polynom& other) const noexcept {
 
     for (auto it_2 = other._polynom.begin(); it_2 != other._polynom.end(); it_2++) {
         res += *this * (*it_2);
-        // res.insert_monom((*it_1) * (*it_2));
     }
 
     if (res._polynom.is_empty()) {
@@ -334,25 +333,12 @@ bool Polynom::is_sorted() {
 }
 
 void Polynom::remove_zero_monoms() {
-    bool has_zero = false;
-    for (auto it = _polynom.begin(); it != _polynom.end(); it++) {
-        if ((*it).coeff() == 0) {
-            has_zero = true;
-            break;
-        }
+    while (_polynom.tail() != nullptr && _polynom.tail()->value.coeff() == 0) {
+        _polynom.pop_back();
     }
-    if (has_zero) {
-        List<Monom> new_polynom;
-        for (auto it = _polynom.begin(); it != _polynom.end(); it++) {
-            if ((*it).coeff() != 0) {
-                new_polynom.push_back(*it);
-            }
-        }
-        if (new_polynom.is_empty()) {
-            Monom zero;
-            new_polynom.push_back(zero);
-        }
-        _polynom = new_polynom;
+    if (_polynom.is_empty()) {
+        Monom zero;
+        _polynom.push_back(zero);
     }
 }
 
@@ -364,6 +350,14 @@ void Polynom::insert_monom(const Monom& monom) {
         if (*pos == monom) {
             Monom& similar_monom = *pos;
             similar_monom += monom;
+            if (similar_monom.coeff() == 0) {
+                if (pos == _polynom.begin()) {
+                    _polynom.pop_front();
+                }
+                else {
+                    _polynom.erase(pos.get_node());
+                }
+            }
             break;
         }
         else if (*pos > monom) {
