@@ -24,7 +24,9 @@ public:
 
     ~List();
 
-    bool is_empty();
+    inline bool is_empty() const noexcept;
+
+    size_t get_count() const;
 
     Node<T>* head() const;
     Node<T>* tail() const;
@@ -104,6 +106,8 @@ public:
     Iterator end() {
         return Iterator(nullptr);
     }
+
+    List<T>& operator=(const List<T>& other);
 };
 
 template <class T>
@@ -140,7 +144,10 @@ List<T>::~List() {
 }
 
 template <class T>
-bool List<T>::is_empty() { return _head == nullptr; }
+inline bool List<T>::is_empty() const noexcept { return _head == nullptr; }
+
+template <class T>
+size_t List<T>::get_count() const { return _count; }
 
 template <class T>
 Node<T>* List<T>::head() const { return _head; }
@@ -246,6 +253,7 @@ void List<T>::erase(Node<T>* node) {
     delete node;
     _count--;
 }
+
 
 template<class T>
 List<T>& List<T>::operator = (const List<T>& other) {
