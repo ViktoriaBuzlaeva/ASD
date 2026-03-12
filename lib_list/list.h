@@ -106,8 +106,6 @@ public:
     Iterator end() {
         return Iterator(nullptr);
     }
-
-    List<T>& operator=(const List<T>& other);
 };
 
 template <class T>
