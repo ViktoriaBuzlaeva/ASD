@@ -24,9 +24,9 @@ public:
 
     ~List();
 
-    inline bool is_empty() const noexcept;
+    const size_t size() const noexcept { return _count; }
 
-    size_t get_count() const;
+    inline bool is_empty() const noexcept;
 
     Node<T>* head() const;
     Node<T>* tail() const;
@@ -142,10 +142,7 @@ List<T>::~List() {
 }
 
 template <class T>
-inline bool List<T>::is_empty() const noexcept { return _head == nullptr; }
-
-template <class T>
-size_t List<T>::get_count() const { return _count; }
+bool List<T>::is_empty() const  noexcept { return _head == nullptr; }
 
 template <class T>
 Node<T>* List<T>::head() const { return _head; }
