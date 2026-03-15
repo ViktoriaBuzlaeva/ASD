@@ -45,3 +45,46 @@ TEST(TestTreeLib, can_clear) {
     t.clear();
     EXPECT_TRUE(t.is_empty());
 }
+
+TEST(TestTreeLib, can_find) {
+    Tree<int, std::string> t;
+    t.insert(1, "one");
+    t.insert(2, "two");
+    t.insert(5, "five");
+    t.insert(3, "three");
+    t.insert(4, "four");
+
+    EXPECT_EQ("one", *(t.find(1)));
+    EXPECT_EQ("five", *(t.find(5)));
+    EXPECT_EQ(nullptr, t.find(6));
+}
+
+TEST(TestTreeLib, can_erase) {
+    Tree<int, std::string> t;
+    t.insert(1, "one");
+    t.insert(2, "two");
+    t.insert(5, "five");
+    t.insert(3, "three");
+    t.insert(4, "four");
+
+    t.erase(4);
+    EXPECT_EQ(nullptr, t.find(4));
+    t.erase(1);
+    EXPECT_EQ(nullptr, t.find(1));
+}
+
+TEST(TestTreeLib, throw_when_try_erase_empty_tree) {
+    Tree<int, std::string> t;
+    ASSERT_ANY_THROW(t.erase(4));
+}
+
+TEST(TestTreeLib, throw_when_try_erase_not_existing_key) {
+    Tree<int, std::string> t;
+    t.insert(1, "one");
+    t.insert(2, "two");
+    t.insert(5, "five");
+    t.insert(3, "three");
+    t.insert(4, "four");
+
+    ASSERT_ANY_THROW(t.erase(6));
+}

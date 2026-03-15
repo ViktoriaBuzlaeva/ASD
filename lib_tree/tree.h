@@ -4,7 +4,7 @@
 #define LIB_TREE_TREE_H_
 
 #include "../lib_pair/pair.h"
-#include "../lib_queue/queue.h"
+#include "../lib_lqueue/lqueue.h"
 
 template <class TKey, class TValue>
 struct TNode {
@@ -37,6 +37,7 @@ public:
     void print_DCLR() const noexcept;
 
 private:
+    TNode<TKey, TValue>* find_pair(const TKey&) const noexcept;
     void clear_rec(TNode<TKey, TValue>*) noexcept;
 
     void print_DLCR_rec(TNode<TKey, TValue>*) const noexcept;
@@ -51,9 +52,9 @@ Tree<TKey, TValue>::Tree() {
 
 template <class TKey, class TValue>
 Tree<TKey, TValue>::~Tree() {
-    if (is_empty()) { delete _root; return; }
+    if (is_empty()) return;
 
-    Queue<TNode<TKey, TValue>*> q;
+    LQueue<TNode<TKey, TValue>*> q;
     TNode<TKey, TValue>* current = nullptr;
     q.push(_root);
     while (!q.is_empty()) {
@@ -73,7 +74,7 @@ void Tree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     if (is_empty()) { _root = new_node; return; }
 
     TNode<TKey, TValue>* curr = nullptr;
-    Queue<TNode<TKey, TValue>*> q;
+    LQueue<TNode<TKey, TValue>*> q;
     q.push(_root);
     while (1) {
         curr = q.head();
@@ -87,12 +88,65 @@ void Tree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
 
 template <class TKey, class TValue>
 TValue* Tree<TKey, TValue>::find(const TKey& key) const noexcept {
+    if (is_empty()) return nullptr;
 
+    TNode<TKey, TValue>* curr = nullptr;
+    LQueue<TNode<TKey, TValue>*> q;
+    q.push(_root);
+    while (!q.is_empty()) {
+        curr = q.head();
+        q.pop();
+        if (curr->data.key == key) {
+            return &(curr->data.value);
+        }
+        if (curr->left) q.push(curr->left);
+        if (curr->right) q.push(curr->right);
+    }
+
+    return nullptr;
 }
 
 template <class TKey, class TValue>
 void Tree<TKey, TValue>::erase(const TKey& key) {
+    if (is_empty()) throw std::logic_error("Tree is empty");
 
+    TNode<TKey, TValue>* deleted_tnode = find_pair(key);
+    if (!deleted_tnode) throw std::logic_error("Key doesn't exist");
+
+    TNode<TKey, TValue>* last_parent = nullptr;
+    TNode<TKey, TValue>* curr = nullptr;
+    LQueue<TNode<TKey, TValue>*> q;
+    q.push(_root);
+    while (!q.is_empty()) {
+        curr = q.head();
+        q.pop();
+        if (curr->left) {
+            last_parent = curr;
+            q.push(curr->left);
+        }
+        if (curr->right) {
+            last_parent = curr;
+            q.push(curr->right);
+        }
+    }
+    if (last_parent == nullptr) {
+        delete _root;
+        _root = nullptr;
+        return;
+    }
+
+    TNode<TKey, TValue>* last_tnode = nullptr;
+    if (last_parent->left) {
+        last_tnode = last_parent->left;
+        last_parent->left = nullptr;
+    }
+    else {
+        last_tnode = last_parent->right;
+        last_parent->right = nullptr;
+    }
+    deleted_tnode->data = last_tnode->data;
+
+    delete last_tnode;
 }
 
 template <class TKey, class TValue>
@@ -110,7 +164,7 @@ template <class TKey, class TValue>
 void Tree<TKey, TValue>::print_w() const noexcept {
     if (is_empty()) return;
 
-    Queue<TNode<TKey, TValue>*> q;
+    LQueue<TNode<TKey, TValue>*> q;
     TNode<TKey, TValue>* curr = nullptr;
     q.push(_root);
     while (!q.is_empty()) {
@@ -138,6 +192,34 @@ void Tree<TKey, TValue>::print_DCLR() const noexcept {
 }
 
 template <class TKey, class TValue>
+TNode<TKey, TValue>* Tree<TKey, TValue>::find_pair(const TKey& key) const noexcept {
+    if (is_empty()) return nullptr;
+
+    TNode<TKey, TValue>* curr = nullptr;
+    LQueue<TNode<TKey, TValue>*> q;
+    q.push(_root);
+    while (!q.is_empty()) {
+        curr = q.head();
+        q.pop();
+        if (curr->data.key == key) {
+            return curr;
+        }
+        if (curr->left) q.push(curr->left);
+        if (curr->right) q.push(curr->right);
+    }
+
+    return nullptr;
+}
+
+template <class TKey, class TValue>
+void Tree<TKey, TValue>::clear_rec(TNode<TKey, TValue>* node) noexcept {
+    if (node == nullptr) return;
+    clear_rec(node->left);
+    clear_rec(node->right);
+    delete node;
+}
+
+template <class TKey, class TValue>
 void Tree<TKey, TValue>::print_DLCR_rec(TNode<TKey, TValue>* node) const noexcept {
     if (node == nullptr) return;
     print_DLCR_rec(node->left);
@@ -159,14 +241,6 @@ void Tree<TKey, TValue>::print_DCLR_rec(TNode<TKey, TValue>* node) const noexcep
     std::cout << node->data.key << " ";
     print_DCLR_rec(node->left);
     print_DCLR_rec(node->right);
-}
-
-template <class TKey, class TValue>
-void Tree<TKey, TValue>::clear_rec(TNode<TKey, TValue>* node) noexcept {
-    if (node == nullptr) return;
-    clear_rec(node->left);
-    clear_rec(node->right);
-    delete node;
 }
 
 #endif  // LIB_TREE_TREE_H_
