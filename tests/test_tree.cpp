@@ -71,6 +71,10 @@ TEST(TestTreeLib, can_erase) {
     EXPECT_EQ(nullptr, t.find(4));
     t.erase(1);
     EXPECT_EQ(nullptr, t.find(1));
+    t.erase(2);
+    t.erase(3);
+    t.erase(5);
+    EXPECT_TRUE(t.is_empty());
 }
 
 TEST(TestTreeLib, throw_when_try_erase_empty_tree) {
