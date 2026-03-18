@@ -3,7 +3,10 @@
 // #define EASY_EXAMPLE
 // #define TYPE_OF_CROSSING
 // #define MATRIX_INTERFACE
-#define LABYRINTH_GENERATION
+// #define LABYRINTH_GENERATION
+// #define EASY_EXAMPLE
+// #define TYPE_OF_CROSSING
+#define SORT_DATA_WITH_BSTREE
 
 #ifdef EASY_EXAMPLE
 
@@ -569,3 +572,33 @@ int main() {
 }
 
 #endif  // LABYRINTH_GENERATION
+
+#ifdef SORT_DATA_WITH_BSTREE
+
+#include "../lib_bstree/bstree.h"
+#include "../lib_tvector/tvector.h"
+
+int main() {
+    srand(time(0));
+    int size = 25;
+
+    TVector<TPair<int, int>> pairs;
+    for (int i = 0; i < size; i++) {
+        TPair<int, int> pair(rand() % 101, i);
+        pairs.push_back(pair);
+    }
+
+    BSTree<int, int> bst;
+    for (int i = 0; i < size; i++) {
+        try {
+            bst.insert(pairs[i].key, pairs[i].value);
+        }
+        catch (std::exception ex) {
+        }
+    }
+
+    bst.print_DLCR();
+    return 0;
+}
+
+#endif  // SORT_DATA_WITH_BSTREE
