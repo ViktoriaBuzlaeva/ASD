@@ -27,7 +27,7 @@ bool Polynom::operator == (const Polynom& other) const noexcept {
     auto it_1 = _polynom.begin();
     auto it_2 = other._polynom.begin();
     for (; it_1 != _polynom.end() && it_2 != other._polynom.end(); it_1++, it_2++) {
-        if ((*it_1).coeff() != (*it_2).coeff() || *it_1 != *it_2) {
+        if ((*it_1).coeff() != (*it_2).coeff() || *it_1 != *it_2 && (*it_1).coeff() != 0) {
             return false;
         }
     }
@@ -333,12 +333,8 @@ bool Polynom::is_sorted() {
 }
 
 void Polynom::remove_zero_monoms() {
-    while (_polynom.tail() != nullptr && _polynom.tail()->value.coeff() == 0) {
+    while (_polynom.size() > 1 && _polynom.tail()->value.coeff() == 0) {
         _polynom.pop_back();
-    }
-    if (_polynom.is_empty()) {
-        Monom zero;
-        _polynom.push_back(zero);
     }
 }
 
