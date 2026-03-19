@@ -58,7 +58,35 @@ void UnsortedTableOnTree<TKey, TValue>::print() const noexcept {
         std::cout << "Table is empty" << std::endl;
         return;
     }
-    _rows.print_w();
+
+    int key_length = 15;
+    int value_length = 40;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
+    std::cout << "| " << std::left << std::setw(key_length) << "Key" << "| "
+        << std::setw(value_length) << "Value" << "|" << std::endl;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
+    LQueue<const TNode<TKey, TValue>*> q;
+    const TNode<TKey, TValue>* curr = nullptr;
+    q.push(_rows.root());
+    while (!q.is_empty()) {
+        curr = q.head();
+
+        std::cout << "| " << std::left << std::setw(key_length) << curr->data.key << "| "
+            << std::setw(value_length) << curr->data.value << "|" << std::endl;
+
+        q.pop();
+        if (curr->left) q.push(curr->left);
+        if (curr->right) q.push(curr->right);
+    }
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
 }
 
 #endif  // LIB_UNSORTED_TABLE_ON_TREE_UNSORTED_TABLE_ON_TREE_H_

@@ -23,6 +23,8 @@ public:
     Tree();
     ~Tree();
 
+    const TNode<TKey, TValue>* root() const noexcept { return _root; }
+
     void insert(const TKey&, const TValue&);
     TValue* find(const TKey&) const noexcept;
     void erase(const TKey&);

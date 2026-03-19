@@ -24,6 +24,8 @@ public:
     BSTree();
     ~BSTree();
 
+    const BSTNode<TKey, TValue>* root() const noexcept { return _root; }
+
     void insert(const TKey&, const TValue&);
     TValue* find(const TKey&) const noexcept;
     void erase(const TKey&);

@@ -51,5 +51,9 @@ TEST(TestUnsortedTableOnTreeLib, throw_when_try_erase_non_exist_key) {
     ASSERT_ANY_THROW(table.erase(1));
     table.insert(1, "one");
     table.insert(2, "two");
+    table.insert(5, "five");
+    table.insert(4, "four");
+    table.insert(6, "six");
+    // table.print();
     ASSERT_ANY_THROW(table.erase(3));
 }
