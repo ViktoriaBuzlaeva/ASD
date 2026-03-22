@@ -11,12 +11,17 @@ TEST(TestBSTreeLib, can_create) {
 
 TEST(TestBSTreeLib, can_insert) {
     BSTree<int, std::string> t;
-    ASSERT_NO_THROW(t.insert(100, "one"));
+    ASSERT_NO_THROW(t.insert(6, "six"));
+    ASSERT_NO_THROW(t.insert(8, "eight"));
+    ASSERT_NO_THROW(t.insert(9, "nine"));
+    ASSERT_NO_THROW(t.insert(4, "four"));
+    ASSERT_NO_THROW(t.insert(7, "seven"));
     ASSERT_NO_THROW(t.insert(2, "two"));
     ASSERT_NO_THROW(t.insert(5, "five"));
     ASSERT_NO_THROW(t.insert(3, "three"));
-    ASSERT_NO_THROW(t.insert(4, "four"));
-    /*t.print_DLCR();
+    ASSERT_NO_THROW(t.insert(1, "one"));
+    /*t.print();
+    t.print_DLCR();
     std::cout << std::endl;*/
 }
 

@@ -16,12 +16,17 @@ TEST(TestTreeLib, can_insert) {
     ASSERT_NO_THROW(t.insert(5, "five"));
     ASSERT_NO_THROW(t.insert(3, "three"));
     ASSERT_NO_THROW(t.insert(4, "four"));
-    /*t.print_w();
-    std::cout << std::endl;
+    ASSERT_NO_THROW(t.insert(6, "six"));
+    ASSERT_NO_THROW(t.insert(8, "eight"));
+    ASSERT_NO_THROW(t.insert(9, "nine"));
+    ASSERT_NO_THROW(t.insert(7, "seven"));
+    /*t.print();
+    t.print_w();
+    std::cout << std::endl << "clr:";
     t.print_DCLR();
-    std::cout << std::endl;
+    std::cout << std::endl << "lcr:";
     t.print_DLCR();
-    std::cout << std::endl;
+    std::cout << std::endl << "lrc:";
     t.print_DLRC();
     std::cout << std::endl;*/
 }

@@ -5,6 +5,7 @@
 
 #include "../lib_pair/pair.h"
 #include "../lib_lqueue/lqueue.h"
+#include "../lib_tvector/tvector.h"
 
 template <class TKey, class TValue>
 struct TNode {
@@ -33,6 +34,8 @@ public:
 
     bool is_empty() const noexcept;
 
+    void print() const noexcept;
+
     void print_w() const noexcept;
     void print_DLCR() const noexcept;
     void print_DLRC() const noexcept;
@@ -41,6 +44,8 @@ public:
 private:
     TNode<TKey, TValue>* find_pair(const TKey&) const noexcept;
     void clear_rec(TNode<TKey, TValue>*) noexcept;
+
+    TVector<std::string> get_tree_lines(const TNode<TKey, TValue>*) const;
 
     void print_DLCR_rec(TNode<TKey, TValue>*) const noexcept;
     void print_DLRC_rec(TNode<TKey, TValue>*) const noexcept;
@@ -163,6 +168,15 @@ bool Tree<TKey, TValue>::is_empty() const noexcept {
 }
 
 template <class TKey, class TValue>
+void Tree<TKey, TValue>::print() const noexcept {
+    if (is_empty()) return;
+    TVector<std::string> lines = get_tree_lines(_root);
+    for (int i = 0; i < lines.size(); i++) {
+        std::cout << lines[i] << std::endl;
+    }
+}
+
+template <class TKey, class TValue>
 void Tree<TKey, TValue>::print_w() const noexcept {
     if (is_empty()) return;
 
@@ -219,6 +233,44 @@ void Tree<TKey, TValue>::clear_rec(TNode<TKey, TValue>* node) noexcept {
     clear_rec(node->left);
     clear_rec(node->right);
     delete node;
+}
+
+template <class TKey, class TValue>
+TVector<std::string> Tree<TKey, TValue>::get_tree_lines(const TNode<TKey, TValue>* node) const {
+    TVector<std::string> result;
+    if (!node) return result;
+
+    TVector<std::string> left_lines = get_tree_lines(node->left);
+    TVector<std::string> right_lines = get_tree_lines(node->right);
+
+    size_t left_width = left_lines.is_empty() ? 0 : left_lines[0].size();
+    size_t right_width = right_lines.is_empty() ? 0 : right_lines[0].size();
+
+    std::ostringstream key_out;
+    key_out << node->data.key;
+    std::string key_str = key_out.str();
+
+    std::string root_line = std::string(left_width, ' ') + key_str + std::string(right_width, ' ');
+    result.push_back(root_line);
+
+    // Строка для линий между корнем и предками
+    std::string line_between_levels;
+    if (!left_lines.is_empty() || !right_lines.is_empty()) {
+        std::string left_part = left_lines.is_empty() ? std::string(left_width, ' ') : std::string(left_width - 1, ' ') + "/";
+        std::string right_part = right_lines.is_empty() ? std::string(right_width, ' ') : "\\" + std::string(right_width - 1, ' ');
+        line_between_levels = left_part + std::string(key_str.size(), ' ') + right_part;
+    }
+    if (!line_between_levels.empty()) result.push_back(line_between_levels);
+
+    // Объединение строк левого и правого поддеревьев корня
+    int max_lines = std::max(left_lines.size(), right_lines.size());
+    for (int i = 0; i < max_lines; i++) {
+        std::string left_part = i < left_lines.size() ? left_lines[i] : std::string(left_width, ' ');
+        std::string right_part = i < right_lines.size() ? right_lines[i] : std::string(right_width, ' ');
+        result.push_back(left_part + std::string(key_str.size(), ' ') + right_part);
+    }
+
+    return result;
 }
 
 template <class TKey, class TValue>
