@@ -4,9 +4,8 @@
 // #define TYPE_OF_CROSSING
 // #define MATRIX_INTERFACE
 // #define LABYRINTH_GENERATION
-// #define EASY_EXAMPLE
-// #define TYPE_OF_CROSSING
-#define SORT_DATA_WITH_BSTREE
+// #define SORT_DATA_WITH_BSTREE
+#define SORT_DATA_WITH_HEAP
 
 #ifdef EASY_EXAMPLE
 
@@ -602,3 +601,26 @@ int main() {
 }
 
 #endif  // SORT_DATA_WITH_BSTREE
+
+#ifdef SORT_DATA_WITH_HEAP
+
+#include "../lib_heap/heap.h"
+
+int main() {
+    srand(time(0));
+    int size = 25;
+
+    Heap<int> h;
+    for (int i = 0; i < size; i++) {
+        h.insert(rand() % 101);
+    }
+
+    for (int i = 0; i < size; i++) {
+        std::cout << h.root() << " ";
+        h.erase();
+    }
+
+    return 0;
+}
+
+#endif  // SORT_DATA_WITH_HEAP
