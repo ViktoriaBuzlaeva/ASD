@@ -5,7 +5,8 @@
 // #define MATRIX_INTERFACE
 // #define LABYRINTH_GENERATION
 // #define SORT_DATA_WITH_BSTREE
-#define SORT_DATA_WITH_HEAP
+
+
 
 #ifdef EASY_EXAMPLE
 
@@ -602,6 +603,9 @@ int main() {
 
 #endif  // SORT_DATA_WITH_BSTREE
 
+#define SORT_DATA_WITH_HEAP
+// #define SORT_DATA_WITH_PRIORITY_QUEUE
+
 #ifdef SORT_DATA_WITH_HEAP
 
 #include "../lib_heap/heap.h"
@@ -624,3 +628,33 @@ int main() {
 }
 
 #endif  // SORT_DATA_WITH_HEAP
+
+#ifdef SORT_DATA_WITH_PRIORITY_QUEUE
+
+#include "../lib_priority_queue/priority_queue.h"
+
+int main() {
+    srand(time(0));
+    int size = 25;
+
+    PriorityQueue<PriorityPair<int>> q;
+    for (int i = 0; i < size; i++) {
+        PriorityPair<int> p(1 + rand() % 10, i, i);
+        std::cout << p << " ";
+        q.push(p);
+    }
+    std::cout << std::endl;
+    
+    int k = 0;
+    std::cout << "k: ";
+    std::cin >> k;
+    std::cout << std::endl;
+    for (int i = 0; i < k; i++) {
+        std::cout << q.head() << " ";
+        q.pop();
+    }
+
+    return 0;
+}
+
+#endif  // SORT_DATA_WITH_PRIORITY_QUEUE

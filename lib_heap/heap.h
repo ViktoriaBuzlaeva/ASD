@@ -18,6 +18,10 @@ public:
         return _data[0];
     }
 
+    bool is_empty() const noexcept {
+        return _data.is_empty();
+    }
+
     void insert(const T&) noexcept;
     void erase();
 };
@@ -33,12 +37,12 @@ void Heap<T>::insert(const T& value) noexcept {
     int parent = (i - 1) / 2;
 
     while (parent >= 0 && _data[i] < _data[parent]) {
-        int temp = _data[i];
+        T temp = _data[i];
         _data[i] = _data[parent];
         _data[parent] = temp;
 
         i = parent;
-        parent = (i - 1) / 2;
+        parent = parent = (i - 1) / 2;
     }
 }
 
@@ -66,7 +70,7 @@ void Heap<T>::erase() {
 
         if (min == i) break;
 
-        int temp = _data[i];
+        T temp = _data[i];
         _data[i] = _data[min];
         _data[min] = temp;
 
