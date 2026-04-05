@@ -12,13 +12,13 @@ TEST(TestSkipListLib, can_create) {
 
 TEST(TestSkipListLib, can_insert) {
     SkipList<int, std::string> sl;
-    sl.print();
+    // sl.print();
     ASSERT_NO_THROW(sl.insert(1, "one"));
     ASSERT_NO_THROW(sl.insert(2, "two"));
     ASSERT_NO_THROW(sl.insert(5, "five"));
     ASSERT_NO_THROW(sl.insert(3, "three"));
     ASSERT_NO_THROW(sl.insert(4, "four"));
-    sl.print();
+    // sl.print();
 }
 
 TEST(TestSkipListLib, throw_when_try_insert_same_key) {
