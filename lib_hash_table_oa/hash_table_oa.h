@@ -6,12 +6,19 @@
 #define SIZE 100
 #define SHIFT 7
 
-#include <numeric>
+#include <iomanip>
 #include <algorithm>
 #include "../lib_table/table.h"
 #include "../lib_tvector/tvector.h"
 
-bool is_coprime(size_t, size_t);
+bool is_coprime(size_t f, size_t s) {
+    while (s != 0) {
+        size_t t = s;
+        s %= f;
+        f = t;
+    }
+    return f == 1;
+}
 
 enum Status { Busy, Empty, Deleted };
 
@@ -137,11 +144,32 @@ bool HashTableOA<TValue>::is_empty() const noexcept {
 
 template <class TValue>
 void HashTableOA<TValue>::print() const noexcept {
+    if (is_empty()) {
+        std::cout << "Table is empty" << std::endl;
+        return;
+    }
+
+    int key_length = 15;
+    int value_length = 40;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
+    std::cout << "| " << std::left << std::setw(key_length) << "Key" << "| "
+        << std::setw(value_length) << "Value" << "|" << std::endl;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
     for (size_t i = 0; i < _size; i++) {
         if (_rows[i].state == Busy) {
-            std::cout << _rows[i].key << ":" << _rows[i].value << std::endl;
+            std::cout << "| " << std::left << std::setw(key_length) << _rows[i].key << "| "
+                << std::setw(value_length) << _rows[i].value << "|" << std::endl;
         }
     }
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
 }
 
 template <class TValue>
@@ -155,15 +183,6 @@ size_t HashTableOA<TValue>::h(const std::string& key) const noexcept {
 template <class TValue>
 size_t HashTableOA<TValue>::hh(size_t hash) const noexcept {
     return (hash + _shift) % _size;
-}
-
-bool is_coprime(size_t f, size_t s) {
-    while (s != 0) {
-        size_t t = s;
-        s %= f;
-        f = t;
-    }
-    return f == 1;
 }
 
 #endif  // LIB_HASH_TABLE_OA_HASH_TABLE_OA_H_

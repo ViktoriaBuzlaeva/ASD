@@ -19,7 +19,7 @@ TEST(TestHashTableCLib, can_insert) {
     table.insert("six", 6);
     table.insert("three", 3);
     EXPECT_FALSE(table.is_empty());
-    table.print();
+    // table.print();
 }
 
 TEST(TestHashTableCLib, throw_when_try_insert_same_key) {

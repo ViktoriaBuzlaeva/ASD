@@ -5,6 +5,7 @@
 
 #define SIZE 100
 
+#include <iomanip>
 #include "../lib_table/table.h"
 #include "../lib_list/list.h"
 #include "../lib_tvector/tvector.h"
@@ -103,11 +104,32 @@ bool HashTableC<TValue>::is_empty() const noexcept {
 
 template <class TValue>
 void HashTableC<TValue>::print() const noexcept {
+    if (is_empty()) {
+        std::cout << "Table is empty" << std::endl;
+        return;
+    }
+
+    int key_length = 15;
+    int value_length = 40;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
+    std::cout << "| " << std::left << std::setw(key_length) << "Key" << "| "
+        << std::setw(value_length) << "Value" << "|" << std::endl;
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
+
     for (size_t i = 0; i < _rows.size(); i++) {
         for (auto it = _rows[i].begin(); it != _rows[i].end(); it++) {
-            std::cout << (*it).key << ":" << (*it).value << std::endl;
+            std::cout << "| " << std::left << std::setw(key_length) << (*it).key << "| "
+                << std::setw(value_length) << (*it).value << "|" << std::endl;
         }
     }
+
+    std::cout << "+-" << std::string(key_length, '-') << "+-"
+        << std::string(value_length, '-') << "+" << std::endl;
 }
 
 template <class TValue>
