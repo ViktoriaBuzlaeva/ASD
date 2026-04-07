@@ -5,8 +5,9 @@
 // #define MATRIX_INTERFACE
 // #define LABYRINTH_GENERATION
 // #define SORT_DATA_WITH_BSTREE
-
-
+// #define SORT_DATA_WITH_HEAP
+// #define SORT_DATA_WITH_PRIORITY_QUEUE
+#define MERGE_DICTIONARIES_WITH_HASH_TABLE
 
 #ifdef EASY_EXAMPLE
 
@@ -603,9 +604,6 @@ int main() {
 
 #endif  // SORT_DATA_WITH_BSTREE
 
-#define SORT_DATA_WITH_HEAP
-// #define SORT_DATA_WITH_PRIORITY_QUEUE
-
 #ifdef SORT_DATA_WITH_HEAP
 
 #include "../lib_heap/heap.h"
@@ -658,3 +656,38 @@ int main() {
 }
 
 #endif  // SORT_DATA_WITH_PRIORITY_QUEUE
+
+#ifdef MERGE_DICTIONARIES_WITH_HASH_TABLE
+
+#include "../lib_hash_table_oa/hash_table_oa.h"
+
+int main() {
+    TVector<TPair<std::string, int>> d1;
+    d1.push_back(TPair<std::string, int>("table", 1349));
+    d1.push_back(TPair<std::string, int>("hash", 1985));
+    d1.push_back(TPair<std::string, int>("list", 4372));
+
+    TVector<TPair<std::string, int>> d2;
+    d2.push_back(TPair<std::string, int>("massive", 4312));
+    d2.push_back(TPair<std::string, int>("list", 5863));
+    d2.push_back(TPair<std::string, int>("hash", 4317));
+    d2.push_back(TPair<std::string, int>("vector", 2586));
+
+    HashTableOA<int> table(7);
+    for (int i = 0; i < 3; i++) {
+        table.insert(d1[i].key, d1[i].value);
+    }
+    for (int i = 0; i < 4; i++) {
+        try {
+            table.insert(d2[i].key, d2[i].value);
+        }
+        catch (std::exception ex) {
+        }
+    }
+
+    std::cout << table;
+
+    return 0;
+}
+
+#endif  // MERGE_DICTIONARIES_WITH_HASH_TABLE

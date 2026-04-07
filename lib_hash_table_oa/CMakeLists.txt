@@ -1,0 +1,2 @@
+create_project_lib(HashTableOA)
+add_depend(HashTableOA Table lib_table)
