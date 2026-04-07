@@ -1,0 +1,2 @@
+create_project_lib(HashTableC)
+add_depend(HashTableC Table lib_table)
