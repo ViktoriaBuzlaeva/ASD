@@ -93,3 +93,15 @@ TEST(TestHashTableOALib, throw_when_try_erase_non_exist_key) {
     table.insert("six", 6);
     ASSERT_ANY_THROW(table.erase("three"));
 }
+
+TEST(TestHashTableOALib, can_insert_with_collision) {
+    HashTableOA<int> table(20);
+    table.insert("one", 1);
+    table.insert("two", 2);
+    table.insert("five", 5);
+    table.insert("four", 4);
+    table.insert("six", 6);
+    table.insert("three", 3);
+    table.insert("there", 10);
+    EXPECT_EQ(10, table.found("there"));
+}

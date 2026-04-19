@@ -114,8 +114,8 @@ void HashTableOA<TValue>::erase(const std::string& key) {
             _count--;
             return;
         }
-        if (first_hash == hash) break;
         hash = hh(hash);
+        if (first_hash == hash) break;
     }
 
     throw std::logic_error("Key doesn't exist");
@@ -131,8 +131,9 @@ TValue& HashTableOA<TValue>::found(const std::string& key) {
         if (_rows[hash].state == Busy && _rows[hash].key == key) {
             return _rows[hash].value;
         }
-        if (first_hash == hash) break;
         hash = hh(hash);
+        if (first_hash == hash) break;
+        
     }
     throw std::logic_error("Key doesn't exist");
 }
