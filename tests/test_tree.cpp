@@ -19,6 +19,15 @@ TEST(TestTreeLib, can_insert) {
     ASSERT_NO_THROW(t.insert(6, "six"));
     ASSERT_NO_THROW(t.insert(8, "eight"));
     ASSERT_NO_THROW(t.insert(9, "nine"));
+    ASSERT_NO_THROW(t.insert(77, "seven"));
+    ASSERT_NO_THROW(t.insert(178, "one"));
+    ASSERT_NO_THROW(t.insert(2, "two"));
+    ASSERT_NO_THROW(t.insert(5, "five"));
+    ASSERT_NO_THROW(t.insert(3, "three"));
+    ASSERT_NO_THROW(t.insert(4654, "four"));
+    ASSERT_NO_THROW(t.insert(6, "six"));
+    ASSERT_NO_THROW(t.insert(8, "eight"));
+    ASSERT_NO_THROW(t.insert(935, "nine"));
     ASSERT_NO_THROW(t.insert(7, "seven"));
     /*t.print();
     t.print_w();

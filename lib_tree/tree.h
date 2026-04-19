@@ -60,17 +60,7 @@ Tree<TKey, TValue>::Tree() {
 template <class TKey, class TValue>
 Tree<TKey, TValue>::~Tree() {
     if (is_empty()) return;
-
-    LQueue<TNode<TKey, TValue>*> q;
-    TNode<TKey, TValue>* current = nullptr;
-    q.push(_root);
-    while (!q.is_empty()) {
-        current = q.head();
-        q.pop();
-        if (current->left) q.push(current->left);
-        if (current->right) q.push(current->right);
-        delete current;
-    }
+    clear();
 }
 
 template <class TKey, class TValue>
