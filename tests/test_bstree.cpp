@@ -123,3 +123,14 @@ TEST(TestBSTreeLib, can_erase_root) {
     EXPECT_EQ("two", *(t.find(2)));
     EXPECT_EQ("three", *(t.find(3)));
 }
+
+TEST(TestBSTreeLib, throw_when_try_erase_not_existing_key) {
+    BSTree<int, std::string> t;
+    ASSERT_ANY_THROW(t.erase(6));
+    t.insert(1, "one");
+    t.insert(2, "two");
+    t.insert(5, "five");
+    t.insert(3, "three");
+    t.insert(4, "four");
+    ASSERT_ANY_THROW(t.erase(6));
+}

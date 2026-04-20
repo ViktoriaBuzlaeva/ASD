@@ -30,7 +30,7 @@ public:
 
     TypeNode* insert(const TKey&, const TValue&);
     TValue* find(const TKey&) const noexcept;
-    void erase(const TKey&);
+    TypeNode* erase(const TKey&);
 
     void clear() noexcept;
 
@@ -40,7 +40,7 @@ public:
     void print_DLCR() const noexcept;
 
 private:
-    void erase_node(TypeNode*, TypeNode*) noexcept;
+    TypeNode* erase_node(TypeNode*, TypeNode*) noexcept;
     TypeNode* find_max_left(TypeNode*) const noexcept;
     void clear_rec(TypeNode*) noexcept;
 
@@ -95,7 +95,8 @@ TValue* BSTree<TKey, TValue, TypeNode>::find(const TKey& key) const noexcept {
 }
 
 template <class TKey, class TValue, class TypeNode>
-void BSTree<TKey, TValue, TypeNode>::erase(const TKey& key) {
+TypeNode* BSTree<TKey, TValue, TypeNode>::erase(const TKey& key) {
+    if (is_empty()) throw std::logic_error("Tree is empty");
     TypeNode* parent = find_parent(key);
     TypeNode* deleted_node = nullptr;
 
@@ -112,7 +113,7 @@ void BSTree<TKey, TValue, TypeNode>::erase(const TKey& key) {
         throw std::logic_error("Key doesn't exist");
     }
 
-    erase_node(deleted_node, parent);
+    return erase_node(deleted_node, parent);
 }
 
 template <class TKey, class TValue, class TypeNode>
@@ -160,7 +161,7 @@ TypeNode* BSTree<TKey, TValue, TypeNode>::find_parent(const TKey& key) const noe
 }
 
 template <class TKey, class TValue, class TypeNode>
-void BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* parent) noexcept {
+TypeNode* BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* parent) noexcept {
     if (!deleted->left && !deleted->right) {
         if (deleted == _root) _root = nullptr;
         else {
@@ -172,6 +173,7 @@ void BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* par
             }
         }
         delete deleted;
+        return parent;
     }
     else if (!deleted->left) {
         if (deleted == _root) _root = deleted->right;
@@ -184,6 +186,7 @@ void BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* par
             }
         }
         delete deleted;
+        return parent;
     }
     else if (!deleted->right) {
         if (deleted == _root) _root = deleted->left;
@@ -196,21 +199,13 @@ void BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* par
             }
         }
         delete deleted;
+        return parent;
     }
     else {
         TypeNode* replacer = find_max_left(deleted);
         TypeNode* replacer_parent = find_parent(replacer->data.key);
-        if (deleted == _root) _root->data = replacer->data;
-        else {
-            deleted->data = replacer->data;
-            if (parent->data.key < deleted->data.key) {
-                parent->right = deleted;
-            }
-            else {
-                parent->left = deleted;
-            }
-        }
-        erase_node(replacer, replacer_parent);
+        deleted->data = replacer->data;
+        return erase_node(replacer, replacer_parent);
     }
 }
 

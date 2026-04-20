@@ -25,8 +25,7 @@ public:
     AVLTree();
 
     void insert(const TKey&, const TValue&);
-    // TValue* find(const TKey&) const noexcept;
-    // void erase(const TKey&);
+    void erase(const TKey&);
 
 private:
     void left_rotate(AVLTNode<TKey, TValue>*);
@@ -72,6 +71,28 @@ void AVLTree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
         if (abs(curr_balance) > 1) recover_balance(curr);
 
         curr = curr->parent;
+    }
+}
+
+template <class TKey, class TValue>
+void AVLTree<TKey, TValue>::erase(const TKey& key) {
+    AVLTNode<TKey, TValue>* node = BSTree<TKey, TValue, AVLTNode<TKey, TValue>>::erase(key);
+    if (!_root) return;
+    // Если удалился старый корень без обновления parent у нового корня
+    if (_root && !_root->left && !_root->right) {
+        _root->parent = nullptr;
+        node = _root;
+    }
+    if (node->right) node->right->parent = node;
+    if (node->left) node->left->parent = node;
+
+    while (node) {
+        recalc_height(node);
+        int balance = calc_balance(node);
+        if (abs(balance) > 1) {
+            recover_balance(node);
+        }
+        node = node->parent;
     }
 }
 
@@ -192,7 +213,7 @@ void AVLTree<TKey, TValue>::LR(AVLTNode<TKey, TValue>* node) {
 template <class TKey, class TValue>
 void AVLTree<TKey, TValue>::recover_balance(AVLTNode<TKey, TValue>* node) {
     int balance = calc_balance(node);
-    if (balance > 1) {  // левое поддерево тяжелее
+    if (balance > 1) {  // Левое поддерево тяжелее
         int left_balance = calc_balance(node->left);
         if (left_balance >= 0) LL(node);
         else LR(node);
