@@ -79,7 +79,7 @@ inline bool LQueue<T>::is_empty() const noexcept {
 template<class T>
 inline bool LQueue<T>::is_full() const noexcept {
     if (_size == -1) return false;
-    return _size == _data.get_count();
+    return _size == _data.size();
 }
 
 template<class T>
