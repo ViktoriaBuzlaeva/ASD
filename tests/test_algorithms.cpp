@@ -101,6 +101,96 @@ TEST(TestAlgorithmsLib, can_determine_touch_spheres) {
     EXPECT_EQ(Touch, res);
 }
 
+TEST(TestAlgorithmsLib, can_find_one_local_min) {
+    // Arrange
+    Matrix<int> matrix({ {1, 2, 3},
+                        { 4, 5, 6 },
+                        { 7, 8, 9 } });
+
+    // Act
+    int value = find_local_min_matrix(matrix);
+
+    // Assert
+    EXPECT_EQ(1, value);
+}
+
+TEST(TestAlgorithmsLib, can_find_any_local_min) {
+    // Arrange
+    Matrix<int> matrix({ {3, 1, 2},
+                        { 5, 8, 4 },
+                        { 7, 6, 9 } });
+
+    // Act
+    int local_min_1 = 1;
+    int local_min_2 = 6;
+    int value = find_local_min_matrix(matrix);
+    bool actual_result = (local_min_1 == value) || (local_min_2 == value);
+
+    // Assert
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
+}
+
+TEST(TestAlgorithmsLib, can_count_islands) {
+    Matrix<int> matrix_1({
+                        { 0, 0, 0, 0, 0, 0 },
+                        { 0, 0, 0, 0, 0, 0 },
+                        { 0, 0, 0, 0, 0, 0 },
+                        { 0, 0, 0, 0, 0, 0 },
+                        { 0, 0, 0, 0, 0, 0 },
+                        { 0, 0, 0, 0, 0, 0 } });
+
+    Matrix<int> matrix_2({
+                        { 1, 0, 0, 0, 0, 1 },
+                        { 0, 0, 0, 0, 1, 1 },
+                        { 1, 1, 0, 0, 0, 1 },
+                        { 1, 0, 0, 0, 0, 1 },
+                        { 1, 0, 0, 1, 0, 1 } });
+
+    Matrix<int> matrix_3({
+                        { 1, 0, 0, 0, 0, 1 },
+                        { 0, 0, 0, 0, 1, 1 },
+                        { 1, 1, 0, 0, 0, 1 },
+                        { 0, 0, 0, 0, 0, 1 },
+                        { 1, 1, 0, 1, 0, 1 },
+                        { 0, 1, 0, 1, 0, 1 } });
+
+    Matrix<int> matrix_4({
+                        { 1, 1, 1, 1, 1, 1 },
+                        { 1, 1, 1, 1, 1, 1 },
+                        { 1, 1, 1, 1, 1, 1 },
+                        { 1, 1, 1, 1, 1, 1 },
+                        { 1, 1, 1, 1, 1, 1 },
+                        { 1, 1, 1, 1, 1, 1 } });
+
+    Matrix<int> matrix_5({ { 1 } });
+
+    Matrix<int> matrix_6({ { 0 } });
+
+    Matrix<int> matrix_7({
+                        { 0, 0, 0, 0, 0, 1 },
+                        { 0, 0, 0, 1, 1, 1 },
+                        { 1, 1, 1, 1, 0, 1 },
+                        { 0, 1, 0, 1, 0, 1 },
+                        { 1, 1, 0, 1, 0, 1 },
+                        { 0, 1, 0, 1, 0, 1 } });
+
+    EXPECT_EQ(0, find_number_of_islands(matrix_1));
+    EXPECT_EQ(4, find_number_of_islands(matrix_2));
+    EXPECT_EQ(5, find_number_of_islands(matrix_3));
+    EXPECT_EQ(1, find_number_of_islands(matrix_4));
+    EXPECT_EQ(1, find_number_of_islands(matrix_5));
+    EXPECT_EQ(0, find_number_of_islands(matrix_6));
+    EXPECT_EQ(1, find_number_of_islands(matrix_7));
+}
+
+TEST(TestAlgorithmsLib, can_generate_labyrinth) {
+    ASSERT_ANY_THROW(generate_labyrinth(1, 16, 4, 4));
+    ASSERT_ANY_THROW(generate_labyrinth(1, 26, 5, 5));
+    ASSERT_ANY_THROW(generate_labyrinth(1, 17, 5, 5));
+    ASSERT_NO_THROW(generate_labyrinth(1, 25, 5, 5));
+}
+
 TEST(TestAlgorithmsLib, can_check_correct_brackets) {
     std::string str = "[(()){}]";
 

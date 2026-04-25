@@ -3,9 +3,12 @@
 #ifndef LIB_ALGORITHMS_ALGORITHMS_H_
 #define LIB_ALGORITHMS_ALGORITHMS_H_
 
+#include <iomanip>
 #include <string>
 #include "../lib_stack/stack.h"
 #include "../lib_list/list.h"
+#include "../lib_matrix/matrix.h"
+#include "../lib_dsu/dsu.h"
 
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
@@ -24,6 +27,18 @@ TypeOfCrossing find_type_of_crossing(const T& first, const T& second) {
         return Touch;
     }
 }
+
+int find_local_min_matrix(Matrix<int>, unsigned int seed = time(0));
+
+int find_number_of_islands(Matrix<int>);
+
+Matrix<bool> generate_labyrinth(int, int, int, int);
+
+Matrix<bool> create_wall_matrix(int, int, int, int);
+
+void create_passage(Matrix<bool>&, int, int, int, int);
+
+void print_lab(Matrix<bool> labyrinth, int N, int M);
 
 bool check_brackets(std::string str);
 

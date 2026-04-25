@@ -99,12 +99,12 @@ public:
     private:
         T* _data;
         State* _states;
-        size_t _index;
+        int _index;
         size_t _size;
 
     public:
         Iterator() : _data(nullptr), _states(nullptr), _index(0), _size(0) {}
-        Iterator(T* data, State* states, size_t index, size_t size) : _data(data), _states(states), _index(index), _size(size) {
+        Iterator(T* data, State* states, size_t size, int index) : _data(data), _states(states), _index(index), _size(size) {
             while (_index < _size && _states[_index] != busy) {
                 ++_index;
             }
@@ -149,9 +149,9 @@ public:
         }
 
         Iterator& operator -- () {
-            if (_index == 0) throw std::logic_error("Decrementing before begin iterator");
+            if (_index == -1) throw std::logic_error("Decrementing before begin iterator");
             --_index;
-            while (_states[_index] != busy) {
+            while (_states[_index] != busy && _index > -1) {
                 --_index;
                 if (_index < 0) throw std::logic_error("Invalid action");
             }
@@ -169,7 +169,7 @@ public:
                 return *this += (-num);
             }
             for (int i = 0; i < num; i++) {
-                if (_index == 0) throw std::logic_error("Reduction before begin iterator");
+                if (_index == -1) throw std::logic_error("Reduction before begin iterator");
                 --(*this);
             }
             return *this;
@@ -190,7 +190,7 @@ public:
     };
 
     const Iterator begin() const {
-        return Iterator(_data, _states, 0, _size + _deleted);
+        return Iterator(_data, _states, _size + _deleted, 0);
     }
 
     const Iterator end() const {
@@ -198,11 +198,27 @@ public:
     }
 
     Iterator begin() {
-        return Iterator(_data, _states, 0, _size + _deleted);
+        return Iterator(_data, _states, _size + _deleted, 0);
     }
 
     Iterator end() {
         return Iterator(_data, _states, _size + _deleted, _size + _deleted);
+    }
+
+    const Iterator rbegin() const {
+        return Iterator(_data, _states, _size + _deleted, _size + _deleted - 1);
+    }
+
+    const Iterator rend() const {
+        return Iterator(_data, _states, _size + _deleted, -1);
+    }
+
+    Iterator rbegin() {
+        return Iterator(_data, _states, _size + _deleted, _size + _deleted - 1);
+    }
+
+    Iterator rend() {
+        return Iterator(_data, _states, _size + _deleted, -1);
     }
 
 private:

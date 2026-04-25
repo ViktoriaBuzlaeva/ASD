@@ -15,7 +15,7 @@ Circle::Circle(float rad, float x, float y) : _cent(Point(x, y)) {
 
 Circle::Circle(float rad, Point cent) : _cent(cent) {
     if (rad < 0)
-    throw std::invalid_argument("Input Error: radius can't be less than zero");
+        throw std::invalid_argument("Input Error: radius can't be less than zero");
     _rad = rad;
 }
 

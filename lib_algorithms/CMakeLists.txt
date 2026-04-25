@@ -1,1 +1,2 @@
 create_project_lib(Algorithms)
+add_depend(Algorithms Matrix lib_matrix)
