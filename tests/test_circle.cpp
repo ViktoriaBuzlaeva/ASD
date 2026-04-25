@@ -6,23 +6,31 @@
 #define EPSILON 0.000001
 
 TEST(TestCircleLib, can_create) {
-    // Arrange & Act
+    // Arrange
     Circle circle;
 
+    // Act
+    Point cent(0, 0);
+    int rad = 0;
+    bool actual_result = (circle.cent() == cent) && (circle.rad() == rad);
+
     // Assert
-    EXPECT_EQ(0, circle.cent().x());
-    EXPECT_EQ(0, circle.cent().y());
-    EXPECT_EQ(0, circle.rad());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestCircleLib, can_create_init) {
-    // Arrange & Act
+    // Arrange
     Circle circle(2, 6, 2);
 
+    // Act
+    Point cent(6, 2);
+    int rad = 2;
+    bool actual_result = (circle.cent() == cent) && (circle.rad() == rad);
+
     // Assert
-    EXPECT_EQ(6, circle.cent().x());
-    EXPECT_EQ(2, circle.cent().y());
-    EXPECT_EQ(2, circle.rad());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestCircleLib, throw_when_create_init_with_incorrect_rad) {
@@ -36,14 +44,20 @@ TEST(TestCircleLib, throw_when_create_init_with_incorrect_rad) {
 }
 
 TEST(TestCircleLib, can_create_init_with_point) {
-    // Arrange & Act
+    // Arrange
     Point cent(6, 2);
     Circle circle(2, cent);
 
+    // Act
+    int rad = 2;
+    int x = 6;
+    int y = 2;
+    bool actual_result = (circle.cent().x() == x) && (circle.cent().y() == y)
+        && (circle.rad() == rad);
+
     // Assert
-    EXPECT_EQ(6, circle.cent().x());
-    EXPECT_EQ(2, circle.cent().y());
-    EXPECT_EQ(2, circle.rad());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestCircleLib, throw_when_create_with_point_with_incorrect_rad) {
@@ -56,13 +70,17 @@ TEST(TestCircleLib, throw_when_create_with_point_with_incorrect_rad) {
 }
 
 TEST(TestCircleLib, can_create_copy) {
-    // Arrange & Act
+    // Arrange
     Circle circle_1(3);
     Circle circle_2(circle_1);
 
+    // Act
+    bool actual_result = (circle_1.cent() == circle_2.cent()) &&
+        (circle_1.rad() == circle_1.rad());
+
     // Assert
-    EXPECT_EQ(circle_2.cent(), circle_1.cent());
-    EXPECT_EQ(circle_2.rad(), circle_1.rad());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestCircleLib, can_comp_correctly_eq_circles) {

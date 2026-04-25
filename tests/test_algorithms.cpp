@@ -190,3 +190,147 @@ TEST(TestAlgorithmsLib, can_generate_labyrinth) {
     ASSERT_ANY_THROW(generate_labyrinth(1, 17, 5, 5));
     ASSERT_NO_THROW(generate_labyrinth(1, 25, 5, 5));
 }
+
+TEST(TestAlgorithmsLib, can_check_correct_brackets) {
+    std::string str = "[(()){}]";
+
+    EXPECT_EQ(true, check_brackets(str));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_brackets_1) {
+    std::string str = "(()";
+
+    EXPECT_EQ(false, check_brackets(str));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_brackets_2) {
+    std::string str = "({})[(){]]";
+
+    EXPECT_EQ(false, check_brackets(str));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_brackets_3) {
+    std::string str = "({}))";
+
+    EXPECT_EQ(false, check_brackets(str));
+}
+
+TEST(TestAlgorithmsLib, can_check_correct_expressions) {
+    std::string expr_1 = "3 * (15 + (x + y) * (2 * x - 7 * y^2))";
+    std::string expr_2 = "-x * (-x + y) * (x - (-y))";
+
+    ASSERT_NO_THROW(read_expression(expr_1));
+    ASSERT_NO_THROW(read_expression(expr_2));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_1) {
+    std::string expr = "3 * (15 + (x y) * (2 * x - 7 * y^2))";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_2) {
+    std::string expr = "3 * (15 + (x + y) * (2 * x - 7 * y^))";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_3) {
+    std::string expr = "((x + y) * (x - y)";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_4) {
+    std::string expr = "3 * 15 + (x + y) *";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_5) {
+    std::string expr = "* (15 + (x + y) * (2 * x - 7 * y^2))";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_6) {
+    std::string expr = "(x + y) * (x - y))";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_7) {
+    std::string expr_1 = "(x + * y) * (x - y)";
+    std::string expr_2 = "(x + -y) * (x - y)";
+
+    ASSERT_ANY_THROW(read_expression(expr_1));
+    ASSERT_ANY_THROW(read_expression(expr_2));
+}
+
+TEST(TestAlgorithmsLib, can_check_uncorrect_expression_8) {
+    std::string expr = "(x + y) & (x - y)";
+
+    ASSERT_ANY_THROW(read_expression(expr));
+}
+
+TEST(TestAlgoritmsLib, can_check_empty_list) {
+    List<int> list;
+
+    EXPECT_FALSE(is_looped_1(list));
+    EXPECT_FALSE(is_looped_2(list));
+    EXPECT_EQ(nullptr, find_loop(list));
+}
+
+TEST(TestAlgoritmsLib, can_check_one_elem_list) {
+    List<int> list;
+    
+    list.push_back(1);
+
+    EXPECT_FALSE(is_looped_1(list));
+    EXPECT_FALSE(is_looped_2(list));
+    EXPECT_EQ(nullptr, find_loop(list));
+}
+
+TEST(TestAlgoritmsLib, can_check_not_looped_list) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i * 3 + 1);
+    }
+
+    EXPECT_FALSE(is_looped_1(list));
+    EXPECT_FALSE(is_looped_2(list));
+    EXPECT_EQ(nullptr, find_loop(list));
+}
+
+TEST(TestAlgoritmsLib, can_check_looped_list) {
+    List<int> list;
+    
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i * 3 + 1);
+    }
+
+    list.tail()->next = list.head()->next->next;
+
+    EXPECT_TRUE(is_looped_1(list));
+    EXPECT_TRUE(is_looped_2(list));
+    EXPECT_EQ(list.head()->next->next, find_loop(list));
+
+    list.tail()->next = nullptr;
+}
+
+TEST(TestAlgoritmsLib, can_check_looped_list_with_loop_in_head) {
+    List<int> list;
+
+    for (int i = 0; i < 5; i++) {
+        list.push_back(i * 3 + 1);
+    }
+
+    list.tail()->next = list.head();
+
+    EXPECT_TRUE(is_looped_1(list));
+    EXPECT_TRUE(is_looped_2(list));
+    EXPECT_EQ(list.head(), find_loop(list));
+
+    list.tail()->next = nullptr;
+}

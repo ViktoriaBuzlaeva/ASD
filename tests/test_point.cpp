@@ -6,31 +6,46 @@
 #define EPSILON 0.000001
 
 TEST(TestPointLib, can_create) {
-    // Arrange & Act
+    // Arrange
     Point point;
 
+    // Act
+    int x = 0;
+    int y = 0;
+    bool actual_result = (point.x() == x) && (point.y() == y);
+
     // Assert
-    EXPECT_EQ(0, point.x());
-    EXPECT_EQ(0, point.y());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_create_init) {
-    // Arrange & Act
+    // Arrange
     Point point(6, 2);
 
+    // Act
+    int x = 6;
+    int y = 2;
+    bool actual_result = (point.x() == x) && (point.y() == y);
+
     // Assert
-    EXPECT_EQ(6, point.x());
-    EXPECT_EQ(2, point.y());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_create_copy) {
-    // Arrange & Act
+    // Arrange
     Point point_1(2, 3);
     Point point_2(point_1);
 
+    // Act
+    int x = 2;
+    int y = 3;
+    bool actual_result = (point_2.x() == x) && (point_2.y() == y);
+
     // Assert
-    EXPECT_EQ(point_2.x(), point_1.x());
-    EXPECT_EQ(point_2.y(), point_1.y());
+    bool expected_result = true;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestPointLib, can_comp_correctly_eq_points) {

@@ -8,7 +8,7 @@
 #include "../lib_circle/circle.h"
 
 Circle::Circle(float rad, float x, float y) : _cent(Point(x, y)) {
-    if (rad < 0) 
+    if (rad < 0)
         throw std::invalid_argument("Input Error: radius can't be less than zero");
     _rad = rad;
 }

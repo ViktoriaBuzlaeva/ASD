@@ -101,7 +101,7 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
             int random = rand() % 65;
 
             if (j + 1 < M && random < 25) {
-                int rcell = i * M + (j + 1); // Правая ячейка (вертикальная стена)
+                int rcell = i * M + (j + 1); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
                 if (labyrinth.find(cell) != labyrinth.find(rcell)) {
                     labyrinth.unite(cell, rcell);
                     walls[2 * i + 1][j + 1] = false;
@@ -109,7 +109,7 @@ Matrix<bool> generate_labyrinth(int S, int F, int N, int M) {
             }
 
             if (i + 1 < N && random >= 25 && random < 50) {
-                int dcell = (i + 1) * M + j; // Нижняя ячейка (горизонтальная стена)
+                int dcell = (i + 1) * M + j; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)
                 if (labyrinth.find(cell) != labyrinth.find(dcell)) {
                     labyrinth.unite(cell, dcell);
                     walls[2 * i + 2][j] = false;
@@ -235,5 +235,119 @@ void print_lab(Matrix<bool> labyrinth, int N, int M) {
             }
             std::cout << std::endl;
         }
+    }
+}    
+    
+bool check_brackets(std::string str) {
+    Stack<char> stack;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '}' || str[i] == ']' || str[i] == ')') {
+            if (stack.is_empty()) return false;
+            switch (str[i]) {
+            case '}':
+                if (stack.top() == '{') {
+                    stack.pop();
+                    break;
+                }
+            case ']':
+                if (stack.top() == '[') {
+                    stack.pop();
+                    break;
+                }
+            case ')':
+                if (stack.top() == '(') {
+                    stack.pop();
+                    break;
+                }
+            }
+        }
+        else {
+            stack.push(str[i]);
+        }
+    }
+
+    return stack.is_empty();
+}
+
+void read_expression(std::string expression) {
+    Stack<char> brackets;
+    bool expect_operand = true;
+    bool prev_is_operand = false;
+    bool prev_is_operation = false;
+
+    for (int i = 0; i < expression.length(); i++) {
+        char c = expression[i];
+
+        if (std::isspace(c)) { continue; }
+
+        if (expect_operand) {
+            if (c == '(') {
+                brackets.push(c);
+
+                prev_is_operand = false;
+                prev_is_operation = false;
+            }
+            else if (c == '-' && (i == 0 || expression[i - 1] == '(')) {
+                prev_is_operand = false;
+                prev_is_operation = false;
+            }
+            else if (std::isdigit(c) || std::isalpha(c)) {
+                if (std::isalpha(c)) {
+                    while (i < expression.length() && std::isalpha(expression[i])) {
+                        i++;
+                    }
+                }
+                else if (std::isdigit(c)) {
+                    while (i < expression.length() && std::isdigit(expression[i])) {
+                        i++;
+                    }
+                }
+                i--;
+
+                prev_is_operand = true;
+                prev_is_operation = false;
+                expect_operand = false;
+            }
+            else {
+                if (prev_is_operation) {
+                    throw std::logic_error("Missing second operand in operation " + std::string(1, expression[i - 1]));
+                }
+                else {
+                    throw std::logic_error("Missing operand");
+                }
+            }
+        }
+        else {
+            if (c == ')') {
+                if (brackets.is_empty()) {
+                    throw std::logic_error("Extra closing bracket");
+                }
+                brackets.pop();
+
+                prev_is_operand = true;
+                prev_is_operation = false;
+            }
+            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+                if (i == expression.length() - 1) {
+                    throw std::logic_error("Missing second operand in operation " + std::string(1, c));
+                }
+
+                prev_is_operand = false;
+                prev_is_operation = true;
+                expect_operand = true;
+            }
+            else {
+                throw std::logic_error("Missing operation");
+            }
+        }
+    }
+
+    if (!brackets.is_empty()) {
+        throw std::logic_error("Missing closing bracket");
+    }
+
+    if (expect_operand && prev_is_operation) {
+        throw std::logic_error("Missing operand");
     }
 }
