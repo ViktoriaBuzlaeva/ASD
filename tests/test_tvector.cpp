@@ -824,12 +824,16 @@ TEST(TestTVectorLib, can_correctly_find_first_element) {
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST(TestTVectorLib, throw_when_cannot_find_first_element) {
+TEST(TestTVectorLib, correct_result_when_cannot_find_first_element) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 5 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_first(v, 6));
+    // Act
+    int actual_result = find_first(v, 6);
+
+    // Assert
+    int expected_result = -1;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_find_last_element) {
@@ -844,12 +848,16 @@ TEST(TestTVectorLib, can_correctly_find_last_element) {
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST(TestTVectorLib, throw_when_cannot_find_last_element) {
+TEST(TestTVectorLib, correct_result_when_cannot_find_last_element) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 5 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_last(v, 6));
+    // Act
+    int actual_result = find_first(v, 6);
+
+    // Assert
+    int expected_result = -1;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_find_all_elements) {
@@ -864,12 +872,16 @@ TEST(TestTVectorLib, can_correctly_find_all_elements) {
     EXPECT_EQ(elems2, elems1);
 }
 
-TEST(TestTVectorLib, throw_when_cannot_find_all_elements) {
+TEST(TestTVectorLib, correct_result_when_cannot_find_all_elements) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 5 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_all(v, 6));
+    // Act
+    TVector<int> actual_result = find_all(v, 6);
+
+    // Assert
+    TVector<int> expected_result;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_find_first_element_pointer) {
@@ -884,12 +896,15 @@ TEST(TestTVectorLib, can_correctly_find_first_element_pointer) {
     EXPECT_EQ(expected_result, actual_result);
 }
 
-TEST(TestTVectorLib, throw_when_cannot_find_first_element_pointer) {
+TEST(TestTVectorLib, correct_result_when_cannot_find_first_element_pointer) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 3 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_first_pointer(v, 6));
+    // Act
+    int* actual_result = find_first_pointer(v, 6);
+
+    // Assert
+    EXPECT_EQ(nullptr, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_find_last_element_pointer) {
@@ -908,8 +923,11 @@ TEST(TestTVectorLib, throw_when_cannot_find_last_element_pointer) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 3 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_last_pointer(v, 6));
+    // Act
+    int* actual_result = find_last_pointer(v, 6);
+
+    // Assert
+    EXPECT_EQ(nullptr, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_find_all_elements_pointers) {
@@ -928,8 +946,12 @@ TEST(TestTVectorLib, throw_when_cannot_find_all_elements_pointers) {
     // Arrange
     TVector<int> v{ 1, 2, 3, 4, 3 };
 
-    // Act & Assert
-    ASSERT_ANY_THROW(find_all(v, 6));
+    // Act
+    TVector<int*> actual_result = find_all_pointers(v, 6);
+
+    // Assert
+    TVector<int*> expected_result;
+    EXPECT_EQ(expected_result, actual_result);
 }
 
 TEST(TestTVectorLib, can_correctly_replace_by_finding_pointer) {
