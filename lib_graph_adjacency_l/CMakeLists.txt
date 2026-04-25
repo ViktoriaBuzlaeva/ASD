@@ -1,0 +1,2 @@
+create_project_lib(GraphAdjacencyL)
+add_depend(GraphAdjacencyL List lib_list)
