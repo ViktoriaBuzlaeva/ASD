@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include "../lib_priority_queue/priority_queue.h"
 
 template <class T>
 struct Edge {
@@ -41,6 +42,8 @@ public:
     void add_edge(const T&, const T&, size_t weight = 1);
     void delete_edge(const T&, const T&);
     void delete_vertex(const T&);
+
+    std::vector<T> find_min_way(const T&, const T&);
 
 private:
     int find_vertex_index(const T&) const;
@@ -145,6 +148,59 @@ void GraphAdjacencyL<T>::delete_vertex(const T& value) {
             }
         }
     }
+}
+
+template <class T>
+std::vector<T> GraphAdjacencyL<T>::find_min_way(const T& start, const T& finish) {
+    int start_id = find_vertex_index(start);
+    int finish_id = find_vertex_index(finish);
+    if (start_id == -1 || finish_id == -1) throw std::logic_error("Vertex doesn't exist");
+
+    std::vector<int> distance(_graph.size(), INT_MAX);  // Минимальное расстояние до каждой вершины
+    distance[start_id] = 0;
+    std::vector<int> previous(_graph.size(), -1);  // Предыдущая вершина на кратчайшем пути
+
+    PriorityQueue<PriorityPair<int>> queue;
+
+    int order = 0;
+    queue.push(PriorityPair<int>(0, start_id, order));
+    order++;
+
+    while (!queue.is_empty()) {
+        PriorityPair<int> cur = queue.head();
+        queue.pop();
+
+        int cur_distance = cur.key;  // Расстояние до вершины
+        int cur_vertex = cur.value;  // Индекс вершины
+
+        if (cur_distance != distance[cur_vertex]) continue;  // Уже посещали вершину
+
+        if (cur_vertex == finish_id) break;
+
+        for (auto it = _graph[cur_vertex].edges.begin(); it != _graph[cur_vertex].edges.end(); it++) {
+            int neighbor_vertex = (*it).to_vertex;
+            int edge_weight = (*it).weight;
+
+            int new_distance = cur_distance + edge_weight;
+            if (new_distance < distance[neighbor_vertex]) {
+                distance[neighbor_vertex] = new_distance;
+                previous[neighbor_vertex] = cur_vertex;
+                queue.push(PriorityPair<int>(new_distance, neighbor_vertex, order));
+                order++;
+            }
+        }
+    }
+
+    if (distance[finish_id] == INT_MAX) throw std::logic_error("Path doesn't exist");
+
+    std::vector<T> path;
+    int v = finish_id;
+    while (v != -1) {
+        path.push_back(_graph[v].value);
+        v = previous[v];
+    }
+    std::reverse(path.begin(), path.end());
+    return path;
 }
 
 template <class T>

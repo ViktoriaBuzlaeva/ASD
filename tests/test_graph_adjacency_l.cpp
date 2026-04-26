@@ -110,3 +110,69 @@ TEST(TestGraphAdjacencyLLib, can_delete_and_add_same_vertex) {
     EXPECT_TRUE(g.has_edge(3, 1));
     EXPECT_FALSE(g.has_edge(0, 1));
 }
+
+TEST(TestGraphAdjacencyLLib, can_find_min_way_unweighted) {
+    GraphAdjacencyL<int> g1({ {0,2}, {2,1}, {1,4}, {3,0}, {3,4} }, false);
+    std::vector<int> actual_path = g1.find_min_way(0, 4);
+
+    std::vector<int> expected_path = { 0, 3, 4 };
+    EXPECT_EQ(actual_path, expected_path);
+
+    GraphAdjacencyL<int> g2({ {0,2}, {2,1}, {1,4}, {3,0}, {3,4} }, true);
+    actual_path = g2.find_min_way(0, 4);
+
+    expected_path = { 0, 2, 1, 4 };
+    EXPECT_EQ(actual_path, expected_path);
+}
+
+TEST(TestGraphAdjacencyLLib, can_find_min_way_weighted) {
+    GraphAdjacencyL<int> g1({ {{0,2}, 2}, {{2,1}, 7}, {{1,4}, 5},
+        {{0,3}, 4}, {{3,4}, 30}, {{1,3}, 3} }, false);
+    std::vector<int> actual_path = g1.find_min_way(0, 4);
+
+    std::vector<int> expected_path = { 0, 3, 1, 4 };
+    EXPECT_EQ(actual_path, expected_path);
+
+    GraphAdjacencyL<int> g2({ {{0,2}, 2}, {{2,1}, 7}, {{1,4}, 5},
+        {{0,3}, 4}, {{3,4}, 30}, {{1,3}, 3} }, true);
+    actual_path = g2.find_min_way(0, 4);
+
+    expected_path = { 0, 2, 1, 4 };
+    EXPECT_EQ(actual_path, expected_path);
+}
+
+TEST(TestGraphAdjacencyLLib, can_find_min_way_to_itself) {
+    GraphAdjacencyL<int> g({ {0,2} });
+    std::vector<int> actual_path = g.find_min_way(0, 0);
+
+    std::vector<int> expected_path = { 0 };
+    EXPECT_EQ(actual_path, expected_path);
+}
+
+TEST(TestGraphAdjacencyLLib, can_find_min_way) {
+    GraphAdjacencyL<int> g(
+        { {{0,1}, 2}, {{0,2}, 5}, {{0,4}, 10},
+        {{1,2}, 1}, {{1,3}, 4},
+        {{2,3}, 2}, {{2,4}, 3},
+        {{3,4}, 1}, {{3,5}, 6},
+        {{4,5}, 2} }, true);
+
+    auto actual_path = g.find_min_way(0, 5);
+    std::vector<int> expected_path_1 = { 0, 1, 2, 3, 4, 5 };
+    std::vector<int> expected_path_2 = { 0, 1, 2, 4, 5 };
+    // Оба пути весом 8
+    EXPECT_TRUE(actual_path == expected_path_2);
+}
+
+TEST(TestGraphAdjacencyLLib, throw_when_try_find_min_way_with_non_exist_vertex) {
+    GraphAdjacencyL<int> g({ {0,2}, {2,1}, {1,4}, {3,0}, {3,4} }, false);
+    ASSERT_ANY_THROW(g.find_min_way(0, 5));
+}
+
+TEST(TestGraphAdjacencyLLib, throw_when_try_find_min_way_with_non_exist_path) {
+    GraphAdjacencyL<int> g({ {{0,2}, 2}, {{2,1}, 7}, {{1,4}, 5},
+        {{0,3}, 4}, {{3,4}, 30}, {{1,3}, 3} }, true);
+    ASSERT_ANY_THROW(g.find_min_way(4, 0));
+}
+
+
