@@ -53,7 +53,7 @@ public:
     }
 
     bool is_empty() const noexcept {
-        _data.is_empty();
+        return _data.is_empty();
     }
 };
 
