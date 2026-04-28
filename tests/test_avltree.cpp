@@ -369,8 +369,8 @@ TEST(TestAVLTreeLib, can_erase_4) {
     for (int i = 1; i <= 15; i++) t.insert(i, i);
     for (int i = 1; i <= 15; i++) {
         t.erase(i);
-        /*t.print();
-        std::cout << std::endl;*/
+        // t.print();
+        // std::cout << std::endl;
     }
     EXPECT_TRUE(t.is_empty());
 }

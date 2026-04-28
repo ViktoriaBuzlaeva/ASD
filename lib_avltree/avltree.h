@@ -45,11 +45,14 @@ AVLTree<TKey, TValue>::AVLTree() : BSTree<TKey, TValue, AVLTNode<TKey, TValue>>(
 
 template <class TKey, class TValue>
 void AVLTree<TKey, TValue>::insert(const TKey& key, const TValue& val) {
-    AVLTNode<TKey, TValue>* node = BSTree<TKey, TValue, AVLTNode<TKey, TValue>>::insert(key, val);
-    if (node == _root) return;
+    AVLTNode<TKey, TValue>* P = BSTree<TKey, TValue, AVLTNode<TKey, TValue>>::insert(key, val);
+    if (!P) return;
 
-    node->parent = BSTree<TKey, TValue, AVLTNode<TKey, TValue>>::find_parent(key);
-    AVLTNode<TKey, TValue>* P = node->parent;
+    AVLTNode<TKey, TValue>* node;
+    if (P->left && P->left->data.key == key) node = P->left;
+    else node = P->right;
+
+    node->parent = P;
     recalc_height(P);
 
     AVLTNode<TKey, TValue>* G = P->parent;
@@ -78,14 +81,15 @@ template <class TKey, class TValue>
 void AVLTree<TKey, TValue>::erase(const TKey& key) {
     AVLTNode<TKey, TValue>* node = BSTree<TKey, TValue, AVLTNode<TKey, TValue>>::erase(key);
     if (!_root) return;
-    // Если удалился старый корень без обновления parent у нового корня
-    if (_root && !_root->left && !_root->right) {
+    if (_root && !node) {
         _root->parent = nullptr;
         node = _root;
     }
+
     if (node->right) node->right->parent = node;
     if (node->left) node->left->parent = node;
 
+    size_t prev_height;
     while (node) {
         recalc_height(node);
         int balance = calc_balance(node);

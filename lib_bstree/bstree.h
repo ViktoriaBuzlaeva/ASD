@@ -68,15 +68,15 @@ TypeNode* BSTree<TKey, TValue, TypeNode>::insert(const TKey& key, const TValue& 
     TypeNode* parent = find_parent(key);
     if (!parent) {
         _root = new TypeNode(TPair<TKey, TValue>(key, value));
-        return _root;
+        return nullptr;
     }
     if (parent->data.key < key && !parent->right) {
         parent->right = new TypeNode(TPair<TKey, TValue>(key, value));
-        return parent->right;
+        return parent;
     }
     if (parent->data.key > key && !parent->left) {
         parent->left = new TypeNode(TPair<TKey, TValue>(key, value));
-        return parent->left;
+        return parent;
     }
     throw std::logic_error("Key already exists");
 }
@@ -163,7 +163,10 @@ TypeNode* BSTree<TKey, TValue, TypeNode>::find_parent(const TKey& key) const noe
 template <class TKey, class TValue, class TypeNode>
 TypeNode* BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode* parent) noexcept {
     if (!deleted->left && !deleted->right) {
-        if (deleted == _root) _root = nullptr;
+        if (deleted == _root) {
+            _root = nullptr;
+            return nullptr;
+        }
         else {
             if (parent->data.key < deleted->data.key) {
                 parent->right = nullptr;
@@ -176,7 +179,10 @@ TypeNode* BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode
         return parent;
     }
     else if (!deleted->left) {
-        if (deleted == _root) _root = deleted->right;
+        if (deleted == _root) {
+            _root = deleted->right;
+            return nullptr;
+        }
         else {
             if (parent->data.key < deleted->data.key) {
                 parent->right = deleted->right;
@@ -189,7 +195,10 @@ TypeNode* BSTree<TKey, TValue, TypeNode>::erase_node(TypeNode* deleted, TypeNode
         return parent;
     }
     else if (!deleted->right) {
-        if (deleted == _root) _root = deleted->left;
+        if (deleted == _root) {
+            _root = deleted->left;
+            return nullptr;
+        }
         else {
             if (parent->data.key < deleted->data.key) {
                 parent->right = deleted->left;
