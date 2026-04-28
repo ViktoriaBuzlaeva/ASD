@@ -7,7 +7,8 @@
 // #define SORT_DATA_WITH_BSTREE
 // #define SORT_DATA_WITH_HEAP
 // #define SORT_DATA_WITH_PRIORITY_QUEUE
-#define MERGE_DICTIONARIES_WITH_HASH_TABLE
+// #define MERGE_DICTIONARIES_WITH_HASH_TABLE
+#define FINDING_PATH_IN_LABYRINTH
 
 #ifdef EASY_EXAMPLE
 
@@ -691,3 +692,42 @@ int main() {
 }
 
 #endif  // MERGE_DICTIONARIES_WITH_HASH_TABLE
+
+#ifdef FINDING_PATH_IN_LABYRINTH
+
+#include <iomanip>
+#include <locale>
+#include "../lib_algorithms/algorithms.h"
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+    while (1) {
+        int S, F, N, M;
+        std::cout << "¬ведите вход, выход и размеры лабиринта (через пробел): ";
+        std::cin >> S;
+        std::cin >> F;
+        std::cin >> N;
+        std::cin >> M;
+        Matrix<bool> labyrinth;
+        try {
+            labyrinth = generate_labyrinth(S, F, N, M);
+            print_lab(labyrinth, N, M);
+            std::vector<int> path = find_path_in_labyrinth(labyrinth, N, M, S, F);
+            print_lab_with_path(labyrinth, N, M, path);
+            /*for (int i = 0; i < path.size(); i++) {
+                std::cout << path[i] << std::endl;
+            }*/
+            std::getchar();
+            std::getchar();
+        }
+        catch (std::logic_error e) {
+            std::cerr << e.what() << std::endl;
+            getchar();
+            getchar();
+        }
+        system("cls");
+    }
+    return 0;
+}
+
+#endif  // FINDING_PATH_IN_LABYRINTH

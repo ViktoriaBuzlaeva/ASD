@@ -207,6 +207,7 @@ void create_passage(Matrix<bool>& walls, int row, int col, int N, int M) {
 }
 
 void print_lab(Matrix<bool> labyrinth, int N, int M) {
+    int num = 1;
     for (int i = 0; i < N * 2 + 1; i++) {
         if (i % 2 == 0) {
             for (int j = 0; j < M; j++) {
@@ -228,7 +229,8 @@ void print_lab(Matrix<bool> labyrinth, int N, int M) {
                 else {
                     std::cout << " ";
                 }
-                std::cout << std::setw(3) << "";
+                std::cout << std::setw(3) << num;
+                num++;
             }
             if (labyrinth[i][M]) {
                 std::cout << "|";
@@ -237,7 +239,71 @@ void print_lab(Matrix<bool> labyrinth, int N, int M) {
         }
     }
 }    
-    
+
+std::vector<int> find_path_in_labyrinth(Matrix<bool> labyrinth, int N, int M, int S, int F) {
+    std::vector<int> path = { 0 };
+    std::vector<std::pair<int, int>> edges;
+    for (int i = 1; i < N * 2 ; i++) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < M; j++) {
+                if (!labyrinth[i][j])
+                    edges.push_back({ i / 2 * M + j + 1, (i - 1) / 2 * M + j + 1});
+            }
+        }
+        else {
+            for (int j = 1; j < M; j++) {
+                if (!labyrinth[i][j])
+                    edges.push_back({ i / 2 * M + j, i / 2 * M + j + 1});
+            }
+        }
+    }
+    GraphAdjacencyL<int> graph_labyrinth(edges);
+    path = graph_labyrinth.find_min_way(S, F);
+    return path;
+}
+
+void print_lab_with_path(Matrix<bool> labyrinth, int N, int M, std::vector<int> path) {
+    int num = 1;
+    std::sort(path.begin(), path.end());
+    auto it_path = path.begin();
+    for (int i = 0; i < N * 2 + 1; i++) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < M; j++) {
+                std::cout << '+';
+                if (labyrinth[i][j]) {
+                    std::cout << "---";
+                }
+                else {
+                    std::cout << "   ";
+                }
+            }
+            std::cout << "+" << std::endl;
+        }
+        else {
+            for (int j = 0; j < M; j++) {
+                if (labyrinth[i][j]) {
+                    std::cout << "|";
+                }
+                else {
+                    std::cout << " ";
+                }
+                if (it_path != path.end() && num == *(it_path)) {
+                    std::cout << std::setw(3) << "*";
+                    it_path++;
+                }
+                else {
+                    std::cout << std::setw(3) << "";
+                }
+                num++;
+            }
+            if (labyrinth[i][M]) {
+                std::cout << "|";
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
 bool check_brackets(std::string str) {
     Stack<char> stack;
 

@@ -9,6 +9,7 @@
 #include "../lib_list/list.h"
 #include "../lib_matrix/matrix.h"
 #include "../lib_dsu/dsu.h"
+#include "../lib_graph_adjacency_l/graph_adjacency_l.h"
 
 enum TypeOfCrossing { Intersect, NotIntersect, Touch, Coincide };
 
@@ -115,5 +116,9 @@ Node<T>* find_loop(List<T>& list) {
 
     return first;
 }
+
+std::vector<int> find_path_in_labyrinth(Matrix<bool> labyrinth, int N, int M, int S, int F);
+
+void print_lab_with_path(Matrix<bool> labyrinth, int N, int M, std::vector<int>);
 
 #endif  // LIB_ALGORITHMS_ALGORITHMS_H_
