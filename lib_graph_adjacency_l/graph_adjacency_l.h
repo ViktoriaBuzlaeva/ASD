@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <unordered_set>
 #include "../lib_priority_queue/priority_queue.h"
 
 template <class T>
@@ -55,16 +56,46 @@ private:
 template <class T>
 GraphAdjacencyL<T>::GraphAdjacencyL(std::vector<std::pair<std::pair<T, T>, int>> data, bool is_oriented) :
     _graph(), _is_oriented(is_oriented), _is_weighted(true) {
-    for (int i = 0; i < data.size(); i++) {
-        add_edge(data[i].first.first, data[i].first.second, data[i].second);
+    std::unordered_set<T> all_vertices;
+    for (auto it = data.begin(); it != data.end(); it++) {
+        all_vertices.insert(it->first.first);
+        all_vertices.insert(it->first.second);
+    }
+
+    for (auto it = all_vertices.begin(); it != all_vertices.end(); it++) {
+        _graph.push_back(Vertex<T>(*it));
+    }
+
+    for (auto it = data.begin(); it != data.end(); it++) {
+        int from_id = find_vertex_index(it->first.first);
+        int to_id = find_vertex_index(it->first.second);
+        add_directed_edge(from_id, to_id, it->second);
+        if (!_is_oriented) {
+            add_directed_edge(to_id, from_id, it->second);
+        }
     }
 }
 
 template <class T>
 GraphAdjacencyL<T>::GraphAdjacencyL(std::vector<std::pair<T, T>> data, bool is_oriented) :
     _graph(), _is_oriented(is_oriented), _is_weighted(false) {
-    for (int i = 0; i < data.size(); i++) {
-        add_edge(data[i].first, data[i].second);
+    std::unordered_set<T> all_vertices;
+    for (auto it = data.begin(); it != data.end(); it++) {
+        all_vertices.insert(it->first);
+        all_vertices.insert(it->second);
+    }
+
+    for (auto it = all_vertices.begin(); it != all_vertices.end(); it++) {
+        _graph.push_back(Vertex<T>(*it));
+    }
+
+    for (auto it = data.begin(); it != data.end(); it++) {
+        int from_id = find_vertex_index(it->first);
+        int to_id = find_vertex_index(it->second);
+        add_directed_edge(from_id, to_id, 1);
+        if (!_is_oriented) {
+            add_directed_edge(to_id, from_id, 1);
+        }
     }
 }
 
@@ -156,11 +187,11 @@ std::vector<T> GraphAdjacencyL<T>::find_min_way(const T& start, const T& finish)
     int finish_id = find_vertex_index(finish);
     if (start_id == -1 || finish_id == -1) throw std::logic_error("Vertex doesn't exist");
 
-    std::vector<int> distance(_graph.size(), INT_MAX);  // Минимальное расстояние до каждой вершины
+    std::vector<int> distance(_graph.size(), INT_MAX);  // Минимальное расстояние от начала до каждой вершины
     distance[start_id] = 0;
     std::vector<int> previous(_graph.size(), -1);  // Предыдущая вершина на кратчайшем пути
 
-    PriorityQueue<PriorityPair<int>> queue;
+    PriorityQueue<PriorityPair<int>> queue;  // Очередь, отсортированная по возрастанию расстояния до вершины
 
     int order = 0;
     queue.push(PriorityPair<int>(0, start_id, order));
@@ -173,7 +204,7 @@ std::vector<T> GraphAdjacencyL<T>::find_min_way(const T& start, const T& finish)
         int cur_distance = cur.key;  // Расстояние до вершины
         int cur_vertex = cur.value;  // Индекс вершины
 
-        if (cur_distance != distance[cur_vertex]) continue;  // Уже посещали вершину
+        if (cur_distance != distance[cur_vertex]) continue;  // Уже посещали вершину (нашли кратчайший путь)
 
         if (cur_vertex == finish_id) break;
 
@@ -206,8 +237,7 @@ std::vector<T> GraphAdjacencyL<T>::find_min_way(const T& start, const T& finish)
 template <class T>
 int GraphAdjacencyL<T>::find_vertex_index(const T& value) const {
     for (int i = 0; i < _graph.size(); i++) {
-        if (_graph[i].value == value)
-            return i;
+        if (_graph[i].value == value) return i;
     }
     return -1;
 }

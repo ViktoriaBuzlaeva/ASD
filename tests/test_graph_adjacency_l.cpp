@@ -161,7 +161,8 @@ TEST(TestGraphAdjacencyLLib, can_find_min_way) {
     std::vector<int> expected_path_1 = { 0, 1, 2, 3, 4, 5 };
     std::vector<int> expected_path_2 = { 0, 1, 2, 4, 5 };
     // Оба пути весом 8
-    EXPECT_TRUE(actual_path == expected_path_2);
+    EXPECT_TRUE(actual_path == expected_path_2 ||
+                actual_path == expected_path_1);
 }
 
 TEST(TestGraphAdjacencyLLib, throw_when_try_find_min_way_with_non_exist_vertex) {
