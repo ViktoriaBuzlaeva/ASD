@@ -111,9 +111,10 @@ void AVLTree<TKey, TValue>::left_rotate(AVLTNode<TKey, TValue>* node) {
     */
     AVLTNode<TKey, TValue>* G = node;
     AVLTNode<TKey, TValue>* P = G->right;
-    G->right = P->left;
-    if (P->left) {
-        P->left->parent = G;
+    AVLTNode<TKey, TValue>* T = P->left;
+    G->right = T;
+    if (T) {
+        T->parent = G;
     }
     P->left = G;
 
@@ -141,9 +142,10 @@ void AVLTree<TKey, TValue>::right_rotate(AVLTNode<TKey, TValue>* node) {
     */
     AVLTNode<TKey, TValue>* G = node;
     AVLTNode<TKey, TValue>* P = G->left;
-    G->left = P->right;
-    if (P->right) {
-        P->right->parent = G;
+    AVLTNode<TKey, TValue>* T = P->right;
+    G->left = T;
+    if (T) {
+        T->parent = G;
     }
     P->right = G;
 
