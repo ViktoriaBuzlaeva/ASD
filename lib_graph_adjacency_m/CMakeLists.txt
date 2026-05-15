@@ -1,0 +1,2 @@
+create_project_lib(GraphAdjacencyM)
+add_depend(GraphAdjacencyM TriangleMatrix lib_triangle_matrix)
