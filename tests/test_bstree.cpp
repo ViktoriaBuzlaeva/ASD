@@ -20,9 +20,9 @@ TEST(TestBSTreeLib, can_insert) {
     ASSERT_NO_THROW(t.insert(5, "five"));
     ASSERT_NO_THROW(t.insert(3, "three"));
     ASSERT_NO_THROW(t.insert(1, "one"));
-    t.print();
+    /*t.print();
     t.print_DLCR();
-    std::cout << std::endl;
+    std::cout << std::endl;*/
 }
 
 TEST(TestBSTreeLib, throw_when_try_insert_same_key) {

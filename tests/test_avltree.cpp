@@ -144,7 +144,7 @@ TEST(TestAVLTreeLib, can_insert_3) {
         t.insert(i, i);
     }
     ASSERT_NO_THROW(t.insert(100, 100));
-    t.print();
+    // t.print();
 }
 
 TEST(TestAVLTreeLib, can_insert_4) {
@@ -156,7 +156,7 @@ TEST(TestAVLTreeLib, can_insert_4) {
         t.insert(i, i);
     }
     ASSERT_NO_THROW(t.insert(100, 100));
-    t.print();
+    // t.print();
 }
 
 TEST(TestAVLTreeLib, can_insert_5) {
@@ -311,9 +311,9 @@ TEST(TestAVLTreeLib, can_erase_1) {
     t.insert(40, 40);
     t.insert(4, 4);
     t.insert(6, 6);
-    t.print();
+    // t.print();
     ASSERT_NO_THROW(t.erase(3));  // Удаление узла с двумя детьми
-    t.print();
+    // t.print();
 }
 
 TEST(TestAVLTreeLib, can_erase_2) {
@@ -331,9 +331,9 @@ TEST(TestAVLTreeLib, can_erase_2) {
     t.insert(8, 8);
     t.insert(13, 13);
     t.insert(12, 12);
-    t.print();
+    // t.print();
     t.erase(4);  // Удаление листа
-    t.print();
+    // t.print();
     t.erase(7);
     t.erase(2);
     t.erase(9);
