@@ -208,6 +208,7 @@ std::vector<T> GraphAdjacencyL<T>::find_min_way(const T& start, const T& finish)
 
         if (cur_vertex == finish_id) break;
 
+        // Для всех соседей вершины проверяем, не улучшит ли путь через неё текущее расстояние до соседа
         for (auto it = _graph[cur_vertex].edges.begin(); it != _graph[cur_vertex].edges.end(); it++) {
             int neighbor_vertex = (*it).to_vertex;
             int edge_weight = (*it).weight;

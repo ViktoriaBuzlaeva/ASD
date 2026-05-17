@@ -55,7 +55,7 @@ GraphAdjacencyM<T>::GraphAdjacencyM(std::vector<std::pair<std::pair<T, T>, int>>
 
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            graph(i,j) = 0;
+            graph(i,j) = INT_MAX;
         }
     }
 
@@ -114,7 +114,12 @@ bool GraphAdjacencyM<T>::has_edge(const T& from, const T& to) {
     int from_ind = _value_index[from];
     int to_ind = _value_index[to];
 
-    return graph(from_ind, to_ind) != 0;
+    if (_is_weighted) {
+        return graph(from_ind, to_ind) != INT_MAX;
+    }
+    else {
+        return graph(from_ind, to_ind) != 0;
+    }
 }
 
 template <class T>
@@ -138,8 +143,14 @@ void GraphAdjacencyM<T>::delete_edge(const T& from, const T& to) {
     int from_ind = _value_index[from];
     int to_ind = _value_index[to];
 
-    if (graph(from_ind, to_ind) == 0) throw std::logic_error("Edge doesn't exist");
-    graph(from_ind, to_ind) = 0;
+    if (_is_weighted) {
+        if (graph(from_ind, to_ind) == INT_MAX) throw std::logic_error("Edge doesn't exist");
+        graph(from_ind, to_ind) = INT_MAX;
+    }
+    else {
+        if (graph(from_ind, to_ind) == 0) throw std::logic_error("Edge doesn't exist");
+        graph(from_ind, to_ind) = 0;
+    }
 }
 
 template <class T>
@@ -150,9 +161,17 @@ void GraphAdjacencyM<T>::delete_vertex_edges(const T& value) {
     int value_ind = _value_index[value];
     size_t n = _is_oriented ? _oriented_graph.rows() : _graph.rows();
 
-    for (size_t i = 0; i < n; i++) {
-        graph(value_ind, i) = 0;
-        graph(i, value_ind) = 0;
+    if (_is_weighted) {
+        for (size_t i = 0; i < n; i++) {
+            graph(value_ind, i) = INT_MAX;
+            graph(i, value_ind) = INT_MAX;
+        }
+    }
+    else{
+        for (size_t i = 0; i < n; i++) {
+            graph(value_ind, i) = 0;
+            graph(i, value_ind) = 0;
+        }
     }
 }
 
